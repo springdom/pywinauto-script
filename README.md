@@ -1,2 +1,2 @@
 # pywinauto-script
-Simple pywinauto Script to sned keys to application
+Simple pywinauto Script to send keys to application
