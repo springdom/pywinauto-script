@@ -34,7 +34,6 @@ dlg = app.window(best_match="AbsoluteTelnet")
 app.dlg.set_focus()
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-
 #Enter Mode
 def mode(opt):
     for num in opt:
