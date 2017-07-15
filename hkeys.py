@@ -15,24 +15,24 @@ print("3: Change to Kick")
 print("Already On Page?")
 print("4: Book Dates")
 print("5: Unlock Lead")
-
+print("")
 Sel = int(input("Select Option: "))
-
+print("")
 opt1 = [1,2,1,2]
 opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
+print("Option: " + Sel)
 
 
-lead = input("Enter Lead: ")
-loc = input("Enter Location: ")
-
-app = Application(backend='uia')
-p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
-app.connect(handle=p.handle)
-dlg = app.window(best_match="AbsoluteTelnet")
-
-app.dlg.set_focus()
 #app.dlg.print_control_identifiers() #Check Identifiers
+#Window Settings
+def set_window():
+    app = Application(backend='uia')
+    p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
+    app.connect(handle=p.handle)
+    dlg = app.window(best_match="AbsoluteTelnet")
+    app.dlg.set_focus()
+
 
 #Enter Mode
 def mode(opt):
@@ -48,10 +48,52 @@ def unlock_lead(leadn,loca):
 
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
-    
+    set_window()
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
+    package_sel = input("Select Package Number: ")
+    
+    set_window()
+    
+    SendKeys('{ENTER}')
+    SendKeys(package_sel + '{ENTER}')
+    SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
+
+    propn = input("Enter Property Number: ") # Enter x 1, ADA- Enter x 1
+    unitt = input("Enter Unit Type: ") # Enter x 1, Unit nbr Enter x 3
+    adults = input("Adults: ") #enter x 2
+    kids = input("Kids: ") # Enter x 2
+
+    arrival = input("Arrival: ")
+    nights = input("Nights: ") #Enter Check backspace
+
+    set_window()
+    
+    SendKeys(propn + '{ENTER 2}')
+    SendKeys(unitt + '{ENTER 4}')
+    SendKeys(adults + '{ENTER 2}')
+    SendKeys(kids + '{ENTER 2}')
+    SendKeys(arrival + '{ENTER}')
+    SendKeys(nights + '{ENTER 2}')
+    
+    bckspace = input("Go back? y or n:") # Backspace
+
+    set_window()
+
+    if bckspace == "y":
+        SendKeys('{BACKSPACE}')
+
+    proceed = input("Proceed - y or n: ")    
+    if proceed == 'y':
+        SendKeys('{ENTER}')
+    #Enter
+
+    #Tab
+    #office = input("Enter Office: ") #Enter
+    #Enter 3
+    
+    
 """
     package_sel = int(input("Select Package Number: "))
     prop = int(input("Enter Property Number: "))
@@ -69,7 +111,23 @@ def lead_package(leadn,loca):
 
 def tour_booking():
     office = 0
+
+def kick_package(leadn,loca):
+    set_window()
     
+    SendKeys(leadn + '{ENTER}')
+    SendKeys(loca + '{ENTER}')
+    SendKeys('{ENTER 2}')
+    package_sel = input("Select Package Number: ")
+    
+    set_window()
+    
+    SendKeys('{ENTER}')
+    SendKeys(package_sel + '{ENTER}')
+    
+    
+    
+ 
 def change_to_kick(leadn,loca):
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
@@ -84,14 +142,20 @@ def change_to_kick(leadn,loca):
     SendKeys("f")
     
 
-print(Sel)
+
 if Sel == 1:
     mode(opt1)
+    lead = input("Enter Lead: ")
+    loc = input("Enter Location: ")
 elif Sel == 2:
     mode(opt2)
+    lead = input("Enter Lead: ")
+    loc = input("Enter Location: ")
 elif Sel == 3:
     mode(opt3)
 elif Sel == 4:
+    lead = input("Enter Lead: ")
+    loc = input("Enter Location: ")
     lead_package(lead,loc)
 elif Sel == 5:
     unlock_lead(lead,loc)
