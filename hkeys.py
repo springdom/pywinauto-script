@@ -21,7 +21,7 @@ print("")
 opt1 = [1,2,1,2]
 opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
-print("Option: " + Sel)
+
 
 
 #app.dlg.print_control_identifiers() #Check Identifiers
@@ -60,13 +60,13 @@ def lead_package(leadn,loca):
     SendKeys(package_sel + '{ENTER}')
     SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
 
-    propn = input("Enter Property Number: ") # Enter x 1, ADA- Enter x 1
-    unitt = input("Enter Unit Type: ") # Enter x 1, Unit nbr Enter x 3
-    adults = input("Adults: ") #enter x 2
-    kids = input("Kids: ") # Enter x 2
+    propn = input("Enter Property Number: ")
+    unitt = input("Enter Unit Type: ")
+    adults = input("Adults: ")
+    kids = input("Kids: ")
 
     arrival = input("Arrival: ")
-    nights = input("Nights: ") #Enter Check backspace
+    nights = input("Nights: ") 
 
     set_window()
     
@@ -84,30 +84,20 @@ def lead_package(leadn,loca):
     if bckspace == "y":
         SendKeys('{BACKSPACE}')
 
-    proceed = input("Proceed - y or n: ")    
+    proceed = input("Proceed - y or n: ")
+
+    set_window()
+    
     if proceed == 'y':
         SendKeys('{ENTER}')
     #Enter
+    time.sleep(1)  
+    office = input("Enter Office: ")
+    manifest = input("Manifest: ")
+    set_window()
+    SendKeys('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER}')
+    
 
-    #Tab
-    #office = input("Enter Office: ") #Enter
-    #Enter 3
-    
-    
-"""
-    package_sel = int(input("Select Package Number: "))
-    prop = int(input("Enter Property Number: "))
-    unit_type int(input("Unit Type: "))
-    adults = int(input("How many adults: "))
-    children = int(input("How many children"))
-    arrival = input("Arrival: ")
-    nights = input("Nights: ")
-    availability = 'n'
-    backspace = 'n'
-""" 
-    #Ask Which Package
-    #SK-7,SK-A
-    #1stSK-PropName,
 
 def tour_booking():
     office = 0
@@ -124,10 +114,12 @@ def kick_package(leadn,loca):
     
     SendKeys('{ENTER}')
     SendKeys(package_sel + '{ENTER}')
+    SendKeys('20' + '{ENTER}')
+    SendKeys('2' + '{ENTER}')
+    SendKeys('14')
+    SendKeys('{ENTER}')
     
     
-    
- 
 def change_to_kick(leadn,loca):
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
@@ -141,7 +133,6 @@ def change_to_kick(leadn,loca):
     SendKeys("{ENTER 2}")
     SendKeys("f")
     
-
 
 if Sel == 1:
     mode(opt1)
@@ -160,19 +151,5 @@ elif Sel == 4:
 elif Sel == 5:
     unlock_lead(lead,loc)
 
-###Book Dates
-    #Recent Date Opt
-    #Opt 7, Opt A
-    #Property
-    #Enter 2
-    #Unit Type
-    #Enter 4
-    #Adults,Enter, Children, ENter
-    #Arrival,Enter,Nights,Enter
-    #Ask if Available, Enter
-    #Ask if Backspace, if yes Backspace
-    #enter, ThreadSleep
-    ###Tour
-    #Tab,office,Enter num,Enter 3
 
 
