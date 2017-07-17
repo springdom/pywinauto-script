@@ -137,6 +137,19 @@ def lead_package(leadn,loca):
         SendKeys(manifest + '{ENTER 8}')
         
 
+def check_avail():
+    region = input("Enter Region: ")
+    arrival = input("Enter Arrival: ")
+    nights = input("Enter Nights: ")
+    
+    mode(opt1)
+    SendKeys('{TAB}' + '2' + '{ENTER}')
+    SendKeys(region + '{ENTER 2}')
+    SendKeys(arrival + '{ENTER 2}')
+    SendKeys(nights)
+    SendKeys('{TAB}' + '3' + '{ENTER}')
+    main()
+
 def tour_booking():
     office = 0
 
@@ -202,7 +215,6 @@ def check_tours():
     SendKeys(office + '{ENTER}')
     SendKeys(starting + '{ENTER 3}')
     SendKeys('{TAB}' + '2' + '{ENTER}')
-    nory = input("Return To Options: y or n")
     main()
 
 main()
