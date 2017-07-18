@@ -5,9 +5,9 @@ from pywinauto.keyboard import SendKeys
 from pywinauto import Desktop
 from pywinauto.application import Application
 from pywinauto.findwindows import find_window
-from subprocess import Popen
 
 #app.dlg.print_control_identifiers() #Check Identifiers
+
 opt1 = [1,2,1,2]
 opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
@@ -17,6 +17,7 @@ def main():
     print("Select From Menu")
     print("0: Check Availability")
     print("9: Check Tours")
+    print("8: Check Avail")
     print("------------------")
     print("1: Book Dates")
     print("2: Unlock Lead")
@@ -43,6 +44,8 @@ def main():
         check_dates()
     elif Sel == 9:
         check_tours()
+    elif Sel == 8:
+        check_avail()
     else:
         print("Invalid Option")
         main()
@@ -60,9 +63,9 @@ def set_window():
 #Enter Mode
 def mode(opt):
     set_window()
-    SendKeys('{BACKSPACE 8}')
+    SendKeys('{BACKSPACE 10}')
     SendKeys('{ENTER}')
-    time.sleep(1)
+    time.sleep(1.5)
     
     for num in opt:
         SendKeys(str(num))
@@ -85,12 +88,14 @@ def lead_package(leadn,loca):
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
+    #check if lead good
     package_sel = input("Select Package Number: ")
     
     set_window()
     
     SendKeys('{ENTER}')
     SendKeys(package_sel + '{ENTER}')
+    #check if package in use
     SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
 
     propn = input("Enter Property Number: ")
@@ -132,10 +137,13 @@ def lead_package(leadn,loca):
     toursa = input("Tours Available y or n: ")
 
     set_window()
+    
     if toursa == "y":
         SendKeys('1' + '{ENTER 2}')
         SendKeys(manifest)
-        SendKeys('{ENTER 14}')
+        SendKeys('{ENTER 10}')
+        time.sleep(1.30)
+        SendKeys('{ENTER 15}')
         SendKeys('f')
         SendKeys('y')
         amount = input("Enter amount: ")
@@ -143,7 +151,8 @@ def lead_package(leadn,loca):
         SendKeys(amount)
     else:
         pass
-    
+
+#Check Availability
 def check_avail():
     region = input("Enter Region: ")
     arrival = input("Enter Arrival: ")
@@ -226,6 +235,20 @@ def check_tours():
     main()
 
 def check_cashback():
-    pass
+    mode(opt3)
+   
+    SendKeys(leadn + '{ENTER}')
+    SendKeys(loca + '{ENTER}')
+    SendKeys('{ENTER 2}')
 
+    package_sel = input("Enter Package Number: ")
+    set_window()
+    
+    SendKeys(package_sel + '{ENTER}')
+    SendKeys('18' + '{ENTER}')
+    SendKeys('1' + '{ENTER}')
+    
+    #iscashback = input("CashBack?:  ")
+
+    
 main()
