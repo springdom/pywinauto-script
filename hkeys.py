@@ -18,6 +18,7 @@ def main():
     print("0: Check Availability")
     print("9: Check Tours")
     print("8: Check Avail")
+    print("7: Cashback Check")
     print("------------------")
     print("1: Book Dates")
     print("2: Unlock Lead")
@@ -28,7 +29,7 @@ def main():
     Sel = int(input("Select Option: "))
     print("")
 
-    if Sel >= 1 and Sel <= 4:
+    if Sel >= 1 and Sel <= 4 or Sel == 7:
         lead = input("Enter Lead: ")
         loc = input("Enter Location: ")
 
@@ -46,6 +47,8 @@ def main():
         check_tours()
     elif Sel == 8:
         check_avail()
+    elif Sel == 7:
+        check_cashback(lead,loc)
     else:
         print("Invalid Option")
         main()
@@ -53,12 +56,13 @@ def main():
 
 #Window Settings
 def set_window():
+    
     app = Application(backend='uia')
     p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
     app.connect(handle=p.handle)
     dlg = app.window(best_match="AbsoluteTelnet")
     app.dlg.set_focus()
-
+    #app.dlg.type_keys(""Test)
 
 #Enter Mode
 def mode(opt):
@@ -144,7 +148,7 @@ def lead_package(leadn,loca):
         SendKeys('{ENTER 10}')
         time.sleep(1.30)
         SendKeys('{ENTER 15}')
-        SendKeys('f')
+        SendKeys('f' + '{ENTER}')
         SendKeys('y')
         amount = input("Enter amount: ")
         set_window()
@@ -234,7 +238,7 @@ def check_tours():
     SendKeys('{TAB}' + '2' + '{ENTER}')
     main()
 
-def check_cashback():
+def check_cashback(leadn,loca):
     mode(opt3)
    
     SendKeys(leadn + '{ENTER}')
@@ -246,9 +250,18 @@ def check_cashback():
     
     SendKeys(package_sel + '{ENTER}')
     SendKeys('18' + '{ENTER}')
-    SendKeys('1' + '{ENTER}')
-    
+
+    main()    
     #iscashback = input("CashBack?:  ")
 
+#Build A Package
+def build_package():
+    mode(opt1)
+    #LastName,FirstName
+    #PhoneNumber, Country
     
+    #check if Exist
+    #if exist go to lead
+    #else - go through package
+
 main()
