@@ -32,7 +32,6 @@ def main():
     if Sel >= 1 and Sel <= 4 or Sel == 7:
         lead = input("Enter Lead: ")
         loc = input("Enter Location: ")
-
     if Sel == 1:
         lead_package(lead,loc)
     elif Sel == 2:
@@ -88,18 +87,20 @@ def unlock_lead(leadn,loca):
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
     mode(opt1)
+
+    #Check avail first then book
     
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
-    #check if lead good
+    #TODO: check if lead good
     package_sel = input("Select Package Number: ")
     
     set_window()
     
     SendKeys('{ENTER}')
     SendKeys(package_sel + '{ENTER}')
-    #check if package in use
+    #TODO: check if package in use
     SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
 
     propn = input("Enter Property Number: ")
