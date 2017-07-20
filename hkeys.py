@@ -1,4 +1,5 @@
 import time
+import win32clipboard
 import pywinauto
 from pywinauto import application
 from pywinauto.keyboard import SendKeys
@@ -13,33 +14,38 @@ opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
 
 def main():
-    print("------------------")
+    print("-" * 20)
     print("Select From Menu")
     print("0: Check Availability")
     print("9: Check Tours")
     print("8: Check Avail")
     print("7: Cashback Check")
-    print("------------------")
+    print("-" * 20)
     print("1: Book Dates")
     print("2: Unlock Lead")
-    print("------------------")
-    print("3: Change to Kick")
-    print("4: Kick Package")
-    print("------------------")
+    print("-")
+    print("3: Kick Package")
+    print("4: Change to Kick")
+    print("-" * 20)
     Sel = int(input("Select Option: "))
     print("")
 
-    if Sel >= 1 and Sel <= 4 or Sel == 7:
+    if Sel >= 1 and Sel <= 3 or Sel == 7:
         lead = input("Enter Lead: ")
         loc = input("Enter Location: ")
+
     if Sel == 1:
         lead_package(lead,loc)
     elif Sel == 2:
         unlock_lead(lead,loc)
     elif Sel == 3:
-        change_to_kick(lead,loc)
-    elif Sel == 4:
         kick_package(lead,loc)
+    elif Sel == 4:
+        win32clipboard.OpenClipboard()
+        data = win32clipboard.GetClipboardData()
+        win32clipboard.CloseClipboard()
+        leadvar = data.split("-")
+        change_to_kick(leadvar[1],leadvar[0])
     elif Sel == 0:
         check_dates()
     elif Sel == 9:
@@ -87,20 +93,18 @@ def unlock_lead(leadn,loca):
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
     mode(opt1)
-
-    #Check avail first then book
     
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
-    #TODO: check if lead good
+    #check if lead good
     package_sel = input("Select Package Number: ")
     
     set_window()
     
     SendKeys('{ENTER}')
     SendKeys(package_sel + '{ENTER}')
-    #TODO: check if package in use
+    #check if package in use
     SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
 
     propn = input("Enter Property Number: ")
@@ -212,7 +216,7 @@ def change_to_kick(leadn,loca):
     SendKeys("{ENTER}")
     SendKeys("9")
     SendKeys("{ENTER 2}")
-    SendKeys("f")
+    SendKeys("f" + "{ENTER}")
     main()
     
 #Check Dates
