@@ -35,6 +35,8 @@ def main():
         loc = input("Enter Location: ")
 
     if Sel == 1:
+        check_avail()
+        time.sleep(2)
         lead_package(lead,loc)
     elif Sel == 2:
         unlock_lead(lead,loc)
@@ -52,12 +54,12 @@ def main():
         check_tours()
     elif Sel == 8:
         check_avail()
+        main()
     elif Sel == 7:
         check_cashback(lead,loc)
     else:
         print("Invalid Option")
         main()
-
 
 #Window Settings
 def set_window():
@@ -80,15 +82,6 @@ def mode(opt):
         SendKeys(str(num))
         SendKeys('{ENTER}')
     SendKeys('{ENTER}')
-
-#Unlock Lead
-def unlock_lead(leadn,loca):
-    mode(opt2)
-    set_window()
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 4}')
-    main()
 
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
@@ -154,25 +147,20 @@ def lead_package(leadn,loca):
         time.sleep(1.30)
         SendKeys('{ENTER 15}')
         SendKeys('f' + '{ENTER}')
-        SendKeys('y')
+        SendKeys('y' + "{ENTER}")
         amount = input("Enter amount: ")
         set_window()
         SendKeys(amount)
     else:
         pass
 
-#Check Availability
-def check_avail():
-    region = input("Enter Region: ")
-    arrival = input("Enter Arrival: ")
-    nights = input("Enter Nights: ")
-    
-    mode(opt1)
-    SendKeys('{TAB}' + '2' + '{ENTER}')
-    SendKeys(region + '{ENTER 2}')
-    SendKeys(arrival + '{ENTER 2}')
-    SendKeys(nights)
-    SendKeys('{TAB}' + '3' + '{ENTER}')
+#Unlock Lead
+def unlock_lead(leadn,loca):
+    mode(opt2)
+    set_window()
+    SendKeys(leadn + '{ENTER}')
+    SendKeys(loca + '{ENTER}')
+    SendKeys('{ENTER 4}')
     main()
 
 #Kick Package
@@ -192,7 +180,7 @@ def kick_package(leadn,loca):
     SendKeys('2' + '{ENTER}')
     SendKeys('14' + '{ENTER}')
     SendKeys('{TAB}')
-    time.sleep(0.50)
+    time.sleep(3)
     SendKeys('{ENTER 8}')
     SendKeys('13')
     #SendKeys('A')
@@ -218,7 +206,21 @@ def change_to_kick(leadn,loca):
     SendKeys("{ENTER 2}")
     SendKeys("f" + "{ENTER}")
     main()
+
+#Check Availability
+def check_avail():
+    region = input("Enter Region: ")
+    arrival = input("Enter Arrival: ")
+    nights = input("Enter Nights: ")
     
+    mode(opt1)
+    SendKeys('{TAB}' + '2' + '{ENTER}')
+    SendKeys(region + '{ENTER 2}')
+    SendKeys(arrival + '{ENTER 2}')
+    SendKeys(nights)
+    SendKeys('{TAB}' + '3' + '{ENTER}')
+
+
 #Check Dates
 def check_dates():
     region = input("Enter Region: ")
@@ -245,27 +247,38 @@ def check_tours():
 
 def check_cashback(leadn,loca):
     mode(opt3)
-   
+
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
 
     package_sel = input("Enter Package Number: ")
     set_window()
-    
     SendKeys(package_sel + '{ENTER}')
     SendKeys('18' + '{ENTER}')
-
+    time.sleep(1)
+    SendKeys('{BACKSPACE 3}')
     main()    
-    #iscashback = input("CashBack?:  ")
 
 #Build A Package
 def build_package():
     mode(opt1)
+    #Check if Exist first
     #LastName,FirstName
+    lastName = input("Enter Last Name: ")
+    FirstName = input("Enter First Name: ")
+    PhoneNo = input("Phone Number: ")
+    phoneNo2 = input("Second Phone Number: ")
+    Country = input("Enter Country Code: ")
+    addr = input("Address: ")
+    zipCode = input("Input ZipCode: ")
+    hhn = input("Hilton Honors Number: ")
+    email = input("Enter Email: ")
+    
+                
     #PhoneNumber, Country
     
-    #check if Exist
+    
     #if exist go to lead
     #else - go through package
 
