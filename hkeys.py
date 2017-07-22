@@ -23,7 +23,7 @@ def main():
     print("-" * 20)
     print("1: Book Dates")
     print("2: Unlock Lead")
-    print("-")
+    print("-" * 20)
     print("3: Kick Package")
     print("4: Change to Kick")
     print("-" * 20)
@@ -69,7 +69,7 @@ def set_window():
     app.connect(handle=p.handle)
     dlg = app.window(best_match="AbsoluteTelnet")
     app.dlg.set_focus()
-    #app.dlg.type_keys(""Test)
+    #app.dlg.type_keys("Test")
 
 #Enter Mode
 def mode(opt):
@@ -153,6 +153,7 @@ def lead_package(leadn,loca):
         SendKeys(amount)
     else:
         pass
+    main()
 
 #Unlock Lead
 def unlock_lead(leadn,loca):
@@ -264,7 +265,7 @@ def check_cashback(leadn,loca):
 def build_package():
     mode(opt1)
     #Check if Exist first
-    #LastName,FirstName
+
     lastName = input("Enter Last Name: ")
     FirstName = input("Enter First Name: ")
     PhoneNo = input("Phone Number: ")
@@ -274,12 +275,14 @@ def build_package():
     zipCode = input("Input ZipCode: ")
     hhn = input("Hilton Honors Number: ")
     email = input("Enter Email: ")
+
+    #LastName,FirstName,Phone Number
+    #Country,Enter*4
+    #zip code,address,Enter 5
+    #Enter 9
+    #HHn Enter 2,email enter 2,
+    #pref lang, Nationailty enter 2
+    #
     
-                
-    #PhoneNumber, Country
-    
-    
-    #if exist go to lead
-    #else - go through package
 
 main()
