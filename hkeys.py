@@ -252,7 +252,6 @@ def check_cashback(leadn,loca):
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
-
     package_sel = input("Enter Package Number: ")
     set_window()
     SendKeys(package_sel + '{ENTER}')
@@ -275,14 +274,27 @@ def build_package():
     zipCode = input("Input ZipCode: ")
     hhn = input("Hilton Honors Number: ")
     email = input("Enter Email: ")
-
-    #LastName,FirstName,Phone Number
-    #Country,Enter*4
-    #zip code,address,Enter 5
-    #Enter 9
-    #HHn Enter 2,email enter 2,
-    #pref lang, Nationailty enter 2
-    #
+    lang = input("Preferred Language: ")
+    natio = input("Nationality: ")
     
+    #LastName,FirstName,Phone Number
+    SendKeys(LastName + "{Enter}")
+    SendKeys(FirstName + "{Enter}")
+    #Country,Enter*4
+    SendKeys(Country + "{ENTER 4}")
+    #zip code,address,Enter 5
+    SendKeys(zipCode + "{ENTER}")
+    SendKeys(addr + "{ENTER 5}")
+    #Enter 9
+    SendKeys("{ENTER 9}")
+    #HHn Enter 2,email enter 2,
+    SendKeys(hhn + "{ENTER 2}")
+    SendKeys(email + "{ENTER 2}")
+    #pref lang, Nationailty enter 2
+    SendKeys(lang + "{ENTER}")
+    SendKeys(natio + "{ENTER}")
+    
+def is_good(x):
+    pass
 
 main()
