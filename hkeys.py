@@ -36,8 +36,9 @@ def main():
 
     if Sel == 1:
         check_avail()
-        time.sleep(2)
-        lead_package(lead,loc)
+        checkavail = input("Available: y or n")
+        if checkavail == "y":
+            lead_package(lead,loc)
     elif Sel == 2:
         unlock_lead(lead,loc)
     elif Sel == 3:
@@ -90,23 +91,24 @@ def lead_package(leadn,loca):
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
-    #check if lead good
-    package_sel = input("Select Package Number: ")
-    
-    set_window()
-    
-    SendKeys('{ENTER}')
-    SendKeys(package_sel + '{ENTER}')
-    #check if package in use
-    SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
+    try:
+        package_sel = input("Select Package Number: ")
+        
+        set_window()
+        
+        SendKeys('{ENTER}')
+        SendKeys(package_sel + '{ENTER}')
+        SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
 
-    propn = input("Enter Property Number: ")
-    unitt = input("Enter Unit Type: ")
-    adults = input("Adults: ")
-    kids = input("Kids: ")
-
-    arrival = input("Arrival: ")
-    nights = input("Nights: ") 
+    
+        propn = input("Enter Property Number: ")
+        unitt = input("Enter Unit Type: ")
+        adults = input("Adults: ")
+        kids = input("Kids: ")
+        arrival = input("Arrival: ")
+        nights = input("Nights: ")
+    except (KeyboardInterrupt, SystemExit):
+        main()
 
     set_window()
     
@@ -264,7 +266,7 @@ def check_cashback(leadn,loca):
 def build_package():
     mode(opt1)
     #Check if Exist first
-
+    
     lastName = input("Enter Last Name: ")
     FirstName = input("Enter First Name: ")
     PhoneNo = input("Phone Number: ")
