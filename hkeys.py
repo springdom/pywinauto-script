@@ -150,7 +150,7 @@ def lead_package(leadn,loca):
         if toursa == "y":
             SendKeys('1' + '{ENTER 2}')
             SendKeys(manifest)
-            SendKeys('{ENTER 10}')
+            SendKeys('{ENTER 9}')
             time.sleep(1.30)
             SendKeys('{ENTER 17}')
             SendKeys('f' + '{ENTER}')
@@ -307,11 +307,12 @@ def build_package():
         SendKeys("{ENTER 9}")
     elif addr == "c":
         pass
-
+    
     SendKeys(hhn + "{ENTER 2}")
     SendKeys(email + "{ENTER 2}")
     SendKeys(lang + "{ENTER}")
-    SendKeys(natio + "{ENTER}")
+    SendKeys(natio + "{ENTER 2}")
+    
     """
     #Enter 9
     SendKeys("{ENTER 9}")
