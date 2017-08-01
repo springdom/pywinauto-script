@@ -26,6 +26,7 @@ def main():
     print("-" * 20)
     print("3: Kick Package")
     print("4: Change to Kick")
+    print("5: Create Package")
     print("-" * 20)
     Sel = int(input("Select Option: "))
     print("")
@@ -36,9 +37,11 @@ def main():
 
     if Sel == 1:
         check_avail()
-        checkavail = input("Available: y or n")
+        checkavail = input("Available: y or n: ")
         if checkavail == "y":
             lead_package(lead,loc)
+        else:
+            main()
     elif Sel == 2:
         unlock_lead(lead,loc)
     elif Sel == 3:
@@ -49,6 +52,8 @@ def main():
         win32clipboard.CloseClipboard()
         leadvar = data.split("-")
         change_to_kick(leadvar[1],leadvar[0])
+    elif Sel == 5:
+        build_package()
     elif Sel == 0:
         check_dates()
     elif Sel == 9:
@@ -107,55 +112,58 @@ def lead_package(leadn,loca):
         kids = input("Kids: ")
         arrival = input("Arrival: ")
         nights = input("Nights: ")
+
+
+        set_window()
+    
+        SendKeys(propn + '{ENTER 2}')
+        SendKeys(unitt + '{ENTER 4}')
+        SendKeys(adults + '{ENTER 2}')
+        SendKeys(kids + '{ENTER 2}')
+        SendKeys(arrival + '{ENTER}')
+        SendKeys(nights + '{ENTER 2}')
+    
+        bckspace = input("Go back? y or n: ") # Backspace
+
+        set_window()
+
+        if bckspace == "y":
+            SendKeys('{BACKSPACE}')
+
+        proceed = input("Proceed - y or n: ")
+
+        set_window()
+    
+        if proceed == 'y':
+            SendKeys('{ENTER}')
+
+        
+        time.sleep(1)  
+        office = input("Enter Office: ")
+        manifest = input("Manifest: ")
+        set_window()
+        SendKeys('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
+        toursa = input("Tours Available y or n: ")
+
+        set_window()
+    
+        if toursa == "y":
+            SendKeys('1' + '{ENTER 2}')
+            SendKeys(manifest)
+            SendKeys('{ENTER 10}')
+            time.sleep(1.30)
+            SendKeys('{ENTER 17}')
+            SendKeys('f' + '{ENTER}')
+            SendKeys('y' + "{ENTER}")
+            amount = input("Enter amount: ")
+            set_window()
+            SendKeys(amount)
+            SendKeys("{ENTER}" + "n")
+        else:
+            pass
+        main()
     except (KeyboardInterrupt, SystemExit):
         main()
-
-    set_window()
-    
-    SendKeys(propn + '{ENTER 2}')
-    SendKeys(unitt + '{ENTER 4}')
-    SendKeys(adults + '{ENTER 2}')
-    SendKeys(kids + '{ENTER 2}')
-    SendKeys(arrival + '{ENTER}')
-    SendKeys(nights + '{ENTER 2}')
-    
-    bckspace = input("Go back? y or n: ") # Backspace
-
-    set_window()
-
-    if bckspace == "y":
-        SendKeys('{BACKSPACE}')
-
-    proceed = input("Proceed - y or n: ")
-
-    set_window()
-    
-    if proceed == 'y':
-        SendKeys('{ENTER}')
-
-    time.sleep(1)  
-    office = input("Enter Office: ")
-    manifest = input("Manifest: ")
-    set_window()
-    SendKeys('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
-    toursa = input("Tours Available y or n: ")
-
-    set_window()
-    
-    if toursa == "y":
-        SendKeys('1' + '{ENTER 2}')
-        SendKeys(manifest)
-        SendKeys('{ENTER 10}')
-        time.sleep(1.30)
-        SendKeys('{ENTER 15}')
-        SendKeys('f' + '{ENTER}')
-        SendKeys('y' + "{ENTER}")
-        amount = input("Enter amount: ")
-        set_window()
-        SendKeys(amount)
-    else:
-        pass
-    main()
 
 #Unlock Lead
 def unlock_lead(leadn,loca):
@@ -184,7 +192,7 @@ def kick_package(leadn,loca):
     SendKeys('14' + '{ENTER}')
     SendKeys('{TAB}')
     time.sleep(3)
-    SendKeys('{ENTER 8}')
+    SendKeys('{ENTER 10}')
     SendKeys('13')
     #SendKeys('A')
     #SendKeys('10' + '{ENTER 5}')
@@ -266,7 +274,7 @@ def check_cashback(leadn,loca):
 def build_package():
     mode(opt1)
     #Check if Exist first
-    
+    SendKeys("{ENTER}")
     lastName = input("Enter Last Name: ")
     FirstName = input("Enter First Name: ")
     PhoneNo = input("Phone Number: ")
@@ -279,14 +287,32 @@ def build_package():
     lang = input("Preferred Language: ")
     natio = input("Nationality: ")
     
+    set_window()
     #LastName,FirstName,Phone Number
-    SendKeys(LastName + "{Enter}")
-    SendKeys(FirstName + "{Enter}")
+    SendKeys(lastName + "{ENTER}")
+    SendKeys(FirstName + "{ENTER}")
+    SendKeys(PhoneNo + "{ENTER 2}")
     #Country,Enter*4
     SendKeys(Country + "{ENTER 4}")
-    #zip code,address,Enter 5
     SendKeys(zipCode + "{ENTER}")
     SendKeys(addr + "{ENTER 5}")
+    time.sleep(2)
+    
+    #Check if address good
+    addrgood = input("Select Option: override continue ")
+
+    set_window()
+    if addrgood == "o":
+        SendKeys("o" + "{ENTER}")
+        SendKeys("{ENTER 9}")
+    elif addr == "c":
+        pass
+
+    SendKeys(hhn + "{ENTER 2}")
+    SendKeys(email + "{ENTER 2}")
+    SendKeys(lang + "{ENTER}")
+    SendKeys(natio + "{ENTER}")
+    """
     #Enter 9
     SendKeys("{ENTER 9}")
     #HHn Enter 2,email enter 2,
@@ -295,7 +321,7 @@ def build_package():
     #pref lang, Nationailty enter 2
     SendKeys(lang + "{ENTER}")
     SendKeys(natio + "{ENTER}")
-    
+    """
 def is_good(x):
     pass
 
