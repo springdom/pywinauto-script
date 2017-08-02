@@ -171,7 +171,7 @@ def unlock_lead(leadn,loca):
     set_window()
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 4}')
+    SendKeys('{ENTER 5}')
     main()
 
 #Kick Package
@@ -304,10 +304,10 @@ def build_package():
     set_window()
     if addrgood == "o":
         SendKeys("o" + "{ENTER}")
-        SendKeys("{ENTER 9}")
     elif addr == "c":
         pass
     
+    SendKeys("{ENTER 9}")    
     SendKeys(hhn + "{ENTER 2}")
     SendKeys(email + "{ENTER 2}")
     SendKeys(lang + "{ENTER}")
@@ -323,6 +323,7 @@ def build_package():
     SendKeys(lang + "{ENTER}")
     SendKeys(natio + "{ENTER}")
     """
+    
 def is_good(x):
     pass
 
