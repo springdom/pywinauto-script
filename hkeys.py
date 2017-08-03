@@ -313,16 +313,8 @@ def build_package():
     SendKeys(lang + "{ENTER}")
     SendKeys(natio + "{ENTER 2}")
     
-    """
-    #Enter 9
-    SendKeys("{ENTER 9}")
-    #HHn Enter 2,email enter 2,
-    SendKeys(hhn + "{ENTER 2}")
-    SendKeys(email + "{ENTER 2}")
-    #pref lang, Nationailty enter 2
-    SendKeys(lang + "{ENTER}")
-    SendKeys(natio + "{ENTER}")
-    """
+    ###Marketing Key Section
+
     
 def is_good(x):
     pass
