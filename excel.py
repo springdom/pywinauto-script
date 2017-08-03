@@ -4,11 +4,10 @@ wb = load_workbook('KeyCodes.xlsx', data_only=True)
 sh=wb["Sheet1"]
 ws = wb.active
 
-outbnd = {}
+outbnd_orl = {}
 orl_call_trsf = {}
 lvn_call_trsf = {}
 gldmtn_call_trsf = {}
-
 
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row,mx_col,mx_row,x):
@@ -19,16 +18,26 @@ def keycodes(m_row,mx_col,mx_row,x):
             if num == 1:
                 #print(cell.value)
                 x[cell.value] = None
-            if num == 33:
-                num = 0
+            if m_row > 17:
+                if num == 33:
+                    num = 0
+            else:
+                if num == 3:
+                    num = 0
 
 def assign_key(n,x):
-    for k,v in x.items():
-        x[k] = sh['D%s' % n].value
-        n += 1
+    if n > 17:
+        for k,v in x.items():
+            x[k] = sh['D%s' % n].value
+            n += 1
+    else:
+        for k,v in x.items():
+            x[k] = sh['B%s' % n].value
+            n += 1
 
-#keycodes(4,3,12,outbnd)
-#assign_key(32,outbnd)
+
+keycodes(4,3,12,outbnd_orl)
+assign_key(4,outbnd_orl)
     
 keycodes(18,33,27,orl_call_trsf)
 assign_key(18,orl_call_trsf)
