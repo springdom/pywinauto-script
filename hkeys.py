@@ -329,7 +329,10 @@ def build_package():
     SendKeys(FirstName.replace(" ","{SPACE}") + "{ENTER}")
     SendKeys(PhoneNo + "{ENTER 2}")
     #Country,Enter*4
-    SendKeys(Country + "{ENTER 4}")
+    if "/" in lastName or "/" in FirstName:
+        SendKeys(Country + "{ENTER 5}")
+    else:
+        SendKeys(Country + "{ENTER 4}")
     SendKeys(zipCode + "{ENTER}")
     SendKeys(addr.replace(" ","{SPACE}") + "{ENTER 5}")
     time.sleep(2)
@@ -392,8 +395,8 @@ def build_package():
     SendKeys("{ENTER 2}")
     SendKeys(promo + "{ENTER 6}")
     
-    #Payement
-    SendKeys(pckgcode)
+    #Payment
+    SendKeys(pckgcode + "{ENTER 3}")
     main()
 
 main()
