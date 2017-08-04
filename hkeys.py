@@ -6,12 +6,22 @@ from pywinauto.keyboard import SendKeys
 from pywinauto import Desktop
 from pywinauto.application import Application
 from pywinauto.findwindows import find_window
+from openpyxl import load_workbook
 
 #app.dlg.print_control_identifiers() #Check Identifiers
+wb = load_workbook('KeyCodes.xlsx', data_only=True)
+sh=wb["Sheet1"]
+ws = wb.active
+
+outbnd_orl = {}
+orl_call_trsf = {}
+lvn_call_trsf = {}
+gldmtn_call_trsf = {}
 
 opt1 = [1,2,1,2]
 opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
+
 
 def main():
     print("-" * 20)
@@ -88,6 +98,32 @@ def mode(opt):
         SendKeys(str(num))
         SendKeys('{ENTER}')
     SendKeys('{ENTER}')
+
+#KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
+def keycodes(m_row,mx_col,mx_row,x):
+    num = 0
+    for row in ws.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
+        for cell in row:
+            num += 1
+            if num == 1:
+                #print(cell.value)
+                x[cell.value] = None
+            if m_row > 17:
+                if num == 33:
+                    num = 0
+            else:
+                if num == 3:
+                    num = 0
+
+def assign_key(n,x):
+    if n > 17:
+        for k,v in x.items():
+            x[k] = sh['D%s' % n].value
+            n += 1
+    else:
+        for k,v in x.items():
+            x[k] = sh['B%s' % n].value
+            n += 1
 
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
@@ -223,7 +259,7 @@ def check_avail():
     region = input("Enter Region: ")
     arrival = input("Enter Arrival: ")
     nights = input("Enter Nights: ")
-    
+
     mode(opt1)
     SendKeys('{TAB}' + '2' + '{ENTER}')
     SendKeys(region + '{ENTER 2}')
@@ -289,13 +325,13 @@ def build_package():
     
     set_window()
     #LastName,FirstName,Phone Number
-    SendKeys(lastName + "{ENTER}")
-    SendKeys(FirstName + "{ENTER}")
+    SendKeys(lastName.replace(" ","{SPACE}") + "{ENTER}")
+    SendKeys(FirstName.replace(" ","{SPACE}") + "{ENTER}")
     SendKeys(PhoneNo + "{ENTER 2}")
     #Country,Enter*4
     SendKeys(Country + "{ENTER 4}")
     SendKeys(zipCode + "{ENTER}")
-    SendKeys(addr + "{ENTER 5}")
+    SendKeys(addr.replace(" ","{SPACE}") + "{ENTER 5}")
     time.sleep(2)
     
     #Check if address good
@@ -314,9 +350,50 @@ def build_package():
     SendKeys(natio + "{ENTER 2}")
     
     ###Marketing Key Section
+    ##Check Department
+    keycodes(18,33,27,orl_call_trsf)
+    assign_key(18,orl_call_trsf)
 
+    """
+    keycodes(32,33,41,lvn_call_trsf)
+    assign_key(32,lvn_call_trsf)
+
+    keycodes(46,33,55,gldmtn_call_trsf)
+    assign_key(46,gldmtn_call_trsf)
+    """
     
-def is_good(x):
-    pass
+    dptm = input("Department: ")
+    key_loca = input("Location: ")
+    promo = input("POS promo: ")
+    pckgcode = input("Package Code: ")
+    
+    """
+    if obnd:
+        pass
+        keycodes(4,3,12,outbnd_orl)
+        assign_key(4,outbnd_orl)
+    if orl:
+        pass
+        keycodes(18,33,27,orl_call_trsf)
+        assign_key(18,orl_call_trsf)
+    if gldmtn:
+        pass
+        keycodes(46,33,55,gldmtn_call_trsf)
+        assign_key(46,gldmtn_call_trsf)
+    if lvn:
+        pass
+    """
+    
+    mktkey = orl_call_trsf[key_loca]
+    
+    set_window()
+    SendKeys(mktkey + "{ENTER}")
+    SendKeys("{BACKSPACE}")
+    SendKeys("{ENTER 2}")
+    SendKeys(promo + "{ENTER 6}")
+    
+    #Payement
+    SendKeys(pckgcode)
+    main()
 
 main()
