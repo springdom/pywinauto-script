@@ -356,7 +356,7 @@ def build_package():
     ###Marketing Key Section
     ##Check Department
    
-    dptm = input("Department: ")
+    dptm = input("Department outbnd, orl, gldmtn, lvn: ")
     key_loca = input("Location: ")
     promo = input("POS promo: ")
     pckgcode = input("Package Code: ")

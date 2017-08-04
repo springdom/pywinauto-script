@@ -6,7 +6,7 @@ outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
 # "6" refers to the index of a folder - in this case,
 # the inbox. You can change that number to reference
 # any other folder
-inbox = outlook.GetDefaultFolder(10) 
+inbox = outlook.GetDefaultFolder(6) 
 
 messages = inbox.Items
 message = messages.GetFirst()
