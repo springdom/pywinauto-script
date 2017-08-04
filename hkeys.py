@@ -22,7 +22,6 @@ opt1 = [1,2,1,2]
 opt2 = [1,2,1,15,4,8]
 opt3 = [1,2,1,15,4,10]
 
-
 def main():
     print("-" * 20)
     print("Select From Menu")
@@ -42,8 +41,11 @@ def main():
     print("")
 
     if Sel >= 1 and Sel <= 3 or Sel == 7:
-        lead = input("Enter Lead: ")
-        loc = input("Enter Location: ")
+        try:
+            lead = input("Enter Lead: ")
+            loc = input("Enter Location: ")
+        except (KeyboardInterrupt, SystemExit):
+            main()
 
     if Sel == 1:
         check_avail()
@@ -79,7 +81,6 @@ def main():
 
 #Window Settings
 def set_window():
-    
     app = Application(backend='uia')
     p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
     app.connect(handle=p.handle)
@@ -114,7 +115,6 @@ def keycodes(m_row,mx_col,mx_row,x):
             else:
                 if num == 3:
                     num = 0
-
 def assign_key(n,x):
     if n > 17:
         for k,v in x.items():
@@ -213,7 +213,7 @@ def unlock_lead(leadn,loca):
 #Kick Package
 def kick_package(leadn,loca):
     mode(opt1)
-    
+    txtcmnt = "Package Kicked as requested"
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
@@ -232,7 +232,7 @@ def kick_package(leadn,loca):
     SendKeys('13')
     #SendKeys('A')
     #SendKeys('10' + '{ENTER 5}')
-    #SendKeys('Package Kicked as requested')
+    #SendKeys(txtcmnt.replace(" ","{SPACE}") + "{ENTER}")
     main()
     
 #Change To Kick
@@ -324,6 +324,7 @@ def build_package():
     natio = input("Nationality: ")
     
     set_window()
+    
     #LastName,FirstName,Phone Number
     SendKeys(lastName.replace(" ","{SPACE}") + "{ENTER}")
     SendKeys(FirstName.replace(" ","{SPACE}") + "{ENTER}")
@@ -354,40 +355,28 @@ def build_package():
     
     ###Marketing Key Section
     ##Check Department
-    keycodes(18,33,27,orl_call_trsf)
-    assign_key(18,orl_call_trsf)
-
-    """
-    keycodes(32,33,41,lvn_call_trsf)
-    assign_key(32,lvn_call_trsf)
-
-    keycodes(46,33,55,gldmtn_call_trsf)
-    assign_key(46,gldmtn_call_trsf)
-    """
-    
+   
     dptm = input("Department: ")
     key_loca = input("Location: ")
     promo = input("POS promo: ")
     pckgcode = input("Package Code: ")
     
-    """
-    if obnd:
-        pass
+    if dptm == "outbnd":
         keycodes(4,3,12,outbnd_orl)
         assign_key(4,outbnd_orl)
-    if orl:
-        pass
+        mktkey = outbnd_call_trsf[key_loca]
+    if dptm == "orl":
         keycodes(18,33,27,orl_call_trsf)
         assign_key(18,orl_call_trsf)
-    if gldmtn:
-        pass
+        mktkey = orl_call_trsf[key_loca]
+    if dptm == "gldmtn":
         keycodes(46,33,55,gldmtn_call_trsf)
         assign_key(46,gldmtn_call_trsf)
-    if lvn:
-        pass
-    """
-    
-    mktkey = orl_call_trsf[key_loca]
+        mktkey = gldmtn_call_trsf[key_loca]
+    if dptm == "lvn":
+        keycodes(32,33,41,lvn_call_trsf)
+        assign_key(32,lvn_call_trsf)
+        mktkey = lvn_call_trsf[key_loca]
     
     set_window()
     SendKeys(mktkey + "{ENTER}")
