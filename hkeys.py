@@ -149,7 +149,6 @@ def lead_package(leadn,loca):
         arrival = input("Arrival: ")
         nights = input("Nights: ")
 
-
         set_window()
     
         SendKeys(propn + '{ENTER 2}')
@@ -236,7 +235,7 @@ def kick_package(leadn,loca):
     main()
     
 #Change To Kick
-def change_to_kick(leadn,loca):
+def change_to_kick(leadn, loca):
     mode(opt3)
    
     SendKeys(leadn + '{ENTER}')
