@@ -108,7 +108,7 @@ def keycodes(m_row,mx_col,mx_row,x):
             num += 1
             if num == 1:
                 #print(cell.value)
-                x[cell.value] = None
+                x[cell.value.lower()] = None
             if m_row > 17:
                 if num == 33:
                     num = 0
@@ -355,12 +355,12 @@ def build_package():
     
     ###Marketing Key Section
     ##Check Department
-   
     dptm = input("Department outbnd, orl, gldmtn, lvn: ")
     key_loca = input("Location: ")
     promo = input("POS promo: ")
     pckgcode = input("Package Code: ")
-    
+    stt = input("Marital Status: ")
+    tsr = input("Agent tsr: ")
     if dptm == "outbnd":
         keycodes(4,3,12,outbnd_orl)
         assign_key(4,outbnd_orl)
@@ -385,7 +385,28 @@ def build_package():
     SendKeys(promo + "{ENTER 6}")
     
     #Payment
-    SendKeys(pckgcode + "{ENTER 3}")
+    SendKeys(pckgcode + "{ENTER 5}")
+    price = input("Price: ")
+    set_window()
+    SendKeys(str(price) + "{ENTER 3}")
+    ##add CC
+    #is cc good then
+    ccgood = input("CC accepted: ")
+
+    if not ccgood:
+        main()
+        
+    set_window()
+    SendKeys("{ENTER 2}")
+    SendKeys(str(tsr) + "{ENTER}")
+    SendKeys(str(tsr) + "{ENTER}")
+    SendKeys(str(tsr) + "{ENTER 12}")
+
+    SendKeys("1" + "{ENTER}")
+    SendKeys("1" + "{ENTER}")
+    SendKeys(mktkey + "{ENTER 3}")
+    SendKeys(stta + "{ENTER 10}")
     main()
 
 main()
+
