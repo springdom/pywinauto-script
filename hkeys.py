@@ -13,6 +13,10 @@ wb = load_workbook('KeyCodes.xlsx', data_only=True)
 sh=wb["Sheet1"]
 ws = wb.active
 
+wb2 = load_workbook('changetokick.xlsx', data_only=True)
+sh2=wb["Sheet1"]
+ws2 = wb2.active
+
 outbnd_orl = {}
 orl_call_trsf = {}
 lvn_call_trsf = {}
@@ -59,11 +63,14 @@ def main():
     elif Sel == 3:
         kick_package(lead,loc)
     elif Sel == 4:
+        """
         win32clipboard.OpenClipboard()
         data = win32clipboard.GetClipboardData()
         win32clipboard.CloseClipboard()
         leadvar = data.split("-")
         change_to_kick(leadvar[1],leadvar[0])
+        """
+        kick_list(3,1,56)
     elif Sel == 5:
         build_package()
     elif Sel == 0:
@@ -124,6 +131,13 @@ def assign_key(n,x):
         for k,v in x.items():
             x[k] = sh['B%s' % n].value
             n += 1
+
+def kick_list(m_row,mx_col,mx_row):
+    for row in ws2.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
+        for cell in row:
+                lead = cell.value.split("-")
+                change_to_kick(lead[1],lead[0])
+
 
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn,loca):
@@ -251,7 +265,7 @@ def change_to_kick(leadn, loca):
     SendKeys("9")
     SendKeys("{ENTER 2}")
     SendKeys("f" + "{ENTER}")
-    main()
+    #main()
 
 #Check Availability
 def check_avail():
