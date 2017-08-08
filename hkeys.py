@@ -9,13 +9,13 @@ from openpyxl import load_workbook
 #from pywinauto.findwindows import find_window
 
 #app.dlg.print_control_identifiers() #Check Identifiers
-wb = load_workbook('KeyCodes.xlsx', data_only=True)
-sh = wb["Sheet1"]
-ws = wb.active
+wb_keycodes = load_workbook('KeyCodes.xlsx', data_only=True)
+sh_keycodes = wb_keycodes["Sheet1"]
+ws_keycodes = wb_keycodes.active
 
-wb2 = load_workbook('changetokick.xlsx', data_only=True)
-sh2 = wb["Sheet1"]
-ws2 = wb2.active
+wb_leadkick = load_workbook('changetokick.xlsx', data_only=True)
+sh_leadkick = wb_leadkick["Sheet1"]
+ws_leadkick = wb_leadkick.active
 
 outbnd_orl = {}
 orl_call_trsf = {}
@@ -30,8 +30,7 @@ def main():
     print("-" * 20)
     print("Select From Menu")
     print("0: Check Availability")
-    print("9: Check Tours")
-    print("8: Check Avail")
+    print("8: Check Tours")
     print("7: Cashback Check")
     print("-" * 20)
     print("1: Book Dates")
@@ -52,12 +51,7 @@ def main():
             main()
 
     if Sel == 1:
-        check_avail()
-        checkavail = input("Available: y or n: ")
-        if checkavail == "y":
-            lead_package(lead, loc)
-        else:
-            main()
+        lead_package(lead, loc)
     elif Sel == 2:
         unlock_lead(lead, loc)
     elif Sel == 3:
@@ -75,11 +69,8 @@ def main():
         build_package()
     elif Sel == 0:
         check_dates()
-    elif Sel == 9:
-        check_tours()
     elif Sel == 8:
-        check_avail()
-        main()
+        check_tours()
     elif Sel == 7:
         check_cashback(lead, loc)
     else:
@@ -110,7 +101,7 @@ def mode(opt):
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row, mx_col, mx_row, x):
     num = 0
-    for row in ws.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
+    for row in ws_keycodes.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
         for cell in row:
             num += 1
             if num == 1:
@@ -126,25 +117,43 @@ def keycodes(m_row, mx_col, mx_row, x):
 def assign_key(n, x):
     if n > 17:
         for k, v in x.items():
-            x[k] = sh['D%s' % n].value
+            x[k] = sh_keycodes['D%s' % n].value
             n += 1
     else:
         for k, v in x.items():
-            x[k] = sh['B%s' % n].value
+            x[k] = sh_keycodes['B%s' % n].value
             n += 1
 
 def kick_list(m_row, mx_col, mx_row):
-    for row in ws2.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
+    for row in ws_leadkick.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
         for cell in row:
             lead = cell.value.split("-")
             change_to_kick(lead[1], lead[0])
 
 #Lead Mktg Package Entry & Edit
 def lead_package(leadn, loca):
+    region = input("Enter Region: ")
+    arrival = input("Enter Arrival: ")
+    nights = input("Enter Nights: ")
+
     mode(opt1)
+
+    SendKeys('{TAB}' + '2' + '{ENTER}')
+    SendKeys(region + '{ENTER 2}')
+    SendKeys(arrival + '{ENTER 2}')
+    SendKeys(nights)
+    SendKeys('{TAB}' + '3' + '{ENTER}')
+    
+    checkavail = input("Available: y or n: ")
+    if checkavail == "n":
+        main()
+
+    mode(opt1)
+
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
     SendKeys('{ENTER 2}')
+
     try:
         package_sel = input("Select Package Number: ")
 
@@ -157,8 +166,8 @@ def lead_package(leadn, loca):
         unitt = input("Enter Unit Type: ")
         adults = input("Adults: ")
         kids = input("Kids: ")
-        arrival = input("Arrival: ")
-        nights = input("Nights: ")
+        #arrival = input("Arrival: ")
+        #nights = input("Nights: ")
 
         set_window()
 
@@ -181,7 +190,6 @@ def lead_package(leadn, loca):
 
         if proceed == 'y':
             SendKeys('{ENTER}')
-
 
         time.sleep(1)
         office = input("Enter Office: ")
@@ -262,21 +270,6 @@ def change_to_kick(leadn, loca):
     SendKeys("{ENTER 2}")
     SendKeys("f" + "{ENTER}")
     #main()
-
-#Check Availability
-def check_avail():
-    region = input("Enter Region: ")
-    arrival = input("Enter Arrival: ")
-    nights = input("Enter Nights: ")
-
-    mode(opt1)
-
-    SendKeys('{TAB}' + '2' + '{ENTER}')
-    SendKeys(region + '{ENTER 2}')
-    SendKeys(arrival + '{ENTER 2}')
-    SendKeys(nights)
-    SendKeys('{TAB}' + '3' + '{ENTER}')
-
 
 #Check Dates
 def check_dates():
