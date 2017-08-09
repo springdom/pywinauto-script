@@ -224,7 +224,7 @@ def unlock_lead(leadn, loca):
     set_window()
     SendKeys(leadn + '{ENTER}')
     SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 5}')
+    SendKeys('{ENTER 6}')
     main()
 
 #Kick Package
@@ -344,7 +344,7 @@ def build_package():
     time.sleep(2)
 
     #Check if address good
-    addrgood = input("Select Option: override continue ")
+    addrgood = input("Select Option: override continue 'o or c': ")
 
     set_window()
     if addrgood == "o":
