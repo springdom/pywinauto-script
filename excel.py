@@ -1,13 +1,20 @@
 from openpyxl import load_workbook
 
-wb = load_workbook('KeyCodes.xlsx', data_only=True)
-sh=wb["Sheet1"]
+filed = r"Z:\Packages\Breakdown Of Current Packages 08-04-2017.xlsx"
+wb = load_workbook(filed, data_only=True)
+sh=wb["Current Packages"]
 ws = wb.active
 
-outbnd_orl = {}
-orl_call_trsf = {}
-lvn_call_trsf = {}
-gldmtn_call_trsf = {}
+orl_pkgs = {}
+lvn_pkgs = {}
+nyc_pkgs = {}
+haw_pkgs = {}
+hhv_pkgs = {}
+cal_pkgs = {}
+sca_pkgs = {}
+mtn_pkgs = {}
+wdc_pkgs = {}
+listn = []
 
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row,mx_col,mx_row,x):
@@ -15,15 +22,13 @@ def keycodes(m_row,mx_col,mx_row,x):
     for row in ws.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
         for cell in row:
             num += 1
-            if num == 1:
-                #print(cell.value)
-                x[cell.value] = None
-            if m_row > 17:
-                if num == 33:
-                    num = 0
-            else:
-                if num == 3:
-                    num = 0
+            if num == 7:
+                num = 1
+            print(num)
+            #if cell.value != None:
+             #   print(cell.value)
+            #print(cell.value)
+            #x[cell.value] = None
 
 def assign_key(n,x):
     if n > 17:
@@ -38,28 +43,6 @@ def assign_key(n,x):
 def tes(z):
     for k in z.items():
         print(k)
-        """
-    mydict = {
-        'orl':,
-        'nyc':,
-        'lvn':,
-        'hhv':,
-        'haw':,
-        'cal':,
-        'sca':,
-        'mtn':,
-        'wdc':,
-        }
-        """
 
-keycodes(4,3,12,outbnd_orl)
-assign_key(4,outbnd_orl)
-    
-keycodes(18,33,27,orl_call_trsf)
-assign_key(18,orl_call_trsf)
-
-keycodes(32,33,41,lvn_call_trsf)
-assign_key(32,lvn_call_trsf)
-
-keycodes(46,33,55,gldmtn_call_trsf)
-assign_key(46,gldmtn_call_trsf)
+keycodes(4,6,82,orl_pkgs)
+#assign_key(4,outbnd_orl)
