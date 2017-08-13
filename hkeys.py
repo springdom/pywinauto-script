@@ -9,6 +9,14 @@ from openpyxl import load_workbook
 #from pywinauto.findwindows import find_window
 
 #app.dlg.print_control_identifiers() #Check Identifiers
+
+app = Application(backend='uia')
+p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
+#p = pywinauto.findwindows.find_element(best_match="Notepad")
+app.connect(handle=p.handle)
+dlg = app.window(best_match="AbsoluteTelnet")
+#dlg = app.window(best_match="Notepad")
+
 wb_keycodes = load_workbook('KeyCodes.xlsx', data_only=True)
 sh_keycodes = wb_keycodes["Sheet1"]
 ws_keycodes = wb_keycodes.active
@@ -25,6 +33,8 @@ gldmtn_call_trsf = {}
 opt1 = [1, 2, 1, 2]
 opt2 = [1, 2, 1, 15, 4, 8]
 opt3 = [1, 2, 1, 15, 4, 10]
+
+typein = app.dlg.type_keys
 
 def main():
     print("-" * 20)
@@ -77,26 +87,23 @@ def main():
         print("Invalid Option")
         main()
 
-#Window Settings
-def set_window():
-    app = Application(backend='uia')
-    p = pywinauto.findwindows.find_element(best_match="AbsoluteTelnet")
-    app.connect(handle=p.handle)
-    dlg = app.window(best_match="AbsoluteTelnet")
-    app.dlg.set_focus()
-    #app.dlg.type_keys("Test")
 
+#Window Settings
+"""
+def set_window():
+    app.dlg.set_focus()
+    #app.dlg.type_keys("Test" + "{ENTER}")
+"""
 #Enter Mode
 def mode(opt):
-    set_window()
-    SendKeys('{BACKSPACE 10}')
-    SendKeys('{ENTER}')
+    typein('{BS 10}')
+    typein('{ENTER}')
     time.sleep(1.5)
 
     for num in opt:
-        SendKeys(str(num))
-        SendKeys('{ENTER}')
-    SendKeys('{ENTER}')
+        typein(str(num))
+        typein('{ENTER}')
+    typein('{ENTER}')
 
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row, mx_col, mx_row, x):
@@ -138,11 +145,11 @@ def lead_package(leadn, loca):
 
     mode(opt1)
 
-    SendKeys('{TAB}' + '2' + '{ENTER}')
-    SendKeys(region + '{ENTER 2}')
-    SendKeys(arrival + '{ENTER 2}')
-    SendKeys(nights)
-    SendKeys('{TAB}' + '3' + '{ENTER}')
+    typein('{TAB}' + '2' + '{ENTER}')
+    typein(region + '{ENTER 2}')
+    typein(arrival + '{ENTER 2}')
+    typein(nights)
+    typein('{TAB}' + '3' + '{ENTER}')
     
     checkavail = input("Available: y or n: ")
     if checkavail == "n":
@@ -150,18 +157,18 @@ def lead_package(leadn, loca):
 
     mode(opt1)
 
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 2}')
+    typein(leadn + '{ENTER}')
+    typein(loca + '{ENTER}')
+    typein('{ENTER 2}')
 
     try:
         package_sel = input("Select Package Number: ")
 
-        set_window()
+        #set_window()
 
-        SendKeys('{ENTER}')
-        SendKeys(package_sel + '{ENTER}')
-        SendKeys('7' + '{ENTER}' + 'A' + '{ENTER}')
+        typein('{ENTER}')
+        typein(package_sel + '{ENTER}')
+        typein('7' + '{ENTER}' + 'A' + '{ENTER}')
         propn = input("Enter Property Number: ")
         unitt = input("Enter Unit Type: ")
         adults = input("Adults: ")
@@ -169,49 +176,49 @@ def lead_package(leadn, loca):
         #arrival = input("Arrival: ")
         #nights = input("Nights: ")
 
-        set_window()
+        #set_window()
 
-        SendKeys(propn + '{ENTER 2}')
-        SendKeys(unitt + '{ENTER 4}')
-        SendKeys(adults + '{ENTER 2}')
-        SendKeys(kids + '{ENTER 2}')
-        SendKeys(arrival + '{ENTER}')
-        SendKeys(nights + '{ENTER 2}')
+        typein(propn + '{ENTER 2}')
+        typein(unitt + '{ENTER 4}')
+        typein(adults + '{ENTER 2}')
+        typein(kids + '{ENTER 2}')
+        typein(arrival + '{ENTER}')
+        typein(nights + '{ENTER 2}')
         bckspace = input("Go back? y or n: ") # Backspace
 
-        set_window()
+        #set_window()
 
         if bckspace == "y":
-            SendKeys('{BACKSPACE}')
+            typein('{BS}')
 
         proceed = input("Proceed - y or n: ")
 
-        set_window()
+        #set_window()
 
         if proceed == 'y':
-            SendKeys('{ENTER}')
+            typein('{ENTER}')
 
         time.sleep(1)
         office = input("Enter Office: ")
         manifest = input("Manifest: ")
-        set_window()
-        SendKeys('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
+        #set_window()
+        typein('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
         toursa = input("Tours Available y or n: ")
 
-        set_window()
+        #set_window()
 
         if toursa == "y":
-            SendKeys('1' + '{ENTER 2}')
-            SendKeys(manifest)
-            SendKeys('{ENTER 9}')
+            typein('1' + '{ENTER 2}')
+            typein(manifest)
+            typein('{ENTER 9}')
             time.sleep(1.30)
-            SendKeys('{ENTER 17}')
-            SendKeys('f' + '{ENTER}')
-            SendKeys('y' + "{ENTER}")
+            typein('{ENTER 17}')
+            typein('f' + '{ENTER}')
+            typein('y' + "{ENTER}")
             amount = input("Enter amount: ")
-            set_window()
-            SendKeys(amount)
-            SendKeys("{ENTER}" + "n")
+            #set_window()
+            typein(amount)
+            typein("{ENTER}" + "n")
         else:
             pass
         main()
@@ -221,54 +228,54 @@ def lead_package(leadn, loca):
 #Unlock Lead
 def unlock_lead(leadn, loca):
     mode(opt2)
-    set_window()
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 6}')
+    #set_window()
+    typein(leadn + '{ENTER}')
+    typein(loca + '{ENTER}')
+    typein('{ENTER 6}')
     main()
 
 #Kick Package
 def kick_package(leadn, loca):
     mode(opt1)
     txtcmnt = "Package Kicked as requested"
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 2}')
+    typein(leadn + '{ENTER}')
+    typein(loca + '{ENTER}')
+    typein('{ENTER 2}')
     package_sel = input("Select Package Number: ")
 
-    set_window()
+    #set_window()
 
-    SendKeys('{ENTER}')
-    SendKeys(package_sel + '{ENTER}')
-    SendKeys('20' + '{ENTER}')
-    SendKeys('2' + '{ENTER}')
-    SendKeys('14' + '{ENTER}')
-    SendKeys('{TAB}')
+    typein('{ENTER}')
+    typein(package_sel + '{ENTER}')
+    typein('20' + '{ENTER}')
+    typein('2' + '{ENTER}')
+    typein('14' + '{ENTER}')
+    typein('{TAB}')
     time.sleep(3)
-    SendKeys('{ENTER 10}')
-    SendKeys('13')
-    #SendKeys('A')
-    #SendKeys('10' + '{ENTER 5}')
-    #SendKeys(txtcmnt.replace(" ","{SPACE}") + "{ENTER}")
+    typein('{ENTER 10}')
+    typein('13')
+    #typein('A')
+    #typein('10' + '{ENTER 5}')
+    #typein(txtcmnt.replace(" ","{SPACE}") + "{ENTER}")
     main()
 
 #Change To Kick
 def change_to_kick(leadn, loca):
     mode(opt3)
 
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 2}')
+    typein(leadn + '{ENTER}')
+    typein(loca + '{ENTER}')
+    typein('{ENTER 2}')
 
     package_sel = input("Enter Package Number: ")
-    set_window()
+    #set_window()
 
-    SendKeys(package_sel + '{ENTER}')
-    SendKeys("2")
-    SendKeys("{ENTER}")
-    SendKeys("9")
-    SendKeys("{ENTER 2}")
-    SendKeys("f" + "{ENTER}")
+    typein(package_sel + '{ENTER}')
+    typein("2")
+    typein("{ENTER}")
+    typein("9")
+    typein("{ENTER 2}")
+    typein("f" + "{ENTER}")
     #main()
 
 #Check Dates
@@ -278,10 +285,10 @@ def check_dates():
 
     mode(opt1)
 
-    SendKeys('{TAB}' + '2' + '{ENTER}')
-    SendKeys(region + '{ENTER 2}')
-    SendKeys(arrival + '{ENTER}')
-    SendKeys('{TAB}' + '2' + '{ENTER}')
+    typein('{TAB}' + '2' + '{ENTER}')
+    typein(region + '{ENTER 2}')
+    typein(arrival + '{ENTER}')
+    typein('{TAB}' + '2' + '{ENTER}')
     main()
 
 #Check Tours
@@ -291,31 +298,31 @@ def check_tours():
 
     mode(opt1)
 
-    SendKeys('{TAB}' + '3' + '{ENTER}')
-    SendKeys(office + '{ENTER}')
-    SendKeys(starting + '{ENTER 3}')
-    SendKeys('{TAB}' + '2' + '{ENTER}')
+    typein('{TAB}' + '3' + '{ENTER}')
+    typein(office + '{ENTER}')
+    typein(starting + '{ENTER 3}')
+    typein('{TAB}' + '2' + '{ENTER}')
     main()
 
 def check_cashback(leadn, loca):
     mode(opt3)
 
-    SendKeys(leadn + '{ENTER}')
-    SendKeys(loca + '{ENTER}')
-    SendKeys('{ENTER 2}')
+    typein(leadn + '{ENTER}')
+    typein(loca + '{ENTER}')
+    typein('{ENTER 2}')
     package_sel = input("Enter Package Number: ")
-    set_window()
-    SendKeys(package_sel + '{ENTER}')
-    SendKeys('18' + '{ENTER}')
+    #set_window()
+    typein(package_sel + '{ENTER}')
+    typein('18' + '{ENTER}')
     time.sleep(1)
-    SendKeys('{BACKSPACE 3}')
+    typein('{BS 3}')
     main()
 
 #Build A Package
 def build_package():
     mode(opt1)
     #Check if Exist first
-    SendKeys("{ENTER}")
+    typein("{ENTER}")
     last_name = input("Enter Last Name: ")
     first_name = input("Enter First Name: ")
     phone_no = input("Phone Number: ")
@@ -328,36 +335,36 @@ def build_package():
     lang = input("Preferred Language: ")
     natio = input("Nationality: ")
 
-    set_window()
+    #set_window()
 
     #last_name,first_name,Phone Number
-    SendKeys(last_name.replace(" ", "{SPACE}") + "{ENTER}")
-    SendKeys(first_name.replace(" ", "{SPACE}") + "{ENTER}")
-    SendKeys(phone_no + "{ENTER 2}")
+    typein(last_name.replace(" ", "{SPACE}") + "{ENTER}")
+    typein(first_name.replace(" ", "{SPACE}") + "{ENTER}")
+    typein(phone_no + "{ENTER 2}")
     #country,Enter*4
     if "/" in last_name or "/" in first_name:
-        SendKeys(country + "{ENTER 5}")
+        typein(country + "{ENTER 5}")
     else:
-        SendKeys(country + "{ENTER 4}")
-    SendKeys(zip_code + "{ENTER}")
-    SendKeys(addr.replace(" ", "{SPACE}") + "{ENTER 5}")
+        typein(country + "{ENTER 4}")
+    typein(zip_code + "{ENTER}")
+    typein(addr.replace(" ", "{SPACE}") + "{ENTER 5}")
     time.sleep(2)
 
     #Check if address good
     addrgood = input("Select Option: override continue 'o or c': ")
 
-    set_window()
+    #set_window()
     if addrgood == "o":
-        SendKeys("o" + "{ENTER}")
+        typein("o" + "{ENTER}")
     elif addr == "c":
         pass
 
-    SendKeys(phone_no2)
-    SendKeys("{ENTER 9}")
-    SendKeys(hhn + "{ENTER 2}")
-    SendKeys(email + "{ENTER 2}")
-    SendKeys(lang + "{ENTER}")
-    SendKeys(natio + "{ENTER 2}")
+    typein(phone_no2)
+    typein("{ENTER 9}")
+    typein(hhn + "{ENTER 2}")
+    typein(email + "{ENTER 2}")
+    typein(lang + "{ENTER}")
+    typein(natio + "{ENTER 2}")
 
     ###Marketing Key Section
     ##Check Department
@@ -384,17 +391,17 @@ def build_package():
         assign_key(32, lvn_call_trsf)
         mktkey = lvn_call_trsf[key_loca]
 
-    set_window()
-    SendKeys(mktkey + "{ENTER}")
-    SendKeys("{BACKSPACE}")
-    SendKeys("{ENTER 2}")
-    SendKeys(promo + "{ENTER 6}")
+    #set_window()
+    typein(mktkey + "{ENTER}")
+    typein("{BS}")
+    typein("{ENTER 2}")
+    typein(promo + "{ENTER 6}")
 
     #Payment
-    SendKeys(pckgcode + "{ENTER 5}")
+    typein(pckgcode + "{ENTER 5}")
     price = input("Price: ")
-    set_window()
-    SendKeys(str(price) + "{ENTER 3}")
+    #set_window()
+    typein(str(price) + "{ENTER 3}")
     ##add CC
     #is cc good then
     ccgood = input("CC accepted: ")
@@ -402,16 +409,16 @@ def build_package():
     if not ccgood:
         main()
 
-    set_window()
-    SendKeys("{ENTER 2}")
-    SendKeys(str(tsr) + "{ENTER}")
-    SendKeys(str(tsr) + "{ENTER}")
-    SendKeys(str(tsr) + "{ENTER 12}")
+    #set_window()
+    typein("{ENTER 2}")
+    typein(str(tsr) + "{ENTER}")
+    typein(str(tsr) + "{ENTER}")
+    typein(str(tsr) + "{ENTER 12}")
 
-    SendKeys("1" + "{ENTER}")
-    SendKeys("1" + "{ENTER}")
-    SendKeys(mktkey + "{ENTER 3}")
-    SendKeys(stt + "{ENTER 10}")
+    typein("1" + "{ENTER}")
+    typein("1" + "{ENTER}")
+    typein(mktkey + "{ENTER 3}")
+    typein(stt + "{ENTER 10}")
     main()
 
 main()
