@@ -52,41 +52,38 @@ def main():
     print("-" * 20)
     Sel = int(input("Select Option: "))
     print("")
-
-    if Sel >= 1 and Sel <= 3 or Sel == 7:
-        try:
+    try:
+        if Sel >= 1 and Sel <= 3 or Sel == 7:
             lead = input("Enter Lead: ")
             loc = input("Enter Location: ")
-        except (KeyboardInterrupt, SystemExit):
+        if Sel == 1:
+            lead_package(lead, loc)
+        elif Sel == 2:
+            unlock_lead(lead, loc)
+        elif Sel == 3:
+            kick_package(lead, loc)
+        elif Sel == 4:
+            """
+            win32clipboard.OpenClipboard()
+            data = win32clipboard.GetClipboardData()
+            win32clipboard.CloseClipboard()
+            leadvar = data.split("-")
+            change_to_kick(leadvar[1],leadvar[0])
+            """
+            kick_list(3, 1, 56)
+        elif Sel == 5:
+            build_package()
+        elif Sel == 0:
+            check_dates()
+        elif Sel == 8:
+            check_tours()
+        elif Sel == 7:
+            check_cashback(lead, loc)
+        else:
+            print("Invalid Option")
             main()
-
-    if Sel == 1:
-        lead_package(lead, loc)
-    elif Sel == 2:
-        unlock_lead(lead, loc)
-    elif Sel == 3:
-        kick_package(lead, loc)
-    elif Sel == 4:
-        """
-        win32clipboard.OpenClipboard()
-        data = win32clipboard.GetClipboardData()
-        win32clipboard.CloseClipboard()
-        leadvar = data.split("-")
-        change_to_kick(leadvar[1],leadvar[0])
-        """
-        kick_list(3, 1, 56)
-    elif Sel == 5:
-        build_package()
-    elif Sel == 0:
-        check_dates()
-    elif Sel == 8:
-        check_tours()
-    elif Sel == 7:
-        check_cashback(lead, loc)
-    else:
-        print("Invalid Option")
+    except (KeyboardInterrupt, SystemExit):
         main()
-
 
 #Window Settings
 """
@@ -161,69 +158,66 @@ def lead_package(leadn, loca):
     typein(loca + '{ENTER}')
     typein('{ENTER 2}')
 
-    try:
-        package_sel = input("Select Package Number: ")
+    package_sel = input("Select Package Number: ")
 
-        #set_window()
+    #set_window()
 
+    typein('{ENTER}')
+    typein(package_sel + '{ENTER}')
+    typein('7' + '{ENTER}' + 'A' + '{ENTER}')
+    propn = input("Enter Property Number: ")
+    unitt = input("Enter Unit Type: ")
+    adults = input("Adults: ")
+    kids = input("Kids: ")
+    #arrival = input("Arrival: ")
+    #nights = input("Nights: ")
+
+    #set_window()
+
+    typein(propn + '{ENTER 2}')
+    typein(unitt + '{ENTER 4}')
+    typein(adults + '{ENTER 2}')
+    typein(kids + '{ENTER 2}')
+    typein(arrival + '{ENTER}')
+    typein(nights + '{ENTER 2}')
+    bckspace = input("Go back? y or n: ") # Backspace
+
+    #set_window()
+
+    if bckspace == "y":
+        typein('{BS}')
+
+    proceed = input("Proceed - y or n: ")
+
+    #set_window()
+
+    if proceed == 'y':
         typein('{ENTER}')
-        typein(package_sel + '{ENTER}')
-        typein('7' + '{ENTER}' + 'A' + '{ENTER}')
-        propn = input("Enter Property Number: ")
-        unitt = input("Enter Unit Type: ")
-        adults = input("Adults: ")
-        kids = input("Kids: ")
-        #arrival = input("Arrival: ")
-        #nights = input("Nights: ")
 
+    time.sleep(1)
+    office = input("Enter Office: ")
+    manifest = input("Manifest: ")
+    #set_window()
+    typein('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
+    toursa = input("Tours Available y or n: ")
+
+    #set_window()
+
+    if toursa == "y":
+        typein('1' + '{ENTER 2}')
+        typein(manifest)
+        typein('{ENTER 9}')
+        time.sleep(1.30)
+        typein('{ENTER 17}')
+        typein('f' + '{ENTER}')
+        typein('y' + "{ENTER}")
+        amount = input("Enter amount: ")
         #set_window()
-
-        typein(propn + '{ENTER 2}')
-        typein(unitt + '{ENTER 4}')
-        typein(adults + '{ENTER 2}')
-        typein(kids + '{ENTER 2}')
-        typein(arrival + '{ENTER}')
-        typein(nights + '{ENTER 2}')
-        bckspace = input("Go back? y or n: ") # Backspace
-
-        #set_window()
-
-        if bckspace == "y":
-            typein('{BS}')
-
-        proceed = input("Proceed - y or n: ")
-
-        #set_window()
-
-        if proceed == 'y':
-            typein('{ENTER}')
-
-        time.sleep(1)
-        office = input("Enter Office: ")
-        manifest = input("Manifest: ")
-        #set_window()
-        typein('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
-        toursa = input("Tours Available y or n: ")
-
-        #set_window()
-
-        if toursa == "y":
-            typein('1' + '{ENTER 2}')
-            typein(manifest)
-            typein('{ENTER 9}')
-            time.sleep(1.30)
-            typein('{ENTER 17}')
-            typein('f' + '{ENTER}')
-            typein('y' + "{ENTER}")
-            amount = input("Enter amount: ")
-            #set_window()
-            typein(amount)
-            typein("{ENTER}" + "n")
-        else:
-            pass
-        main()
-    except (KeyboardInterrupt, SystemExit):
-        main()
+        typein(amount)
+        typein("{ENTER}" + "n")
+    else:
+        pass
+    main()
 
 #Unlock Lead
 def unlock_lead(leadn, loca):
