@@ -35,6 +35,7 @@ opt2 = [1, 2, 1, 15, 4, 8]
 opt3 = [1, 2, 1, 15, 4, 10]
 
 typein = app.dlg.type_keys
+_comment = ("13" + "{ENTER}" + "a" + "{ENTER}" + "10" + "{ENTER 5}")
 
 def main():
     print("-" * 20)
@@ -197,32 +198,33 @@ def lead_package(leadn, loca):
     time.sleep(1)
     office = input("Enter Office: ")
     manifest = input("Manifest: ")
-    #set_window()
+
     typein('{TAB}' + office + '{ENTER}' + '{ENTER}' + '{ENTER 2}')
     toursa = input("Tours Available y or n: ")
 
-    #set_window()
+    if toursa == "n":
+        main()
+    
+    typein('1' + '{ENTER 2}')
+    typein(manifest)
+    typein('{ENTER 9}')
+    time.sleep(1.30)
+    typein('{ENTER 17}')
+    typein('f' + '{ENTER}')
+    typein('y' + "{ENTER}")
+    amount = input("Enter amount: ")
 
-    if toursa == "y":
-        typein('1' + '{ENTER 2}')
-        typein(manifest)
-        typein('{ENTER 9}')
-        time.sleep(1.30)
-        typein('{ENTER 17}')
-        typein('f' + '{ENTER}')
-        typein('y' + "{ENTER}")
-        amount = input("Enter amount: ")
-        #set_window()
-        typein(amount)
-        typein("{ENTER}" + "n")
-    else:
-        pass
+    typein(amount)
+    typein("{ENTER}" + "n")
+    typein("{ENTER 3}")
+    typein_comment
+    
     main()
 
 #Unlock Lead
 def unlock_lead(leadn, loca):
     mode(opt2)
-    #set_window()
+    
     typein(leadn + '{ENTER}')
     typein(loca + '{ENTER}')
     typein('{ENTER 6}')
@@ -237,8 +239,6 @@ def kick_package(leadn, loca):
     typein('{ENTER 2}')
     package_sel = input("Select Package Number: ")
 
-    #set_window()
-
     typein('{ENTER}')
     typein(package_sel + '{ENTER}')
     typein('20' + '{ENTER}')
@@ -246,7 +246,7 @@ def kick_package(leadn, loca):
     typein('14' + '{ENTER}')
     typein('{TAB}')
     time.sleep(3)
-    typein('{ENTER 10}')
+    typein('{ENTER 13}')
     typein('13')
     #typein('A')
     #typein('10' + '{ENTER 5}')
@@ -260,9 +260,9 @@ def change_to_kick(leadn, loca):
     typein(leadn + '{ENTER}')
     typein(loca + '{ENTER}')
     typein('{ENTER 2}')
-
+    
+    print(leadn + "-" + loca)
     package_sel = input("Enter Package Number: ")
-    #set_window()
 
     typein(package_sel + '{ENTER}')
     typein("2")
@@ -305,7 +305,7 @@ def check_cashback(leadn, loca):
     typein(loca + '{ENTER}')
     typein('{ENTER 2}')
     package_sel = input("Enter Package Number: ")
-    #set_window()
+
     typein(package_sel + '{ENTER}')
     typein('18' + '{ENTER}')
     time.sleep(1)
@@ -328,8 +328,6 @@ def build_package():
     email = input("Enter Email: ")
     lang = input("Preferred Language: ")
     natio = input("Nationality: ")
-
-    #set_window()
 
     #last_name,first_name,Phone Number
     typein(last_name.replace(" ", "{SPACE}") + "{ENTER}")
