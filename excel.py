@@ -8,14 +8,6 @@ sh=wb["Current Packages"]
 ws = wb.active
 
 orl_pkgs = {}
-lvn_pkgs = {}
-nyc_pkgs = {}
-haw_pkgs = {}
-hhv_pkgs = {}
-cal_pkgs = {}
-sca_pkgs = {}
-mtn_pkgs = {}
-wdc_pkgs = {}
 
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row,mx_col,mx_row,x):
@@ -37,40 +29,23 @@ def keycodes(m_row,mx_col,mx_row,x):
             #print(cell.value)
             #x[cell.value] = None
 
-price = []
-day_res_discount = []
-listn = []
-package_terms = []
+#price = []
+pckgs = []
+
+for i in range(11, 1):
+    ws.cell(row=i, column=2).value = i
 
 def get_pckg(x,y,pkg):
     for i in range(x,y):
+        pckg_code = str(sh['A%s' % i].value)
+        price = str(sh['E%s' % i].value)
+        day_res_discount = sh['F%s' % i].value
+        if pckg_code != "None" or price != "None":
+            if pckg_code != "gifts - " and pckg_code != "Gifts - ":
+                pckgs.append({'Package Code' : pckg_code,
+                              'Price' : price
+                        })
         #print(sh['A%s' % i].value)
-        listn.append(sh['A%s' % i].value)
-        price.append(sh['E%s' % i].value)
-        day_res_discount.append(sh['F%s' % i].value)
-        package_terms.append(sh['N%s' % i].value)
+       
 
 get_pckg(5,80,orl_pkgs)
-p = list(filter(None, listn))
-q = list(filter(None, price))
-r = list(filter(None, day_res_discount))
-s = list(filter(None, day_res_discount))
-
-p[:] = [item for item in p if item != "gifts - "]
-p[:] = [item for item in p if item != "Gifts - "]
-
-
-def ted():
-    for f, b in zip(p,q):
-        orl_pkgs[f] = str(b)
-
-def sed():
-    pass
-
-new_dict = defaultdict(list)
-def all_prce():
-    for k, v in orl_pkgs.items():
-        new_dict[v].append(k)
-
-ted()
-all_prce()
