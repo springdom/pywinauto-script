@@ -1,6 +1,8 @@
 from openpyxl import load_workbook
+from collections import defaultdict
 
-filed = r"Z:\Packages\Breakdown Of Current Packages 08-04-2017.xlsx"
+#filed = r"Z:\Packages\Breakdown Of Current Packages 08-04-2017.xlsx"
+filed = r"Packages.xlsx"
 wb = load_workbook(filed, data_only=True)
 sh=wb["Current Packages"]
 ws = wb.active
@@ -14,7 +16,6 @@ cal_pkgs = {}
 sca_pkgs = {}
 mtn_pkgs = {}
 wdc_pkgs = {}
-listn = []
 
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row,mx_col,mx_row,x):
@@ -22,27 +23,54 @@ def keycodes(m_row,mx_col,mx_row,x):
     for row in ws.iter_rows(min_row=m_row, max_col=mx_col, max_row=mx_row):
         for cell in row:
             num += 1
-            if num == 7:
+            if num == 10:
                 num = 1
-            print(num)
-            #if cell.value != None:
-             #   print(cell.value)
+            if cell.value != None:
+                print(cell.value)
+                if num == 1:
+                    pass
+                    #listn.append(cell.value)
+                #listn.append(str(num) + " val " + str(cell.value))
+                #x[cell.value] = num
+            #print(num)
+
             #print(cell.value)
             #x[cell.value] = None
 
-def assign_key(n,x):
-    if n > 17:
-        for k,v in x.items():
-            x[k] = sh['D%s' % n].value
-            n += 1
-    else:
-        for k,v in x.items():
-            x[k] = sh['B%s' % n].value
-            n += 1
+price = []
+day_res_discount = []
+listn = []
+package_terms = []
 
-def tes(z):
-    for k in z.items():
-        print(k)
+def get_pckg(x,y,pkg):
+    for i in range(x,y):
+        #print(sh['A%s' % i].value)
+        listn.append(sh['A%s' % i].value)
+        price.append(sh['E%s' % i].value)
+        day_res_discount.append(sh['F%s' % i].value)
+        package_terms.append(sh['N%s' % i].value)
 
-keycodes(4,6,82,orl_pkgs)
-#assign_key(4,outbnd_orl)
+get_pckg(5,80,orl_pkgs)
+p = list(filter(None, listn))
+q = list(filter(None, price))
+r = list(filter(None, day_res_discount))
+s = list(filter(None, day_res_discount))
+
+p[:] = [item for item in p if item != "gifts - "]
+p[:] = [item for item in p if item != "Gifts - "]
+
+
+def ted():
+    for f, b in zip(p,q):
+        orl_pkgs[f] = str(b)
+
+def sed():
+    pass
+
+new_dict = defaultdict(list)
+def all_prce():
+    for k, v in orl_pkgs.items():
+        new_dict[v].append(k)
+
+ted()
+all_prce()
