@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 from collections import defaultdict
+import json
 
 #filed = r"Z:\Packages\Breakdown Of Current Packages 08-04-2017.xlsx"
 filed = r"Packages.xlsx"
@@ -9,6 +10,7 @@ ws = wb.active
 
 orl_pkgs = {}
 
+"""
 #KeyCodes - Outbound, Orlando, Las Vegas, Gold Mountain
 def keycodes(m_row,mx_col,mx_row,x):
     num = 0
@@ -28,6 +30,7 @@ def keycodes(m_row,mx_col,mx_row,x):
 
             #print(cell.value)
             #x[cell.value] = None
+"""
 
 #price = []
 pckgs = []
@@ -43,9 +46,14 @@ def get_pckg(x,y,pkg):
         if pckg_code != "None" or price != "None":
             if pckg_code != "gifts - " and pckg_code != "Gifts - ":
                 pckgs.append({'Package Code' : pckg_code,
-                              'Price' : price
+                              'Price' : price,
                         })
         #print(sh['A%s' % i].value)
        
 
 get_pckg(5,80,orl_pkgs)
+print(pckgs[0]['Package Code'])
+"""
+print(json.dumps(pckgs, sort_keys=True,
+                 indent=4,separators=(',',': ')))
+"""
