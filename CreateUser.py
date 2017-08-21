@@ -11,6 +11,78 @@ p = pywinauto.findwindows.find_element(best_match="Interaction Administrator")
 app.connect(handle=p.handle)
 dlg = app.window(best_match="Interaction Administrator")
 typein = app.dlg.type_keys
+#app.dlg.print_control_identifiers() #Check Identifiers
+
+"""
+Agent Queues
+
+---------------------------------------------------------------------
+- Orlando - OutBoundCMS
+No Licenses
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
+Roles - MKT-Agent
+
+- Las Vegas - OutBoundCMS
+No Licenses
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
+Roles - MKT-Agent
+
+- SpringField - OutBoundCMS
+No Licenses
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, SPG_OUT_SUP
+Roles - MKT-Agent
+---------------------------------------------------------------------
+
+- Orlando - OutBoundManual
+No Licenses
+LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
+Roles - MKT-SF-Agent
+
+- Las Vegas - OutBoundManual
+No Licenses
+LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
+Roles - MKT-SF-Agent
+
+- SpringField - OutBoundManual
+No Licenses
+LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
+Roles - MKT-SF-Agent
+---------------------------------------------------------------------
+
+- Orlando - Call Tranfer
+Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
+Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+Roles - MKT-Agent
+
+- Las Vegas - Call Transfer
+Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
+Workgroups - CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+Roles - MKT-Agent
+
+- SpringField - Call Transfer
+Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
+Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+Roles - MKT-Agent
+
+
+Call Transfer - Client Optimizer
+---------------------------------------------------------------------
+
+- Orlando Activations
+No Licenses
+WorkGroups - LOC-ORL-MKT-ACT, MKT-Activations-CallBack, MKT-ACT-Main, MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
+Roles - MKT-CC-Agent
+
+---------------------------------------------------------------------
+
+- ORlando Customer Care
+Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
+WorkGroups - LOC-ORL-MKT-CC,  MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
+Roles - MKT-CC-Agent
+---------------------------------------------------------------------
+
+Auto-ACD
+"""
 
 """
 Check Location
@@ -18,7 +90,6 @@ Check Dept
 Check Type
 """
 
-#app.dlg.print_control_identifiers() #Check Identifiers
 """
 TSR
 """
@@ -77,7 +148,6 @@ app.dlg['CT Priority 2'].click_input()
 app.dlg.Add.click_input()
 
 #Licensing
-
 app.dlg.Licensing.click_input()
 app.dlg.OK.click_input()
 app.dlg['Enable Licenses'].click_input()
@@ -88,3 +158,19 @@ app.dlg['Interaction Optimizer Real-time Adherence Tracking'].type_keys("{SPACE}
 app.dlg['Interaction Optimizer Schedulable'].click_input()
 app.dlg['Interaction Optimizer Schedulable'].type_keys("{SPACE}")
 app.dlg.OK.click_input()
+
+def main():
+    pass
+def GetUserDetails():
+    pass
+def GetDptmnt():
+    pass
+def AgentQueue():
+    pass
+
+
+
+
+
+
+
