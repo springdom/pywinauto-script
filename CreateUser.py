@@ -16,6 +16,10 @@ typein = app.dlg.type_keys
 #LAS,ORL,SPG
 #CT,ACT,CC,Outbound
 
+locations = ["orl","llvn","spg"]
+departments = ["ct","act","cc","outbound"]
+orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
 """
 Agent Queues
 ---------------------------------------------------------------------
@@ -49,10 +53,12 @@ Roles - MKT-SF-Agent
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
 Roles - MKT-Agent
+
 - Las Vegas - Call Transfer
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
 Roles - MKT-Agent
+
 - SpringField - Call Transfer
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
@@ -71,6 +77,53 @@ Roles - MKT-CC-Agent
 ---------------------------------------------------------------------
 Auto-ACD
 """
+
+
+def main():
+    pass
+
+def NewAgent(): #maybe
+    app.dlg.menu_select("File->New")
+    app.dlg.Edit0.type_keys("123456" + "{ENTER}")
+    
+def Config():
+    #app.dlg.Edit.type_keys("Matthew") #Extension
+    app.dlg.Edit3.type_keys("10102015") #Password
+    app.dlg.Edit4.type_keys("10102015") #Confirm Password
+    app.dlg.Edit7.type_keys("hgvcnt\\") #Domain User
+    #Email
+    #Location?
+    
+def GetUserDetails(name, tsr, username):
+    pass
+
+def AgentWorkGroups(deptmnt):
+    num = 0
+    app.dlg.Workgroups.click_input()
+    app.dlg.OK.click_input()
+    for x in deptmnt:
+        num+=1
+        app.dlg[x].click_input()
+        app.dlg.Add.click_input()
+        if num == 3:
+            for x in range(1,4):
+                app.dlg['VerticalScrollBar'].click_input()
+            
+        
+
+def Licensing(licences):
+    pass
+
+def AutoACD():
+    app.dlg.ACD.click_input()
+    app.dlg.ListItem3.click_input()
+    app.dlg.CheckBox0.click_input() #Auto ACD
+
+def Roles(dept):
+    pass
+
+
+
 
 """
 Check Location
@@ -128,58 +181,25 @@ app.dlg.OK.click_input() #Multiple Select?
 """
 Check Dept
 """
+
+"""
 app.dlg.Workgroups.click_input()
 app.dlg.OK.click_input()
-app.dlg.ListItem4.click_input()
 app.dlg['CT Priority 1'].click_input()
 app.dlg.Add.click_input()
 app.dlg['CT Priority 2'].click_input()
 app.dlg.Add.click_input()
+"""
+
+AgentWorkGroups(orl_ct)
 
 #Licensing
 app.dlg.Licensing.click_input()
 app.dlg.OK.click_input()
 app.dlg['Enable Licenses'].click_input()
-app.dlg['Interaction Optimizer Client Access'].click_input()
 app.dlg['Interaction Optimizer Client Access'].type_keys("{SPACE}")
-app.dlg['Interaction Optimizer Real-time Adherence Tracking'].click_input()
 app.dlg['Interaction Optimizer Real-time Adherence Tracking'].type_keys("{SPACE}")
-app.dlg['Interaction Optimizer Schedulable'].click_input()
 app.dlg['Interaction Optimizer Schedulable'].type_keys("{SPACE}")
 #app.dlg.OK.click_input()
-
-def main():
-    pass
-
-def NewAgent(): #maybe
-    app.dlg.menu_select("File->New")
-    app.dlg.Edit0.type_keys("123456" + "{ENTER}")
-    
-def Config():
-    #app.dlg.Edit.type_keys("Matthew") #Extension
-    app.dlg.Edit3.type_keys("10102015") #Password
-    app.dlg.Edit4.type_keys("10102015") #Confirm Password
-    app.dlg.Edit7.type_keys("hgvcnt\\") #Domain User
-    #Email
-    #Location?
-    
-def GetUserDetails(name, tsr, username):
-    pass
-
-def AgentWorkGroups(loc,deptmnt):
-    #check location, department
-    pass
-
-def Licensing(licences):
-    pass
-
-def AutoACD():
-    app.dlg.ACD.click_input()
-    app.dlg.ListItem3.click_input()
-    app.dlg.CheckBox0.click_input() #Auto ACD
-
-def Roles(dept):
-    pass
-
 
 #pass in obj eg. Edit0
