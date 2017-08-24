@@ -18,7 +18,12 @@ typein = app.dlg.type_keys
 
 locations = ["orl","llvn","spg"]
 departments = ["ct","act","cc","outbound"]
+
+orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
+orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 
 """
 Agent Queues
@@ -97,7 +102,7 @@ def Config():
 def GetUserDetails(name, tsr, username):
     pass
 
-def AgentWorkGroups(deptmnt):
+def AgentWorkGroups(loc,deptmnt):
     num = 0
     app.dlg.Workgroups.click_input()
     app.dlg.OK.click_input()
@@ -191,7 +196,7 @@ app.dlg['CT Priority 2'].click_input()
 app.dlg.Add.click_input()
 """
 
-AgentWorkGroups(orl_ct)
+AgentWorkGroups("orl",orl_ct)
 
 #Licensing
 app.dlg.Licensing.click_input()
