@@ -6,12 +6,14 @@ from pywinauto import Desktop
 from pywinauto.application import Application
 from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
+from string import ascii_lowercase
 
 app = Application(backend='uia')
 p = pywinauto.findwindows.find_element(best_match="Interaction Administrator")
 app.connect(handle=p.handle)
 dlg = app.window(best_match="Interaction Administrator")
 typein = app.dlg.type_keys
+
 #app.dlg.print_control_identifiers() #Check Identifiers
 #LAS,ORL,SPG
 #CT,ACT,CC,Outbound
@@ -32,21 +34,28 @@ roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
 def main():
     pass
 
+"""
+loop through and find column name
+for c in ascii_lowercase:
+	print(c)
+"""
+
 def orgchart_data():
     n = 2
-#Find Correct columns
+#Find Correct columns ?Give option to setup correct colums then check if correct column
     for x in range(1,200):
         if sh['A%s' % n].value == "Add":
             username = sh['B%s' % n].value
             agentName = sh['D%s' % n].value
             tsr = str(sh['E%s' % n].value)
+            #Email
             
             print(username, agentName, tsr)
             
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
-            Roles("dept")
+            Roles("ct")
             getWorkGroups()
             Licensing("Test")
             app.dlg.Cancel.click_input() #Change When DOne
@@ -55,11 +64,11 @@ def orgchart_data():
 def getWorkGroups():
     if location == "orl":
         if department == "ct":
-            AgentWorkGroups("orl", orl_ct)
+            AgentWorkGroups(orl_ct)
         if department == "act":
-            AgentWorkGroups("orl", orl_act)
+            AgentWorkGroups(orl_act)
         if department == "cc":
-            AgentWorkGroups("orl", orl_cc)
+            AgentWorkGroups(orl_cc)
     elif location == "spg":
         pass
     elif location == "lvn":
@@ -86,7 +95,7 @@ def GetUserDetails(agentName):
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
 
-def AgentWorkGroups(loc,wrkgrps):
+def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
     app.dlg.OK.click_input()
@@ -99,11 +108,7 @@ def AgentWorkGroups(loc,wrkgrps):
             for x in range(1,4):
                 app.dlg['VerticalScrollBar'].click_input() #Click Scroll button insteal scrollbar
 
-
-
-
-def Queues():
-    pass
+def QueueScroll():
     
                               
 def AutoACD():
@@ -112,10 +117,15 @@ def AutoACD():
     app.dlg.CheckBox0.click_input() #Auto ACD
 
 def Roles(deptmnt):
-    app.dlg.Roles.click_input()
-    app.dlg.Add.click_input()
-    app.dlg.ListItem4.select()
-    app.dlg.OK.click_input()
+    if deptmnt == "ct":
+        app.dlg.Roles.click_input()
+        app.dlg.Add.click_input()
+        app.dlg.ListItem4.select()
+        app.dlg.OK.click_input()
+    elif deptmnt == "act":
+        pass
+    elif deptmnt == "cc":
+        pass
 
 def Licensing(department):
     app.dlg.Licensing.click_input()
@@ -123,7 +133,7 @@ def Licensing(department):
     app.dlg['Enable Licenses'].click_input()
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
-        
+
     """"
     app.dlg['Interaction Optimizer Client Access'].type_keys("{SPACE}")
     app.dlg['Interaction Optimizer Real-time Adherence Tracking'].type_keys("{SPACE}")
