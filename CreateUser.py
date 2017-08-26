@@ -31,8 +31,9 @@ orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "
 licenses = ["Interaction Optimizer Client Access","Interaction Optimizer Real-time Adherence Tracking","Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
 
+
 def main():
-    pass
+    orgchart_data()
 
 """
 loop through and find column name
@@ -58,7 +59,7 @@ def orgchart_data():
             Roles(department)
             getWorkGroups()
             if department == "ct" or department == "cc":
-                Licensing("Test")
+                Licensing()
             else:
                 pass
             app.dlg.Cancel.click_input() #Change When DOne
@@ -66,6 +67,8 @@ def orgchart_data():
 
 def getWorkGroups():
     if location == "orl":
+        if department == "outbnd":
+            AgentWorkGroups(orl_outbnd_cms)
         if department == "ct":
             AgentWorkGroups(orl_ct)
         if department == "act":
@@ -104,16 +107,27 @@ def AgentWorkGroups(wrkgrps):
     app.dlg.OK.click_input()
     
     for x in wrkgrps:
+        if department == "outbnd":
+            if num == 0:
+                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -13)
+            if num == 2:
+                app.dlg['ListBox'].click_input()
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -5)
+                
         num+=1
+        app.dlg[x].click_input()
+        app.dlg.Add.click_input()
+
         if department == "ct":
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
+            if num == 3:
+                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
+        if department == "ct":
             if num == 3:
                 app.dlg['CC Elite 1'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
         if department == "act" or department == "cc":
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
             if num == 1:
                 app.dlg['CC Elite 1'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -6)
@@ -130,14 +144,14 @@ def Roles(deptmnt):
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
     
-    if deptmnt == "ct":
+    if deptmnt == "ct" or deptmnt == "outbnd":
         app.dlg.ListItem4.select()
     elif deptmnt == "act" or deptmnt == "cc":
         app.dlg.ListItem6.select()
 
     app.dlg.OK.click_input()
 
-def Licensing(department):
+def Licensing():
     app.dlg.Licensing.click_input()
     app.dlg.OK.click_input()
     app.dlg['Enable Licenses'].click_input()
@@ -150,53 +164,52 @@ def Licensing(department):
     app.dlg['Interaction Optimizer Schedulable'].type_keys("{SPACE}")
     """
 
+
 location = input("Location orl, spg, lvn: ")
-department = input("Department ct, act, cc: ")
+department = input("Department outbnd, ct, act, cc: ")
 
-orgchart_data()
-
+main()
 
 """
 Agent Queues
 ---------------------------------------------------------------------
+No Licenses
+Roles - MKT-Agent
 - Orlando - OutBoundCMS
-No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
-Roles - MKT-Agent
+
 - Las Vegas - OutBoundCMS
-No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
-Roles - MKT-Agent
+
 - SpringField - OutBoundCMS
-No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, SPG_OUT_SUP
-Roles - MKT-Agent
+
 ---------------------------------------------------------------------
+No Licenses
+Roles - MKT-SF-Agent
 - Orlando - OutBoundManual
-No Licenses
 LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
-Roles - MKT-SF-Agent
+
 - Las Vegas - OutBoundManual
-No Licenses
 LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
-Roles - MKT-SF-Agent
+
 - SpringField - OutBoundManual
-No Licenses
 LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
-Roles - MKT-SF-Agent
+
 ---------------------------------------------------------------------
+Enable Licenses - Interaction Optimizer CLient Access,
+Interaction Optimizer Real Time Adherance Tracking,
+Interaction Optimizer Scheduable
+Roles - MKT-Agent
 - Orlando - Call Tranfer
-Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-Roles - MKT-Agent
-- Las Vegas - Call Transfer
-Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
-Workgroups - CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-Roles - MKT-Agent
+
+Las Vegas - Call Transfer
+CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+
 - SpringField - Call Transfer
-Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-Roles - MKT-Agent
+
 Call Transfer - Client Optimizer
 ---------------------------------------------------------------------
 - Orlando Activations
@@ -211,4 +224,3 @@ Roles - MKT-CC-Agent
 ---------------------------------------------------------------------
 Auto-ACD
 """
-
