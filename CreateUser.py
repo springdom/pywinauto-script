@@ -159,10 +159,11 @@ def Email(email):
     app.dlg["Edit"].type_keys("{BS 40}")
     app.dlg["Edit"].type_keys(email)
 
-#location = input("Location orl, spg, lvn: ")
-#department = input("Department outbnd, ct, act, cc: ")
+location = input("Location orl, spg, lvn: ")
+department = input("Department outbnd, ct, act, cc: ")
 
-#main()
+main()
+
 
 """
 Agent Queues
