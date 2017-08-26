@@ -55,9 +55,12 @@ def orgchart_data():
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
-            Roles("ct")
+            Roles(department)
             getWorkGroups()
-            Licensing("Test")
+            if department == "ct" or department == "cc":
+                Licensing("Test")
+            else:
+                pass
             app.dlg.Cancel.click_input() #Change When DOne
             n += 1
 
@@ -102,14 +105,21 @@ def AgentWorkGroups(wrkgrps):
     
     for x in wrkgrps:
         num+=1
-        app.dlg[x].click_input()
-        app.dlg.Add.click_input()
-        if num == 3:
-            for x in range(1,4):
-                app.dlg['VerticalScrollBar'].click_input() #Click Scroll button insteal scrollbar
+        if department == "ct":
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+            if num == 3:
+                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
+        if department == "act" or department == "cc":
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+            if num == 1:
+                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -6)
 
 def QueueScroll():
-    
+    pass
                               
 def AutoACD():
     app.dlg.ACD.click_input()
@@ -117,15 +127,15 @@ def AutoACD():
     app.dlg.CheckBox0.click_input() #Auto ACD
 
 def Roles(deptmnt):
+    app.dlg.Roles.click_input()
+    app.dlg.Add.click_input()
+    
     if deptmnt == "ct":
-        app.dlg.Roles.click_input()
-        app.dlg.Add.click_input()
         app.dlg.ListItem4.select()
-        app.dlg.OK.click_input()
-    elif deptmnt == "act":
-        pass
-    elif deptmnt == "cc":
-        pass
+    elif deptmnt == "act" or deptmnt == "cc":
+        app.dlg.ListItem6.select()
+
+    app.dlg.OK.click_input()
 
 def Licensing(department):
     app.dlg.Licensing.click_input()
@@ -141,7 +151,7 @@ def Licensing(department):
     """
 
 location = input("Location orl, spg, lvn: ")
-department = input("Department ct, act, cc:")
+department = input("Department ct, act, cc: ")
 
 orgchart_data()
 
@@ -153,12 +163,10 @@ Agent Queues
 No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
 Roles - MKT-Agent
-
 - Las Vegas - OutBoundCMS
 No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
 Roles - MKT-Agent
-
 - SpringField - OutBoundCMS
 No Licenses
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, SPG_OUT_SUP
@@ -168,12 +176,10 @@ Roles - MKT-Agent
 No Licenses
 LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
 Roles - MKT-SF-Agent
-
 - Las Vegas - OutBoundManual
 No Licenses
 LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
 Roles - MKT-SF-Agent
-
 - SpringField - OutBoundManual
 No Licenses
 LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
@@ -183,17 +189,14 @@ Roles - MKT-SF-Agent
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
 Roles - MKT-Agent
-
 - Las Vegas - Call Transfer
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
 Roles - MKT-Agent
-
 - SpringField - Call Transfer
 Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
 Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
 Roles - MKT-Agent
-
 Call Transfer - Client Optimizer
 ---------------------------------------------------------------------
 - Orlando Activations
@@ -208,3 +211,4 @@ Roles - MKT-CC-Agent
 ---------------------------------------------------------------------
 Auto-ACD
 """
+
