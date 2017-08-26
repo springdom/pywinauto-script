@@ -15,8 +15,6 @@ dlg = app.window(best_match="Interaction Administrator")
 typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
-#LAS,ORL,SPG
-#CT,ACT,CC,Outbound
 
 wb = load_workbook('orgchart.xlsx', data_only=True)
 sh = wb['HGV_OrgChart']
@@ -30,7 +28,6 @@ orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "
 
 licenses = ["Interaction Optimizer Client Access","Interaction Optimizer Real-time Adherence Tracking","Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
-
 
 def main():
     orgchart_data()
@@ -49,7 +46,6 @@ def orgchart_data():
             username = sh['B%s' % n].value
             agentName = sh['D%s' % n].value
             tsr = str(sh['E%s' % n].value)
-            #Email
             
             print(username, agentName, tsr)
             
@@ -60,8 +56,12 @@ def orgchart_data():
             getWorkGroups()
             if department == "ct" or department == "cc":
                 Licensing()
-            else:
-                pass
+
+            #Email
+            """
+            if department == "act":
+                Email(email)
+            """
             app.dlg.Cancel.click_input() #Change When DOne
             n += 1
 
@@ -121,20 +121,13 @@ def AgentWorkGroups(wrkgrps):
 
         if department == "ct":
             if num == 3:
-                app.dlg['CC Elite 1'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
-        if department == "ct":
-            if num == 3:
-                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
         if department == "act" or department == "cc":
             if num == 1:
-                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -6)
 
-def QueueScroll():
-    pass
-                              
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
@@ -158,17 +151,18 @@ def Licensing():
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
 
-    """"
-    app.dlg['Interaction Optimizer Client Access'].type_keys("{SPACE}")
-    app.dlg['Interaction Optimizer Real-time Adherence Tracking'].type_keys("{SPACE}")
-    app.dlg['Interaction Optimizer Schedulable'].type_keys("{SPACE}")
-    """
+def Email(email):
+    app.dlg['Configuration'].click_input()
+    app.dlg['...'].click_input()
+    app.dlg['RadioButton6'].click_input()
+    app.dlg['Email address'].click_input()
+    app.dlg["Edit"].type_keys("{BS 40}")
+    app.dlg["Edit"].type_keys(email)
 
+#location = input("Location orl, spg, lvn: ")
+#department = input("Department outbnd, ct, act, cc: ")
 
-location = input("Location orl, spg, lvn: ")
-department = input("Department outbnd, ct, act, cc: ")
-
-main()
+#main()
 
 """
 Agent Queues
