@@ -51,29 +51,29 @@ def column_headers():
     for k,v in column_header.items():
         if v == Add:
             add = k
+        elif v == Add2:
+            add = k  
         if v == windows:
             agent_username = k
-        """
         if v == email:
-            agent_email = k
-        """
-        
+            agentemail = k
         if v == Name:
             agent_name = k
         if v == cic_id:
             agent_tsr = k
             
-    orgchart_data(add, agent_username, agent_name, agent_tsr)
+    orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
 
-def orgchart_data(add, windows, agent_name, agent_tsr): #Add Email
+def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
     n = 2
-    while sh[add + str(n)].value != None or n < 180:
+    while n < sh.max_row :
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
+            email = sh[agent_email + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
             
-            print(username, agentName, tsr)
+            print(username, email,agentName, tsr)
             
             Config(tsr, username)
             GetUserDetails(agentName)
@@ -110,7 +110,6 @@ def Config(tsr, win_username):
     app.dlg.menu_select("File->New")
     app.dlg.Edit0.type_keys(tsr + "{ENTER}")
 
-    #app.dlg.Edit.type_keys("Matthew") #Extension
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User

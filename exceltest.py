@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
-wb = load_workbook('orgchart.xlsx', data_only=True)
+wb = load_workbook('orgchart4.xlsx', data_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 column_header = {}
@@ -13,40 +13,40 @@ email = "Email Address"
 Name = "AgentName"
 cic_id = "CIC_ID"
 
-
-
 #loop through and find column name
 for c in ascii_lowercase:
 	x = sh[c.upper() + "1"].value
 	column_header[c.upper()] = sh[c.upper() + "1"].value
 
-def orgchart_data(add, windows, agent_name, agent_tsr):
+def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
     n = 2
-    while sh[add + str(n)].value != None or n < 180:
+    while n < sh.max_row :
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
+            email = sh[agent_email + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
             
-            print(username, agentName, tsr)
+            print(username, email,agentName, tsr)
         n += 1
 
 def cheese():
+    agentemail = "AZ"
     for k,v in column_header.items():
         if v == Add:
             add = k
+        elif v == Add2:
+            add = k  
         if v == windows:
             agent_username = k
-        """
         if v == email:
-            agent_email = k
-        """
+            agentemail = k
         if v == Name:
             agent_name = k
         if v == cic_id:
             agent_tsr = k
             
-    orgchart_data(add, agent_username, agent_name, agent_tsr)
+    orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
             
 cheese()
  
