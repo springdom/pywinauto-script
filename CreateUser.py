@@ -16,7 +16,7 @@ typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-wb = load_workbook('orgchart.xlsx', data_only=True)
+wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 

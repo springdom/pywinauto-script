@@ -1,7 +1,8 @@
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
-wb = load_workbook('orgchart4.xlsx', data_only=True)
+
+wb = load_workbook('orgchart2.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 column_header = {}
