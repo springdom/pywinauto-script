@@ -29,23 +29,49 @@ orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "
 licenses = ["Interaction Optimizer Client Access","Interaction Optimizer Real-time Adherence Tracking","Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
 
+column_header = {}
+Add = "Add/Delete/Change/Transfer/Rehire"
+Add2 = "Add/Delete/Change"
+windows = "Windows for Adds"
+email = "Email Address"
+Name = "AgentName"
+cic_id = "CIC_ID"
+
+
 def main():
-    orgchart_data()
+    get_alphabet()
+    column_headers()
 
-"""
-loop through and find column name
-for c in ascii_lowercase:
-	print(c)
-"""
+def get_alphabet():
+    for c in ascii_lowercase:
+	x = sh[c.upper() + "1"].value
+	column_header[c.upper()] = sh[c.upper() + "1"].value
 
-def orgchart_data():
+def column_headers():
+    for k,v in column_header.items():
+        if v == Add:
+            add = k
+        if v == windows:
+            agent_username = k
+        """
+        if v == email:
+            agent_email = k
+        """
+        
+        if v == Name:
+            agent_name = k
+        if v == cic_id:
+            agent_tsr = k
+            
+    orgchart_data(add, agent_username, agent_name, agent_tsr)
+
+def orgchart_data(add, windows, agent_name, agent_tsr): #Add Email
     n = 2
-#Find Correct columns ?Give option to setup correct colums then check if correct column
-    for x in range(1,200):
-        if sh['A%s' % n].value == "Add":
-            username = sh['B%s' % n].value
-            agentName = sh['D%s' % n].value
-            tsr = str(sh['E%s' % n].value)
+    while sh[add + str(n)].value != None or n < 180:
+        if sh[add + str(n)].value == "Add":
+            username = sh[windows + str(n)].value
+            agentName = sh[agent_name + str(n)].value
+            tsr = sh[agent_tsr + str(n)].value
             
             print(username, agentName, tsr)
             
@@ -59,11 +85,11 @@ def orgchart_data():
 
             #Email
             """
-            if department == "act":
+            if loc == "orl":
                 Email(email)
             """
             app.dlg.Cancel.click_input() #Change When DOne
-            n += 1
+        n += 1
 
 def getWorkGroups():
     if location == "orl":
