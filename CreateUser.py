@@ -37,7 +37,6 @@ email = "Email Address"
 Name = "AgentName"
 cic_id = "CIC_ID"
 
-
 def main():
     get_alphabet()
     column_headers()
@@ -116,7 +115,6 @@ def Config(tsr, win_username):
     #Email
     #Location?
 
-
 def GetUserDetails(agentName):
     name = agentName.split(" ")
 
@@ -125,12 +123,11 @@ def GetUserDetails(agentName):
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
-
 def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
     app.dlg.OK.click_input()
-    
+
     for x in wrkgrps:
         if department == "outbnd":
             if num == 0:
@@ -139,7 +136,7 @@ def AgentWorkGroups(wrkgrps):
             if num == 2:
                 app.dlg['ListBox'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -5)
-                
+
         num+=1
         app.dlg[x].click_input()
         app.dlg.Add.click_input()
@@ -161,7 +158,7 @@ def AutoACD():
 def Roles(deptmnt):
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
-    
+
     if deptmnt == "ct" or deptmnt == "outbnd":
         app.dlg.ListItem4.select()
     elif deptmnt == "act" or deptmnt == "cc":
