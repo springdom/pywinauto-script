@@ -26,6 +26,14 @@ orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callb
 orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 
+spg_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "SPG_OUT_SUP"]
+spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
+spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
+lv_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "LV_OUT_SUP"]
+lv_outbnd_sf = ["LOC-LV-MKT-SalesForce", "SF-LV-Manual", "SF-RestrictDialing"]
+lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
 licenses = ["Interaction Optimizer Client Access","Interaction Optimizer Real-time Adherence Tracking","Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
 
@@ -50,7 +58,7 @@ def sed(a):
      for k,v in column_header.items():
          if v == a:
              a = k
-             return str(k)
+         return str(k)
 
 def column_headers():
     add = sed(Add) or sed(Add2)
@@ -79,7 +87,6 @@ def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
             getWorkGroups()
             if department == "ct" or department == "cc":
                 Licensing()
-
             #Email
             """
             if loc == "orl":
@@ -88,7 +95,7 @@ def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
             app.dlg.Cancel.click_input() #Change When DOne
         n += 1
 
-def getWorkGroups():
+def getWorkGroups(): # helper function here
     if location == "orl":
         if department == "outbnd":
             AgentWorkGroups(orl_outbnd_cms)
@@ -98,10 +105,18 @@ def getWorkGroups():
             AgentWorkGroups(orl_act)
         if department == "cc":
             AgentWorkGroups(orl_cc)
-    elif location == "spg":
-        pass
-    elif location == "lvn":
-        pass
+
+    if location == "spg":
+        if department == "outbnd":
+            AgentWorkGroups(spg_outbnd_cms)
+        if department == "ct":
+            AgentWorkGroups(spg_ct)
+
+    if location == "lvn":
+        if department == "outbnd":
+            AgentWorkGroups(lv_outbnd_cms)
+        if department == "ct":
+            AgentWorkGroups(lv_ct)
 
 def Config(tsr, win_username):
     app.dlg.menu_select("File->New")
@@ -110,9 +125,9 @@ def Config(tsr, win_username):
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
-    #Email
     #Location?
 
+#Personal Info
 def GetUserDetails(agentName):
     name = agentName.split(" ")
 
@@ -129,7 +144,7 @@ def AgentWorkGroups(wrkgrps):
     for x in wrkgrps:
         if department == "outbnd":
             if num == 0:
-                app.dlg['CC Elite 1'].click_input()
+                app.dlg['ListBox'].click_input()
                 app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -13)
             if num == 2:
                 app.dlg['ListBox'].click_input()
@@ -157,10 +172,15 @@ def Roles(deptmnt):
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
 
-    if deptmnt == "ct" or deptmnt == "outbnd":
-        app.dlg.ListItem4.select()
-    elif deptmnt == "act" or deptmnt == "cc":
-        app.dlg.ListItem6.select()
+    if location == "orl":
+        if deptmnt == "ct" or deptmnt == "outbnd":
+            app.dlg.ListItem4.select()
+        elif deptmnt == "act" or deptmnt == "cc":
+            app.dlg.ListItem6.select()
+    if location == "spg":
+        pass
+    if location == "lvn":
+        pass
 
     app.dlg.OK.click_input()
 
