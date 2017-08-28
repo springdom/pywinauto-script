@@ -29,7 +29,6 @@ orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callb
 orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 
-spg_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "SPG_OUT_SUP"]
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
@@ -123,7 +122,7 @@ def getWorkGroups(): # helper function here
 
 def Config(tsr, win_username):
     app.dlg.menu_select("File->New")
-    app.dlg.Edit0.type_keys(tsr + "{ENTER}")
+    app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
 
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
@@ -145,26 +144,61 @@ def AgentWorkGroups(wrkgrps):
     app.dlg.OK.click_input()
 
     for x in wrkgrps:
-        if department == "outbnd":
-            if num == 0:
-                app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
-            if num == 2:
-                app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-5)
+        if location == "orl":
+            if department == "outbnd":
+                if num == 0:
+                    ListBoxPos(-13)
+                if num == 2:
+                    ListBoxPos(-5)
 
-        num += 1
-        app.dlg[x].click_input()
-        app.dlg.Add.click_input()
+            num += 1
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
 
-        if department == "ct":
-            if num == 3:
-                app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-10)
-        if department == "act" or department == "cc":
-            if num == 1:
-                app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-6)
+            if department == "ct":
+                if num == 3:
+                    ListBoxPos(-10)
+            if department == "act" or department == "cc":
+                if num == 1:
+                    ListBoxPos(-6)
+            
+        if location == "spg":
+            num += 1
+            if department == "ct":
+                if num == 1:
+                    ListBoxPos(-2)
+                if num == 2:
+                    ListBoxPos(-8)
+            
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+
+        if location == "lvn":
+            if department == "outbnd":
+                if num == 0:
+                    app.dlg['ListBox'].click_input()
+                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
+                if num == 2:
+                    app.dlg['ListBox'].click_input()
+                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-5)
+
+            num += 1
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+
+            if department == "ct":
+                if num == 3:
+                    app.dlg['ListBox'].click_input()
+                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-10)
+            if department == "act" or department == "cc":
+                if num == 1:
+                    app.dlg['ListBox'].click_input()
+                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-6)
+                    
+
+def ListBoxPos(scrollpos):
+    app.dlg['ListBox'].click_input()
+    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
 
 def AutoACD():
     app.dlg.ACD.click_input()
@@ -175,13 +209,11 @@ def Roles(deptmnt):
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
 
-    if location == "orl":
+    if location == "orl" or location == "spg":
         if deptmnt == "ct" or deptmnt == "outbnd":
             app.dlg.ListItem4.select()
         elif deptmnt == "act" or deptmnt == "cc":
             app.dlg.ListItem6.select()
-    if location == "spg":
-        pass
     if location == "lvn":
         pass
 
@@ -206,7 +238,8 @@ location = input("Location orl, spg, lvn: ")
 department = input("Department outbnd, ct, act, cc: ")
 
 main()
-
+#app.dlg['ListBox'].click_input()
+#app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
 
 """
 Agent Queues
@@ -215,25 +248,19 @@ No Licenses
 Roles - MKT-Agent
 - Orlando - OutBoundCMS
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
-
 - Las Vegas - OutBoundCMS
 Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
-
 - SpringField - OutBoundCMS
-Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, SPG_OUT_SUP
-
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2
 ---------------------------------------------------------------------
 No Licenses
 Roles - MKT-SF-Agent
 - Orlando - OutBoundManual
 LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
-
 - Las Vegas - OutBoundManual
 LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
-
 - SpringField - OutBoundManual
 LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
-
 ---------------------------------------------------------------------
 Enable Licenses - Interaction Optimizer CLient Access,
 Interaction Optimizer Real Time Adherance Tracking,
@@ -241,13 +268,10 @@ Interaction Optimizer Scheduable
 Roles - MKT-Agent
 - Orlando - Call Tranfer
 Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-
 Las Vegas - Call Transfer
 CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-
 - SpringField - Call Transfer
 Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-
 Call Transfer - Client Optimizer
 ---------------------------------------------------------------------
 - Orlando Activations
