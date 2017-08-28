@@ -1,10 +1,13 @@
-import time
+"""
+Automates Interaction Administrator
+"""
+#import time
 import pywinauto
 from pywinauto import application
-from pywinauto.keyboard import SendKeys
-from pywinauto import Desktop
+#from pywinauto.keyboard import SendKeys
+#from pywinauto import Desktop
 from pywinauto.application import Application
-from pywinauto.findwindows import find_window
+#from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
@@ -24,7 +27,7 @@ orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-orl_cc = ["LOC-ORL-MKT-CC",  "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 
 spg_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "SPG_OUT_SUP"]
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
@@ -34,8 +37,8 @@ lv_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "LV_OUT_SUP"]
 lv_outbnd_sf = ["LOC-LV-MKT-SalesForce", "SF-LV-Manual", "SF-RestrictDialing"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
-licenses = ["Interaction Optimizer Client Access","Interaction Optimizer Real-time Adherence Tracking","Interaction Optimizer Schedulable"]
-roles = ["MKT-Agent","MKT-SF-Agent","MKT-CC-Agent"]
+licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
+roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 column_header = {}
 Add = "Add/Delete/Change/Transfer/Rehire"
@@ -51,35 +54,35 @@ def main():
 
 def get_alphabet():
     for c in ascii_lowercase:
-	x = sh[c.upper() + "1"].value
-	column_header[c.upper()] = sh[c.upper() + "1"].value
+        x = sh[c.upper() + "1"].value
+        column_header[c.upper()] = sh[c.upper() + "1"].value
 
 def sed(a):
-     for k,v in column_header.items():
-         if v == a:
-             a = k
-         return str(k)
+    for k, v in column_header.items():
+        if v == a:
+            a = k
+        return str(k)
 
 def column_headers():
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
-    agentemail = sed(email) or "AZ"        
-    agent_name =  sed(Name)
+    agentemail = sed(email) or "AZ"
+    agent_name = sed(Name)
     agent_tsr = sed(cic_id)
 
     orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
 
-def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
+def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
     n = 2
-    while n < sh.max_row :
+    while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
             email = sh[agent_email + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
-            
-            print(username, email,agentName, tsr)
-            
+
+            print(username, email, agentName, tsr)
+
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
@@ -145,23 +148,23 @@ def AgentWorkGroups(wrkgrps):
         if department == "outbnd":
             if num == 0:
                 app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -13)
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
             if num == 2:
                 app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -5)
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-5)
 
-        num+=1
+        num += 1
         app.dlg[x].click_input()
         app.dlg.Add.click_input()
 
         if department == "ct":
             if num == 3:
                 app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -10)
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-10)
         if department == "act" or department == "cc":
             if num == 1:
                 app.dlg['ListBox'].click_input()
-                app.dlg['ListBox'].wheel_mouse_input(wheel_dist = -6)
+                app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-6)
 
 def AutoACD():
     app.dlg.ACD.click_input()
