@@ -32,7 +32,7 @@ orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "M
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
-lv_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "LV_OUT_SUP"]
+lv_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
 lv_outbnd_sf = ["LOC-LV-MKT-SalesForce", "SF-LV-Manual", "SF-RestrictDialing"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
@@ -174,27 +174,20 @@ def AgentWorkGroups(wrkgrps):
             app.dlg.Add.click_input()
 
         if location == "lvn":
-            if department == "outbnd":
-                if num == 0:
-                    app.dlg['ListBox'].click_input()
-                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
-                if num == 2:
-                    app.dlg['ListBox'].click_input()
-                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-5)
-
             num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
+            
+            if department == "outbnd":
+                if num == 1:
+                    ListBoxPos(-13)
 
             if department == "ct":
                 if num == 3:
-                    app.dlg['ListBox'].click_input()
-                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-10)
+                    ListBoxPos(-10)
             if department == "act" or department == "cc":
                 if num == 1:
-                    app.dlg['ListBox'].click_input()
-                    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-6)
-                    
+                    ListBoxPos(-6)                    
 
 def ListBoxPos(scrollpos):
     app.dlg['ListBox'].click_input()
@@ -209,13 +202,10 @@ def Roles(deptmnt):
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
 
-    if location == "orl" or location == "spg":
-        if deptmnt == "ct" or deptmnt == "outbnd":
-            app.dlg.ListItem4.select()
-        elif deptmnt == "act" or deptmnt == "cc":
+    if deptmnt == "ct" or deptmnt == "outbnd":
+        app.dlg.ListItem4.select()
+    elif deptmnt == "act" or deptmnt == "cc":
             app.dlg.ListItem6.select()
-    if location == "lvn":
-        pass
 
     app.dlg.OK.click_input()
 
