@@ -46,21 +46,19 @@ def get_alphabet():
 	x = sh[c.upper() + "1"].value
 	column_header[c.upper()] = sh[c.upper() + "1"].value
 
+def sed(a):
+     for k,v in column_header.items():
+         if v == a:
+             a = k
+             return str(k)
+
 def column_headers():
-    for k,v in column_header.items():
-        if v == Add:
-            add = k
-        elif v == Add2:
-            add = k  
-        if v == windows:
-            agent_username = k
-        if v == email:
-            agentemail = k
-        if v == Name:
-            agent_name = k
-        if v == cic_id:
-            agent_tsr = k
-            
+    add = sed(Add) or sed(Add2)
+    agent_username = sed(windows)
+    agentemail = sed(email) or "AZ"        
+    agent_name =  sed(Name)
+    agent_tsr = sed(cic_id)
+
     orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
 
 def orgchart_data(add, windows, agent_email,agent_name, agent_tsr):
