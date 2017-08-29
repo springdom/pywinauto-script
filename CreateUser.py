@@ -1,7 +1,7 @@
 """
 Automates Interaction Administrator
 """
-#import time
+import time
 import pywinauto
 from pywinauto import application
 #from pywinauto.keyboard import SendKeys
@@ -59,8 +59,10 @@ cic_id = "CIC_ID"
 
 
 location = input("Location orl, spg, lvn: ")
+location = location.lower()
 if serv == 1:
     department = input("Department outbnd, ct, act, cc: ")
+    department = department.lower()
 
 def main():
     get_alphabet()
@@ -80,22 +82,20 @@ def sed(a):
 def column_headers():
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
-    agentemail = sed(email) or "AZ"
     agent_name = sed(Name)
     agent_tsr = sed(cic_id)
 
-    orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
+    orgchart_data(add, agent_username,agent_name, agent_tsr)
 
-def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
+def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
     while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
-            email = sh[agent_email + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
 
-            print(username, email, agentName, tsr)
+            print(username, agentName, tsr)
 
             Config(tsr, username)
             GetUserDetails(agentName)
@@ -110,11 +110,6 @@ def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
-            #Email
-            """
-            if loc == "orl":
-                Email(email)
-            """
             app.dlg.Cancel.click_input() #Change When DOne
         n += 1
 
@@ -156,7 +151,16 @@ def Config(tsr, win_username):
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
-    #Location?
+    getLoc()
+
+def getLoc():
+    app.dlg["ComboBox4"].click_input()
+    if location == "orl":
+        app.dlg["Orlando - Metro Center"].select()
+    if location == "spg":
+        app.dlg["Spingfield"].select()
+    if location == "lvn":
+        app.dlg["Las Vegas"].select()
 
 #Personal Info
 def GetUserDetails(agentName):
@@ -274,18 +278,8 @@ def Licensing():
     app.dlg['Enable Licenses'].click_input()
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
-
-def Email(email):
-    app.dlg['Configuration'].click_input()
-    app.dlg['...'].click_input()
-    app.dlg['RadioButton6'].click_input()
-    app.dlg['Email address'].click_input()
-    app.dlg["Edit"].type_keys("{BS 40}")
-    app.dlg["Edit"].type_keys(email)
-    
+   
 main()
-#app.dlg['ListBox'].click_input()
-#app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
 
 """
 Agent Queues
