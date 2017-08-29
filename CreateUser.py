@@ -11,10 +11,19 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
+serv = input("1:CMS\n2:Salesforce\nSelect Option: ")
+serv = int(serv)
+
 app = Application(backend='uia')
-p = pywinauto.findwindows.find_element(best_match="Interaction Administrator")
+if serv == 1:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
+else:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
 app.connect(handle=p.handle)
-dlg = app.window(best_match="Interaction Administrator")
+if serv == 1:
+    dlg = app.window(title="Interaction Administrator - [HiltonACD]")
+else:
+    dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
 typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
@@ -23,18 +32,19 @@ wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
+#CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
-orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-
-spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-
 lv_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
-lv_outbnd_sf = ["LOC-LV-MKT-SalesForce", "SF-LV-Manual", "SF-RestrictDialing"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
+#SalesForce
+orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
+spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
+lv_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
 licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
@@ -46,6 +56,11 @@ windows = "Windows for Adds"
 email = "Email Address"
 Name = "AgentName"
 cic_id = "CIC_ID"
+
+
+location = input("Location orl, spg, lvn: ")
+if serv == 1:
+    department = input("Department outbnd, ct, act, cc: ")
 
 def main():
     get_alphabet()
@@ -85,10 +100,16 @@ def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
-            Roles(department)
-            getWorkGroups()
-            if department == "ct" or department == "cc":
-                Licensing()
+            if serv == 1:
+                Roles(department)
+            else:
+                SFRoles()
+            if serv == 1:
+                getWorkGroups()
+                if department == "ct" or department == "cc":
+                    Licensing()
+            else:
+                getSFWorkGroups()
             #Email
             """
             if loc == "orl":
@@ -119,6 +140,14 @@ def getWorkGroups(): # helper function here
             AgentWorkGroups(lv_outbnd_cms)
         if department == "ct":
             AgentWorkGroups(lv_ct)
+
+def getSFWorkGroups(): # helper function here
+    if location == "orl":
+        AgentSFWorkGroups(orl_outbnd_sf)
+    if location == "spg":
+        AgentSFWorkGroups(spg_outbnd_sf)
+    if location == "lvn":
+        AgentSFWorkGroups(lv_outbnd_sf)
 
 def Config(tsr, win_username):
     app.dlg.menu_select("File->New")
@@ -185,9 +214,32 @@ def AgentWorkGroups(wrkgrps):
             if department == "ct":
                 if num == 3:
                     ListBoxPos(-10)
-            if department == "act" or department == "cc":
-                if num == 1:
-                    ListBoxPos(-6)                    
+
+def AgentSFWorkGroups(wrkgrps):
+    num = 0
+    app.dlg.Workgroups.click_input()
+    app.dlg.OK.click_input()
+
+    for x in wrkgrps:
+        if location == "orl":
+            num += 1
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+    
+        if location == "spg":
+            num += 1            
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+            if num == 2:
+                ListBoxPos(-2)
+
+        if location == "lvn":
+            num += 1
+            app.dlg[x].click_input()
+            app.dlg.Add.click_input()
+            if num == 2:
+                ListBoxPos(-2)
+
 
 def ListBoxPos(scrollpos):
     app.dlg['ListBox'].click_input()
@@ -196,7 +248,7 @@ def ListBoxPos(scrollpos):
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
-    app.dlg.CheckBox0.click_input() #Auto ACD
+    app.dlg.CheckBox0.click_input() 
 
 def Roles(deptmnt):
     app.dlg.Roles.click_input()
@@ -205,8 +257,15 @@ def Roles(deptmnt):
     if deptmnt == "ct" or deptmnt == "outbnd":
         app.dlg.ListItem4.select()
     elif deptmnt == "act" or deptmnt == "cc":
-            app.dlg.ListItem6.select()
+        app.dlg.ListItem6.select()
 
+
+    app.dlg.OK.click_input()
+
+def SFRoles():
+    app.dlg.Roles.click_input()
+    app.dlg.Add.click_input()
+    app.dlg.ListItem6.select()
     app.dlg.OK.click_input()
 
 def Licensing():
@@ -223,10 +282,7 @@ def Email(email):
     app.dlg['Email address'].click_input()
     app.dlg["Edit"].type_keys("{BS 40}")
     app.dlg["Edit"].type_keys(email)
-
-location = input("Location orl, spg, lvn: ")
-department = input("Department outbnd, ct, act, cc: ")
-
+    
 main()
 #app.dlg['ListBox'].click_input()
 #app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
