@@ -59,10 +59,15 @@ cic_id = "CIC_ID"
 
 
 location = input("Location orl, spg, lvn: ")
+<<<<<<< HEAD
 location = location.lower()
 if serv == 1:
     department = input("Department outbnd, ct, act, cc: ")
     department = department.lower()
+=======
+if serv == 1:
+    department = input("Department outbnd, ct, act, cc: ")
+>>>>>>> cleanup
 
 def main():
     get_alphabet()
@@ -82,24 +87,50 @@ def sed(a):
 def column_headers():
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
+<<<<<<< HEAD
     agent_name = sed(Name)
     agent_tsr = sed(cic_id)
 
     orgchart_data(add, agent_username,agent_name, agent_tsr)
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
+=======
+    agentemail = sed(email) or "AZ"
+    agent_name = sed(Name)
+    agent_tsr = sed(cic_id)
+
+    orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
+
+def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
+>>>>>>> cleanup
     n = 2
     while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
+<<<<<<< HEAD
             tsr = sh[agent_tsr + str(n)].value
 
             print(username, agentName, tsr)
+=======
+            email = sh[agent_email + str(n)].value
+            tsr = sh[agent_tsr + str(n)].value
+
+            print(username, email, agentName, tsr)
+>>>>>>> cleanup
 
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            Roles(department)
+            getWorkGroups() # pass value in
+            if department == "ct" or department == "cc":
+                Licensing()
+=======
+>>>>>>> cleanup
             if serv == 1:
                 Roles(department)
             else:
@@ -110,6 +141,15 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
+<<<<<<< HEAD
+=======
+>>>>>>> b5a285963860901e94a3ff2e77a9bc51e94161af
+            #Email
+            """
+            if loc == "orl":
+                Email(email)
+            """
+>>>>>>> cleanup
             app.dlg.Cancel.click_input() #Change When DOne
         n += 1
 
@@ -151,6 +191,7 @@ def Config(tsr, win_username):
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
+<<<<<<< HEAD
     getLoc()
 
 def getLoc():
@@ -162,6 +203,14 @@ def getLoc():
     if location == "lvn":
         app.dlg["Las Vegas"].select()
 
+=======
+    #Location?
+    """ if orlando, las vegas, springfield
+    app.dlg["ComboBox4"].click_input()
+    app.dlg["Las Vegas"].select()
+    """
+
+>>>>>>> cleanup
 #Personal Info
 def GetUserDetails(agentName):
     name = agentName.split(" ")
@@ -278,8 +327,21 @@ def Licensing():
     app.dlg['Enable Licenses'].click_input()
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
+<<<<<<< HEAD
    
 main()
+=======
+
+def Email(email):
+    app.dlg['Configuration'].click_input()
+    app.dlg['...'].click_input()
+    app.dlg['RadioButton6'].click_input()
+    app.dlg['Email address'].click_input()
+    app.dlg["Edit"].type_keys("{BS 40}")
+    app.dlg["Edit"].type_keys(email)
+    
+#main()
+>>>>>>> cleanup
 
 """
 Agent Queues
