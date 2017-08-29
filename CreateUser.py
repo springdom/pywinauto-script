@@ -37,13 +37,6 @@ sh = wb['HGV_OrgChart']
 ws = wb.active
 
 column_header = {}
-Add = "Add/Delete/Change/Transfer/Rehire"
-Add2 = "Add/Delete/Change"
-windows = "Windows for Adds"
-email = "Email Address"
-Name = "AgentName"
-cic_id = "CIC_ID"
-
 app = Application(backend='uia')
 if serv == 1:
     p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
@@ -60,6 +53,7 @@ typein = app.dlg.type_keys
 
 location = input("Location orl, spg, lvn: ")
 location = location.lower()
+
 if serv == 1:
     department = input("Department outbnd, ct, act, cc: ")
     department = department.lower()
@@ -80,6 +74,13 @@ def sed(a):
             return str(k)
 
 def column_headers():
+    Add = "Add/Delete/Change/Transfer/Rehire"
+    Add2 = "Add/Delete/Change"
+    windows = "Windows for Adds"
+    email = "Email Address"
+    Name = "AgentName"
+    cic_id = "CIC_ID"
+    
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
     agent_name = sed(Name)
@@ -121,7 +122,7 @@ def getWorkGroups(loc, dept):
             else:
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
     
-def getSFWorkGroups(): # helper function here
+def getSFWorkGroups(): #helper function here
     if location == "orl":
         AgentSFWorkGroups(orl_outbnd_sf)
     if location == "spg":
@@ -130,9 +131,9 @@ def getSFWorkGroups(): # helper function here
         AgentSFWorkGroups(lv_outbnd_sf)
 
 def Config(tsr, win_username):
-    app.dlg.menu_select("File->New")
+    #app.dlg.menu_select("File->New")
+    app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
-
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
