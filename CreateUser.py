@@ -87,7 +87,7 @@ def orgchart_data(add, windows, agent_email, agent_name, agent_tsr):
             GetUserDetails(agentName)
             AutoACD()
             Roles(department)
-            getWorkGroups()
+            getWorkGroups() # pass value in
             if department == "ct" or department == "cc":
                 Licensing()
             #Email
