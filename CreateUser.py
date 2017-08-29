@@ -130,7 +130,14 @@ def getSFWorkGroups(): #helper function here
     if location == "lvn":
         AgentSFWorkGroups(lv_outbnd_sf)
 
-def Config(tsr, win_username):
+def Config(tsr, win_username): #Check If Already Exist
+    static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
+                                     class_name_re='Static')
+
+    """
+    if static.exists(timeout=20): # if it opens no later than 20 sec.
+        app.DialogName.OK.click()
+    """
     #app.dlg.menu_select("File->New")
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
