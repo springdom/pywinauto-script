@@ -1,7 +1,7 @@
 """
 Automates Interaction Administrator
 """
-#import time
+import time
 import pywinauto
 from pywinauto import application
 #from pywinauto.keyboard import SendKeys
@@ -157,6 +157,10 @@ def Config(tsr, win_username):
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
     #Location?
+    """ if orlando, las vegas, springfield
+    app.dlg["ComboBox4"].click_input()
+    app.dlg["Las Vegas"].select()
+    """
 
 #Personal Info
 def GetUserDetails(agentName):
@@ -283,9 +287,7 @@ def Email(email):
     app.dlg["Edit"].type_keys("{BS 40}")
     app.dlg["Edit"].type_keys(email)
     
-main()
-#app.dlg['ListBox'].click_input()
-#app.dlg['ListBox'].wheel_mouse_input(wheel_dist=-13)
+#main()
 
 """
 Agent Queues
