@@ -55,7 +55,12 @@ location = input("Location orl, spg, lvn: ")
 location = location.lower()
 
 if serv == 1:
-    department = input("Department outbnd, ct, act, cc: ")
+    if location == "spg":
+        department = input("Select a department - ct:  ")
+    if location == "lvn":
+        department = input("Select a department - outbnd, ct: ")
+    else:
+        department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
 def main():
@@ -101,6 +106,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
+            
             if serv == 1:
                 Roles(department)
             else:
@@ -111,7 +117,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
-            app.dlg.Cancel.click_input() #Change When DOne
+            app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
 def getWorkGroups(loc, dept):
@@ -133,14 +139,14 @@ def getSFWorkGroups(): #helper function here
 def Config(tsr, win_username): #Check If Already Exist
     static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
                                      class_name_re='Static')
-
     """
     if static.exists(timeout=20): # if it opens no later than 20 sec.
         app.DialogName.OK.click()
     """
-    #app.dlg.menu_select("File->New")
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
+        
+
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
@@ -163,6 +169,7 @@ def GetUserDetails(agentName):
     app.dlg.Edit0.type_keys(name[0]) #FirstName
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
+
 
 def AgentWorkGroups(wrkgrps):
     num = 0
