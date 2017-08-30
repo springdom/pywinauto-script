@@ -20,14 +20,14 @@ orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callb
 orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-lv_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lv_outbnd_cms":lv_outbnd_cms,"lv_ct":lv_ct}
+wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lvn_outbnd_cms":lvn_outbnd_cms,"lvn_ct":lv_ct}
 
 #SalesForce
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
-lv_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
+lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
 licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
@@ -55,7 +55,12 @@ location = input("Location orl, spg, lvn: ")
 location = location.lower()
 
 if serv == 1:
-    department = input("Department outbnd, ct, act, cc: ")
+    if location == "spg":
+        department = input("Select a department - ct:  ")
+    if location == "lvn":
+        department = input("Select a department - outbnd, ct: ")
+    else:
+        department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
 def main():
@@ -101,6 +106,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
+            
             if serv == 1:
                 Roles(department)
             else:
@@ -111,7 +117,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
-            app.dlg.Cancel.click_input() #Change When DOne
+            app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
 def getWorkGroups(loc, dept):
@@ -133,14 +139,14 @@ def getSFWorkGroups(): #helper function here
 def Config(tsr, win_username): #Check If Already Exist
     static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
                                      class_name_re='Static')
-
     """
     if static.exists(timeout=20): # if it opens no later than 20 sec.
         app.DialogName.OK.click()
     """
-    #app.dlg.menu_select("File->New")
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
+        
+
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
@@ -163,6 +169,7 @@ def GetUserDetails(agentName):
     app.dlg.Edit0.type_keys(name[0]) #FirstName
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
+
 
 def AgentWorkGroups(wrkgrps):
     num = 0
