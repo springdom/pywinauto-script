@@ -11,18 +11,11 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
-serv = input("1:CMS\n2:Salesforce\nSelect Option: ")
+serv = input("1:CMS\n2:Salesforce\nSelect Option 1 or 2: ")
 serv = int(serv)
 
 #CMS
-orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
-orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
-lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lvn_outbnd_cms":lvn_outbnd_cms,"lvn_ct":lv_ct}
+wrkqueues = {}
 
 #SalesForce
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
@@ -52,7 +45,7 @@ typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-location = input("Location orl, spg, lvn: ")
+location = input("Select Location (orl, spg, lvn): ")
 location = location.lower()
 
 if serv == 1:
@@ -67,6 +60,18 @@ if serv == 1:
 def main():
     get_alphabet()
     column_headers()
+
+def Queues():
+    orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
+    orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+    orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+    orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+    spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+    lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+    lvn_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
+    for i in ('orl_outbnd_cms','orl_ct','orl_act','orl_cc','spg_ct','lvn_outbnd_cms','lvn_ct'):
+        wrkqueues[i] = locals()[i]
 
 def get_alphabet():
     for c in ascii_lowercase:
