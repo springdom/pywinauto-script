@@ -102,9 +102,12 @@ def column_headers():
 
     orgchart_data(add, agent_username, agent_name, agent_tsr)
 
+#Sends OrgChart Data to IA
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
+    #Loop until last Row
     while n < sh.max_row:
+        #Find All Adds
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
@@ -128,22 +131,6 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 getSFWorkGroups()
             app.dlg.Cancel.click_input() #Change When Done
         n += 1
-
-def getWorkGroups(loc, dept):
-    if location == loc:
-        if department == dept:
-            if department == "outbnd":
-                AgentWorkGroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
-            else:
-                AgentWorkGroups(wrkqueues[loc + "_" + dept])
-
-def getSFWorkGroups(): #helper function here
-    if location == "orl":
-        AgentSFWorkGroups(orl_outbnd_sf)
-    if location == "spg":
-        AgentSFWorkGroups(spg_outbnd_sf)
-    if location == "lvn":
-        AgentSFWorkGroups(lv_outbnd_sf)
 
 def Config(tsr, win_username): #Check If Already Exist
     static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
@@ -179,6 +166,43 @@ def GetUserDetails(agentName):
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
+def AutoACD():
+    app.dlg.ACD.click_input()
+    app.dlg.ListItem3.click_input()
+    app.dlg.CheckBox0.click_input()
+
+def Roles(deptmnt):
+    app.dlg.Roles.click_input()
+    app.dlg.Add.click_input()
+
+    if deptmnt == "ct" or deptmnt == "outbnd":
+        app.dlg.ListItem4.select()
+    elif deptmnt == "act" or deptmnt == "cc":
+        app.dlg.ListItem6.select()
+
+    app.dlg.OK.click_input()
+
+def SFRoles():
+    app.dlg.Roles.click_input()
+    app.dlg.Add.click_input()
+    app.dlg.ListItem6.select()
+    app.dlg.OK.click_input()
+    
+def getWorkGroups(loc, dept):
+    if location == loc:
+        if department == dept:
+            if department == "outbnd":
+                AgentWorkGroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
+            else:
+                AgentWorkGroups(wrkqueues[loc + "_" + dept])
+
+def getSFWorkGroups(): #helper function here
+    if location == "orl":
+        AgentSFWorkGroups(orl_outbnd_sf)
+    if location == "spg":
+        AgentSFWorkGroups(spg_outbnd_sf)
+    if location == "lvn":
+        AgentSFWorkGroups(lv_outbnd_sf)
 
 def AgentWorkGroups(wrkgrps):
     num = 0
@@ -257,28 +281,6 @@ def AgentSFWorkGroups(wrkgrps):
 def ListBoxPos(scrollpos):
     app.dlg['ListBox'].click_input()
     app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
-
-def AutoACD():
-    app.dlg.ACD.click_input()
-    app.dlg.ListItem3.click_input()
-    app.dlg.CheckBox0.click_input()
-
-def Roles(deptmnt):
-    app.dlg.Roles.click_input()
-    app.dlg.Add.click_input()
-
-    if deptmnt == "ct" or deptmnt == "outbnd":
-        app.dlg.ListItem4.select()
-    elif deptmnt == "act" or deptmnt == "cc":
-        app.dlg.ListItem6.select()
-
-    app.dlg.OK.click_input()
-
-def SFRoles():
-    app.dlg.Roles.click_input()
-    app.dlg.Add.click_input()
-    app.dlg.ListItem6.select()
-    app.dlg.OK.click_input()
 
 def Licensing():
     app.dlg.Licensing.click_input()
