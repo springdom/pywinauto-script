@@ -115,6 +115,7 @@ def sed(a):
             a = k
             return str(k)
 
+#Find Letter associated with user details and add in excel
 def column_headers():
     Add = "Add/Delete/Change/Transfer/Rehire"
     Add2 = "Add/Delete/Change"
@@ -232,6 +233,7 @@ def GetUserDetails(agentName):
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
 
+#Assign CMS WorkGroups
 def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
@@ -280,6 +282,7 @@ def AgentWorkGroups(wrkgrps):
                 if num == 3:
                     ListBoxPos(-10)
 
+#Assign SF WorkGroups
 def AgentSFWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
