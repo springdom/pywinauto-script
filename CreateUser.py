@@ -87,6 +87,7 @@ def getHeader(a):
             a = k
             return str(k)
 
+#Find Letter associated with user details and add in excel
 def column_headers():
     Add = "Add/Delete/Change/Transfer/Rehire"
     Add2 = "Add/Delete/Change"
@@ -204,6 +205,7 @@ def getSFWorkGroups(): #helper function here
     if location == "lvn":
         AgentSFWorkGroups(lv_outbnd_sf)
 
+#Assign CMS WorkGroups
 def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
@@ -252,6 +254,7 @@ def AgentWorkGroups(wrkgrps):
                 if num == 3:
                     ListBoxPos(-10)
 
+#Assign SF WorkGroups
 def AgentSFWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
