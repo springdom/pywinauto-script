@@ -1,7 +1,8 @@
 """
 Automates Interaction Administrator
 """
-import time
+#import time
+from string import ascii_lowercase
 import pywinauto
 from pywinauto import application
 #from pywinauto.keyboard import SendKeys
@@ -9,10 +10,6 @@ from pywinauto import application
 from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
-from string import ascii_lowercase
-
-serv = input("1:CMS\n2:Salesforce\nSelect Option 1 or 2: ")
-serv = int(serv)
 
 #CMS
 wrkqueues = {}
@@ -22,7 +19,8 @@ orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDial
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
-licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
+licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking",
+            "Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 wb = load_workbook('orgchart.xlsx', read_only=True)
@@ -30,6 +28,9 @@ sh = wb['HGV_OrgChart']
 ws = wb.active
 
 column_header = {}
+
+serv = input("1:CMS\n2:Salesforce\nSelect Option 1 or 2: ")
+serv = int(serv)
 
 app = Application(backend='uia')
 if serv == 1:
@@ -64,13 +65,15 @@ def main():
 def Queues():
     orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
     orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-    orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-    orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+    orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates",
+               "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+    orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService",
+              "MKT-CC-CustomerService-Priority2"]
     spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-    lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+    lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
     lvn_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
-    for i in ('orl_outbnd_cms','orl_ct','orl_act','orl_cc','spg_ct','lvn_outbnd_cms','lvn_ct'):
+    for i in ('orl_outbnd_cms', 'orl_ct', 'orl_act', 'orl_cc', 'spg_ct', 'lvn_outbnd_cms', 'lvn_ct'):
         wrkqueues[i] = locals()[i]
 
 def get_alphabet():
@@ -78,7 +81,7 @@ def get_alphabet():
         x = sh[c.upper() + "1"].value
         column_header[c.upper()] = sh[c.upper() + "1"].value
 
-def sed(a):
+def getHeader(a):
     for k, v in column_header.items():
         if v == a:
             a = k
@@ -91,13 +94,13 @@ def column_headers():
     email = "Email Address"
     Name = "AgentName"
     cic_id = "CIC_ID"
-    
-    add = sed(Add) or sed(Add2)
-    agent_username = sed(windows)
-    agent_name = sed(Name)
-    agent_tsr = sed(cic_id)
 
-    orgchart_data(add, agent_username,agent_name, agent_tsr)
+    add = getHeader(Add) or getHeader(Add2)
+    agent_username = getHeader(windows)
+    agent_name = getHeader(Name)
+    agent_tsr = getHeader(cic_id)
+
+    orgchart_data(add, agent_username, agent_name, agent_tsr)
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
@@ -112,7 +115,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             Config(tsr, username)
             GetUserDetails(agentName)
             AutoACD()
-            
+
             if serv == 1:
                 Roles(department)
             else:
@@ -133,7 +136,7 @@ def getWorkGroups(loc, dept):
                 AgentWorkGroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
             else:
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
-    
+
 def getSFWorkGroups(): #helper function here
     if location == "orl":
         AgentSFWorkGroups(orl_outbnd_sf)
@@ -144,14 +147,14 @@ def getSFWorkGroups(): #helper function here
 
 def Config(tsr, win_username): #Check If Already Exist
     static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
-                                     class_name_re='Static')
+                                         class_name_re='Static')
     """
     if static.exists(timeout=20): # if it opens no later than 20 sec.
         app.DialogName.OK.click()
     """
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
-        
+
 
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
@@ -200,7 +203,7 @@ def AgentWorkGroups(wrkgrps):
             if department == "act" or department == "cc":
                 if num == 1:
                     ListBoxPos(-6)
-            
+
         if location == "spg":
             num += 1
             if department == "ct":
@@ -208,7 +211,7 @@ def AgentWorkGroups(wrkgrps):
                     ListBoxPos(-2)
                 if num == 2:
                     ListBoxPos(-8)
-            
+
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
 
@@ -216,7 +219,7 @@ def AgentWorkGroups(wrkgrps):
             num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
-            
+
             if department == "outbnd":
                 if num == 1:
                     ListBoxPos(-13)
@@ -235,9 +238,9 @@ def AgentSFWorkGroups(wrkgrps):
             num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
-    
+
         if location == "spg":
-            num += 1            
+            num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
             if num == 2:
@@ -258,7 +261,7 @@ def ListBoxPos(scrollpos):
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
-    app.dlg.CheckBox0.click_input() 
+    app.dlg.CheckBox0.click_input()
 
 def Roles(deptmnt):
     app.dlg.Roles.click_input()
@@ -283,7 +286,7 @@ def Licensing():
     app.dlg['Enable Licenses'].click_input()
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
-   
+
 main()
 
 """
