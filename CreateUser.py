@@ -103,7 +103,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             agentName = sh[agent_name + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
 
-            print(username, agentName, tsr)
+            print("Adding User - " + username, agentName, tsr)
         
             try:
                 Config(tsr, username)
