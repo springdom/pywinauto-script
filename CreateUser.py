@@ -57,7 +57,7 @@ location = location.lower()
 if serv == 1:
     if location == "spg":
         department = input("Select a department - ct:  ")
-    if location == "lvn":
+    elif location == "lvn":
         department = input("Select a department - outbnd, ct: ")
     else:
         department = input("Select a department - outbnd, ct, act, cc: ")
@@ -94,6 +94,7 @@ def column_headers():
     orgchart_data(add, agent_username,agent_name, agent_tsr)
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
+    check_exist = app.dlg["A User with that name already exists"].exists()
     n = 2
     while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
@@ -102,6 +103,9 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             tsr = sh[agent_tsr + str(n)].value
 
             print(username, agentName, tsr)
+            
+            app.dlg.type_keys('^n')
+            app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}") 
 
             Config(tsr, username)
             GetUserDetails(agentName)
@@ -117,7 +121,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
-        app.dlg.Cancel.click_input() #Change When Done
+            app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
 def getWorkGroups(loc, dept):
@@ -136,17 +140,8 @@ def getSFWorkGroups(): #helper function here
     if location == "lvn":
         AgentSFWorkGroups(lv_outbnd_sf)
 
-def Config(tsr, win_username): #Check If Already Exist
-    static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
-                                     class_name_re='Static')
-    """
-    if static.exists(timeout=20): # if it opens no later than 20 sec.
-        app.DialogName.OK.click()
-    """
-    app.dlg.type_keys('^n')
-    app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
-        
-
+def Config(tsr, win_username):
+   
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
