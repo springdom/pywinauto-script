@@ -117,7 +117,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     Licensing()
             else:
                 getSFWorkGroups()
-            app.dlg.Cancel.click_input() #Change When Done
+        app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
 def getWorkGroups(loc, dept):
