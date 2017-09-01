@@ -39,7 +39,7 @@ lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialin
 licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
-wb = load_workbook('orgchart.xlsx', read_only=True)
+wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
@@ -52,6 +52,7 @@ serv = int(serv)
 column_header = {}
 
 app = Application(backend='uia')
+
 if serv == 1:
     p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
 else:
