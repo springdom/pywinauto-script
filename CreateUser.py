@@ -11,9 +11,6 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
-serv = input("1:CMS\n2:Salesforce\nSelect Option: ")
-serv = int(serv)
-
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
@@ -36,6 +33,9 @@ wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
+serv = input("1:CMS\n2:Salesforce\nSelect Option:")
+serv = int(serv)
+
 column_header = {}
 app = Application(backend='uia')
 if serv == 1:
@@ -51,7 +51,7 @@ typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-location = input("Location orl, spg, lvn: ")
+location = input("Location orl, spg, lvn:")
 location = location.lower()
 
 if serv == 1:
@@ -62,6 +62,7 @@ if serv == 1:
     else:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
+
 
 def main():
     get_alphabet()
@@ -93,8 +94,8 @@ def column_headers():
 
     orgchart_data(add, agent_username,agent_name, agent_tsr)
 
+
 def orgchart_data(add, windows, agent_name, agent_tsr):
-    check_exist = app.dlg["A User with that name already exists"].exists()
     n = 2
     while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
@@ -103,24 +104,26 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             tsr = sh[agent_tsr + str(n)].value
 
             print(username, agentName, tsr)
-            
-            app.dlg.type_keys('^n')
-            app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}") 
-
-            Config(tsr, username)
-            GetUserDetails(agentName)
-            AutoACD()
-            
-            if serv == 1:
-                Roles(department)
-            else:
-                SFRoles()
-            if serv == 1:
-                getWorkGroups(location, department)
-                if department == "ct" or department == "cc":
-                    Licensing()
-            else:
-                getSFWorkGroups()
+        
+            try:
+                Config(tsr, username)
+                GetUserDetails(agentName)
+                AutoACD()
+                if serv == 1:
+                    Roles(department)
+                else:
+                    SFRoles()
+                if serv == 1:
+                    getWorkGroups(location, department)
+                    if department == "ct" or department == "cc":
+                        Licensing()
+                else:
+                    getSFWorkGroups()
+            except:
+                print("User Already Exists " + username, agentName, tsr)
+                if app.dlg["A User with that name already exists"].exists() == True:
+                    app.dlg.OK.click_input()
+                    app.dlg.Cancel.click_input()
             app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
@@ -141,7 +144,8 @@ def getSFWorkGroups(): #helper function here
         AgentSFWorkGroups(lv_outbnd_sf)
 
 def Config(tsr, win_username):
-   
+    app.dlg.type_keys('^n')
+    app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
     app.dlg.Edit3.type_keys("10102015") #Password
     app.dlg.Edit4.type_keys("10102015") #Confirm Password
     app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
