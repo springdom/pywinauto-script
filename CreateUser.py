@@ -59,7 +59,11 @@ roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
+=======
+wb = load_workbook('orgchart.xlsx', read_only=True)
+>>>>>>> parent of c3fbc65... added build
 =======
 wb = load_workbook('orgchart.xlsx', read_only=True)
 >>>>>>> parent of c3fbc65... added build
