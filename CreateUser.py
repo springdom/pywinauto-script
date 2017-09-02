@@ -59,7 +59,11 @@ licenses = [
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
+=======
+wb = load_workbook('orgchart.xlsx', read_only=True)
+>>>>>>> parent of c3fbc65... added build
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
@@ -79,7 +83,6 @@ serv = int(serv)
 column_header = {}
 
 app = Application(backend='uia')
-
 if serv == 1:
     p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
 else:
