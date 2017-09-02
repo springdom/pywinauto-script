@@ -1,7 +1,7 @@
 """
 Automates Interaction Administrator
 """
-import time
+from string import ascii_lowercase
 import pywinauto
 from pywinauto import application
 #from pywinauto.keyboard import SendKeys
@@ -9,27 +9,41 @@ from pywinauto import application
 from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
-from string import ascii_lowercase
 
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
-orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+orl_act = [
+    "LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates",
+    "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
+    ]
+
+orl_cc = [
+    "LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1",
+    "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
+          ]
+
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lvn_outbnd_cms":lvn_outbnd_cms,"lvn_ct":lv_ct}
+wrkqueues = {
+    "orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,
+    "orl_cc":orl_cc, "spg_ct":spg_ct, "lvn_outbnd_cms":lvn_outbnd_cms, "lvn_ct":lv_ct,
+    }
 
 #SalesForce
-orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
+orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] 
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
-licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
+licenses = [
+    "Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking",
+    "Interaction Optimizer Schedulable",
+    ]
+
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
-wb = load_workbook('orgchart.xlsx', read_only=True)
+wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
@@ -63,15 +77,14 @@ if serv == 1:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
-
 def main():
     get_alphabet()
     column_headers()
 
 def get_alphabet():
-    for c in ascii_lowercase:
-        x = sh[c.upper() + "1"].value
-        column_header[c.upper()] = sh[c.upper() + "1"].value
+    for alpha in ascii_lowercase:
+        x = sh[alpha.upper() + "1"].value
+        column_header[alpha.upper()] = sh[alpha.upper() + "1"].value
 
 def sed(a):
     for k, v in column_header.items():
@@ -93,7 +106,6 @@ def column_headers():
     agent_tsr = sed(cic_id)
 
     orgchart_data(add, agent_username,agent_name, agent_tsr)
-
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
@@ -125,7 +137,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     app.dlg.OK.click_input()
                     app.dlg.Cancel.click_input()
             app.dlg.Cancel.click_input() #Change When Done
-        n += 1
+        n += 1 bv
 
 def getWorkGroups(loc, dept):
     if location == loc:
@@ -143,12 +155,12 @@ def getSFWorkGroups(): #helper function here
     if location == "lvn":
         AgentSFWorkGroups(lv_outbnd_sf)
 
-def Config(tsr, win_username):
+def Config(tsr, win_username, passwd = "1010215", domain = "hgvcnt\\"):
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
-    app.dlg.Edit3.type_keys("10102015") #Password
-    app.dlg.Edit4.type_keys("10102015") #Confirm Password
-    app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
+    app.dlg.Edit3.type_keys(passwd) #Password
+    app.dlg.Edit4.type_keys(passwd) #Confirm Password
+    app.dlg.Edit7.type_keys(domain + win_username) #Domain User
     getLoc()
 
 def getLoc():
@@ -243,7 +255,6 @@ def AgentSFWorkGroups(wrkgrps):
             if num == 2:
                 ListBoxPos(-2)
 
-
 def ListBoxPos(scrollpos):
     app.dlg['ListBox'].click_input()
     app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
@@ -274,8 +285,8 @@ def Licensing():
     app.dlg.Licensing.click_input()
     app.dlg.OK.click_input()
     app.dlg['Enable Licenses'].click_input()
-    for ls in licenses:
-        app.dlg[ls].type_keys("{SPACE}")
+    for Ls in licenses:
+        app.dlg[Ls].type_keys("{SPACE}")
    
 main()
 
