@@ -408,11 +408,14 @@ def getSFWorkGroups(): #helper function here
     if location == "lvn":
         AgentSFWorkGroups(lv_outbnd_sf)
 
+<<<<<<< HEAD
 >>>>>>> 8e45f202e44ca3f92e7df0b9aeb2e201bf981abf
 #Assign CMS WorkGroups
 =======
 
 >>>>>>> cleanup
+=======
+>>>>>>> parent of c6cb0b0... cleanup formatting
 def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
