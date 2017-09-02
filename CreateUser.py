@@ -1,10 +1,7 @@
 """
 Automates Interaction Administrator
 """
-<<<<<<< HEAD
-=======
 #import time
->>>>>>> cleanup
 from string import ascii_lowercase
 import pywinauto
 from pywinauto import application
@@ -15,7 +12,6 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 
 #CMS
-<<<<<<< HEAD
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 orl_act = [
@@ -52,27 +48,7 @@ wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
-serv = input("1:CMS\n2:Salesforce\nSelect Option:")
-=======
-wrkqueues = {}
-
-#SalesForce
-orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
-spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
-lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
-
-licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking",
-            "Interaction Optimizer Schedulable"]
-roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
-
-wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
-sh = wb['HGV_OrgChart']
-ws = wb.active
-
-column_header = {}
-
 serv = input("1:CMS\n2:Salesforce\nSelect Option 1 or 2: ")
->>>>>>> cleanup
 serv = int(serv)
 
 column_header = {}
@@ -91,21 +67,11 @@ typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-<<<<<<< HEAD
-location = input("Location orl, spg, lvn:")
-=======
-location = input("Select Location (orl, spg, lvn): ")
->>>>>>> cleanup
-location = location.lower()
-
 if serv == 1:
     if location == "spg":
         department = input("Select a department - ct:  ")
-<<<<<<< HEAD
     elif location == "lvn":
-=======
     if location == "lvn":
->>>>>>> cleanup
         department = input("Select a department - outbnd, ct: ")
     else:
         department = input("Select a department - outbnd, ct, act, cc: ")
@@ -148,7 +114,6 @@ def column_headers():
     email = "Email Address"
     Name = "AgentName"
     cic_id = "CIC_ID"
-<<<<<<< HEAD
     
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
@@ -156,8 +121,6 @@ def column_headers():
     agent_tsr = sed(cic_id)
 
     orgchart_data(add, agent_username,agent_name, agent_tsr)
-
-=======
 
     add = getHeader(Add) or getHeader(Add2)
     agent_username = getHeader(windows)
@@ -167,7 +130,6 @@ def column_headers():
     orgchart_data(add, agent_username, agent_name, agent_tsr)
 
 #Sends OrgChart Data to IA
->>>>>>> cleanup
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
     #Loop until last Row
@@ -177,10 +139,8 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
-
-<<<<<<< HEAD
             print("Adding User - " + username, agentName, tsr)
-        
+            
             try:
                 Config(tsr, username)
                 GetUserDetails(agentName)
@@ -220,7 +180,7 @@ def getSFWorkGroups(): #helper function here
         AgentSFWorkGroups(lv_outbnd_sf)
 
 def Config(tsr, win_username, passwd = "1010215", domain = "hgvcnt\\"):
-=======
+
             print(username, agentName, tsr)
 
             Config(tsr, username)
@@ -240,30 +200,6 @@ def Config(tsr, win_username, passwd = "1010215", domain = "hgvcnt\\"):
             app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
-def Config(tsr, win_username): #Check If Already Exist
-    static = app.DialogName.child_window(title_re='.*Please contact your system administrator.',
-                                         class_name_re='Static')
-    """
-    if static.exists(timeout=20): # if it opens no later than 20 sec.
-        app.DialogName.OK.click()
-    """
->>>>>>> cleanup
-    app.dlg.type_keys('^n')
-    app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
-    app.dlg.Edit3.type_keys(passwd) #Password
-    app.dlg.Edit4.type_keys(passwd) #Confirm Password
-    app.dlg.Edit7.type_keys(domain + win_username) #Domain User
-    getLoc()
-
-<<<<<<< HEAD
-=======
-
-    app.dlg.Edit3.type_keys("10102015") #Password
-    app.dlg.Edit4.type_keys("10102015") #Confirm Password
-    app.dlg.Edit7.type_keys("hgvcnt\\" + win_username) #Domain User
-    getLoc()
-
->>>>>>> cleanup
 def getLoc():
     app.dlg["ComboBox4"].click_input()
     if location == "orl":
@@ -282,9 +218,6 @@ def GetUserDetails(agentName):
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
-<<<<<<< HEAD
-
-=======
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
@@ -324,7 +257,6 @@ def getSFWorkGroups(): #helper function here
         AgentSFWorkGroups(lv_outbnd_sf)
 
 #Assign CMS WorkGroups
->>>>>>> cleanup
 def AgentWorkGroups(wrkgrps):
     num = 0
     app.dlg.Workgroups.click_input()
@@ -403,7 +335,6 @@ def ListBoxPos(scrollpos):
     app.dlg['ListBox'].click_input()
     app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
 
-<<<<<<< HEAD
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
@@ -426,21 +357,14 @@ def SFRoles():
     app.dlg.ListItem6.select()
     app.dlg.OK.click_input()
 
-=======
->>>>>>> cleanup
 def Licensing():
     app.dlg.Licensing.click_input()
     app.dlg.OK.click_input()
     app.dlg['Enable Licenses'].click_input()
-<<<<<<< HEAD
+
     for Ls in licenses:
         app.dlg[Ls].type_keys("{SPACE}")
-   
-=======
-    for ls in licenses:
-        app.dlg[ls].type_keys("{SPACE}")
 
->>>>>>> cleanup
 main()
 
 """
