@@ -1,14 +1,16 @@
 """
 Automates Interaction Administrator
 """
-from string import ascii_lowercase
+import time
 import pywinauto
 from pywinauto import application
 #from pywinauto import Desktop
 from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
+from string import ascii_lowercase
 
+<<<<<<< HEAD
 app = Application(backend='uia')
 
 #CMS
@@ -38,16 +40,32 @@ wrkqueues = {
     "orl_outbnd_cms":orl_outbnd_cms, "orl_ct":orl_ct, "orl_act":orl_act, "orl_cc":orl_cc,
     "spg_ct":spg_ct, "lvn_outbnd_cms":lvn_outbnd_cms, "lvn_ct":lvn_ct,
     }
+=======
+#CMS
+orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
+orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+
+wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lv_outbnd_cms":lv_outbnd_cms,"lv_ct":lv_ct}
+>>>>>>> master
 
 #SalesForce
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
+<<<<<<< HEAD
 licenses = [
     "Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking",
     "Interaction Optimizer Schedulable",
     ]
+=======
+licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
+>>>>>>> master
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
@@ -56,11 +74,31 @@ ws = wb.active
 
 column_header = {}
 
+<<<<<<< HEAD
 #app.dlg.print_control_identifiers() #Check Identifiers
 
 serv = input("1:CMS\n2:Salesforce\nSelect Option:")
 serv = int(serv)
 
+=======
+app = Application(backend='uia')
+if serv == 1:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
+else:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
+app.connect(handle=p.handle)
+if serv == 1:
+    dlg = app.window(title="Interaction Administrator - [HiltonACD]")
+else:
+    dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
+typein = app.dlg.type_keys
+#app.dlg.print_control_identifiers() #Check Identifiers
+
+
+serv = input("1:CMS\n2:Salesforce\nSelect Option:")
+serv = int(serv)
+
+>>>>>>> master
 location = input("Location orl, spg, lvn:")
 location = location.lower()
 
@@ -115,7 +153,11 @@ def column_headers():
     agent_name = sed(Name)
     agent_tsr = sed(cic_id)
 
+<<<<<<< HEAD
     orgchart_data(add, agent_username, agent_name, agent_tsr)
+=======
+    orgchart_data(add, agent_username,agent_name, agent_tsr)
+>>>>>>> master
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
@@ -124,6 +166,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
+<<<<<<< HEAD
 
             print("Adding User - " + username, agentName, tsr)
 
@@ -157,6 +200,41 @@ def getWorkGroups(loc, dept):
             else:
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
 
+=======
+
+            print("Adding User - " + username, agentName, tsr)
+        
+            try:
+                Config(tsr, username)
+                GetUserDetails(agentName)
+                AutoACD()
+                if serv == 1:
+                    Roles(department)
+                else:
+                    SFRoles()
+                if serv == 1:
+                    getWorkGroups(location, department)
+                    if department == "ct" or department == "cc":
+                        Licensing()
+                else:
+                    getSFWorkGroups()
+            except:
+                print("User Already Exists " + username, agentName, tsr)
+                if app.dlg["A User with that name already exists"].exists() == True:
+                    app.dlg.OK.click_input()
+                    app.dlg.Cancel.click_input()
+            app.dlg.Cancel.click_input() #Change When Done
+        n += 1
+
+def getWorkGroups(loc, dept):
+    if location == loc:
+        if department == dept:
+            if department == "outbnd":
+                AgentWorkGroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
+            else:
+                AgentWorkGroups(wrkqueues[loc + "_" + dept])
+    
+>>>>>>> master
 def getSFWorkGroups(): #helper function here
     if location == "orl":
         AgentSFWorkGroups(orl_outbnd_sf)
@@ -299,10 +377,14 @@ def Licensing():
     app.dlg['Enable Licenses'].click_input()
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
+<<<<<<< HEAD
 
 if serv == 1:
     get_IA_cms()
 else:
     get_IA_manual()
 
+=======
+   
+>>>>>>> master
 main()
