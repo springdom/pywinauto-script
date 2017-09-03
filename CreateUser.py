@@ -11,12 +11,7 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 from string import ascii_lowercase
 
-<<<<<<< HEAD
-=======
-serv = input("1:CMS\n2:Salesforce\nSelect Option: ")
-serv = int(serv)
 
->>>>>>> Update CreateUser.py
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
@@ -25,11 +20,8 @@ orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "M
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
 lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-<<<<<<< HEAD
+
 wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lvn_outbnd_cms":lvn_outbnd_cms,"lvn_ct":lv_ct}
-=======
-wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lv_outbnd_cms":lv_outbnd_cms,"lv_ct":lv_ct}
->>>>>>> Update CreateUser.py
 
 #SalesForce
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
@@ -43,12 +35,9 @@ wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb['HGV_OrgChart']
 ws = wb.active
 
-<<<<<<< HEAD
 serv = input("1:CMS\n2:Salesforce\nSelect Option:")
 serv = int(serv)
 
-=======
->>>>>>> Update CreateUser.py
 column_header = {}
 
 app = Application(backend='uia')
@@ -65,7 +54,6 @@ typein = app.dlg.type_keys
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-<<<<<<< HEAD
 location = input("Location orl, spg, lvn:")
 location = location.lower()
 
@@ -77,28 +65,6 @@ if serv == 1:
     else:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
-
-=======
-app = Application(backend='uia')
-if serv == 1:
-    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
-else:
-    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
-app.connect(handle=p.handle)
-if serv == 1:
-    dlg = app.window(title="Interaction Administrator - [HiltonACD]")
-else:
-    dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
-typein = app.dlg.type_keys
-
-#app.dlg.print_control_identifiers() #Check Identifiers
-
-location = input("Location orl, spg, lvn: ")
-location = location.lower()
-if serv == 1:
-    department = input("Department outbnd, ct, act, cc: ")
-    department = department.lower()
->>>>>>> Update CreateUser.py
 
 def main():
     get_alphabet()
@@ -131,10 +97,6 @@ def column_headers():
 
     orgchart_data(add, agent_username,agent_name, agent_tsr)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> Update CreateUser.py
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
     while n < sh.max_row:
@@ -143,7 +105,6 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
             agentName = sh[agent_name + str(n)].value
             tsr = sh[agent_tsr + str(n)].value
 
-<<<<<<< HEAD
             print("Adding User - " + username, agentName, tsr)
         
             try:
@@ -166,24 +127,6 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     app.dlg.OK.click_input()
                     app.dlg.Cancel.click_input()
             app.dlg.Cancel.click_input() #Change When Done
-=======
-            print(username, agentName, tsr)
-
-            Config(tsr, username)
-            GetUserDetails(agentName)
-            AutoACD()
-            if serv == 1:
-                Roles(department)
-            else:
-                SFRoles()
-            if serv == 1:
-                getWorkGroups(location, department)
-                if department == "ct" or department == "cc":
-                    Licensing()
-            else:
-                getSFWorkGroups()
-            app.dlg.Cancel.click_input() #Change When DOne
->>>>>>> Update CreateUser.py
         n += 1
 
 def getWorkGroups(loc, dept):
@@ -194,11 +137,7 @@ def getWorkGroups(loc, dept):
             else:
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
     
-<<<<<<< HEAD
-def getSFWorkGroups(): #helper function here
-=======
 def getSFWorkGroups(): # helper function here
->>>>>>> Update CreateUser.py
     if location == "orl":
         AgentSFWorkGroups(orl_outbnd_sf)
     if location == "spg":
@@ -343,49 +282,3 @@ def Licensing():
         app.dlg[ls].type_keys("{SPACE}")
    
 main()
-
-"""
-Agent Queues
----------------------------------------------------------------------
-No Licenses
-Roles - MKT-Agent
-- Orlando - OutBoundCMS
-Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
-- Las Vegas - OutBoundCMS
-Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
-- SpringField - OutBoundCMS
-Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2
----------------------------------------------------------------------
-No Licenses
-Roles - MKT-SF-Agent
-- Orlando - OutBoundManual
-LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
-- Las Vegas - OutBoundManual
-LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
-- SpringField - OutBoundManual
-LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
----------------------------------------------------------------------
-Enable Licenses - Interaction Optimizer CLient Access,
-Interaction Optimizer Real Time Adherance Tracking,
-Interaction Optimizer Scheduable
-Roles - MKT-Agent
-- Orlando - Call Tranfer
-Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-Las Vegas - Call Transfer
-CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-- SpringField - Call Transfer
-Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
-Call Transfer - Client Optimizer
----------------------------------------------------------------------
-- Orlando Activations
-No Licenses
-WorkGroups - LOC-ORL-MKT-ACT, MKT-Activations-CallBack, MKT-ACT-Main, MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
-Roles - MKT-CC-Agent
----------------------------------------------------------------------
-- ORlando Customer Care
-Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
-WorkGroups - LOC-ORL-MKT-CC,  MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
-Roles - MKT-CC-Agent
----------------------------------------------------------------------
-Auto-ACD
-"""
