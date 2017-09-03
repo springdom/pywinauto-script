@@ -4,38 +4,29 @@ Automates Interaction Administrator
 import time
 import pywinauto
 from pywinauto import application
+#from pywinauto.keyboard import SendKeys
 #from pywinauto import Desktop
 from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
 from string import ascii_lowercase
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 app = Application(backend='uia')
+=======
+>>>>>>> parent of 55d8f87... a
 
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
-orl_ct = [
-    "CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC",
-    "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-
-orl_act = [
-    "LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates",
-    "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
-    ]
-
-orl_cc = [
-    "LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1",
-    "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
-    ]
-
+orl_ct = ["CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+orl_act = ["LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
+orl_cc = ["LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2"]
 spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
-lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
-lvn_ct = [
-    "CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC",
-    "MKT-InbCT-Callback", "MKT-InbCT-HRCC",
-    ]
+lvn_outbnd_cms = ["LAS_OUT_SUP","MKT-Outbound-Callback", "MKT-Outbound-Main2"]
+lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
+<<<<<<< HEAD
 wrkqueues = {
     "orl_outbnd_cms":orl_outbnd_cms, "orl_ct":orl_ct, "orl_act":orl_act, "orl_cc":orl_cc,
     "spg_ct":spg_ct, "lvn_outbnd_cms":lvn_outbnd_cms, "lvn_ct":lvn_ct,
@@ -52,12 +43,16 @@ lv_ct = ["CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC", "MKT-InbCT-Callbac
 
 wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lv_outbnd_cms":lv_outbnd_cms,"lv_ct":lv_ct}
 >>>>>>> master
+=======
+wrkqueues = {"orl_outbnd_cms":orl_outbnd_cms,"orl_ct":orl_ct,"orl_act":orl_act,"orl_cc":orl_cc,"spg_ct":spg_ct,"lv_outbnd_cms":lv_outbnd_cms,"lv_ct":lv_ct}
+>>>>>>> parent of 55d8f87... a
 
 #SalesForce
 orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 licenses = [
     "Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking",
@@ -66,6 +61,9 @@ licenses = [
 =======
 licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
 >>>>>>> master
+=======
+licenses = ["Interaction Optimizer Client Access", "Interaction Optimizer Real-time Adherence Tracking", "Interaction Optimizer Schedulable"]
+>>>>>>> parent of 55d8f87... a
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 wb = load_workbook('excel_orgchart/orgchart.xlsx', read_only=True)
@@ -75,7 +73,22 @@ ws = wb.active
 column_header = {}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+app = Application(backend='uia')
+if serv == 1:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
+else:
+    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
+app.connect(handle=p.handle)
+if serv == 1:
+    dlg = app.window(title="Interaction Administrator - [HiltonACD]")
+else:
+    dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
+typein = app.dlg.type_keys
+>>>>>>> parent of 55d8f87... a
 #app.dlg.print_control_identifiers() #Check Identifiers
+
 
 serv = input("1:CMS\n2:Salesforce\nSelect Option:")
 serv = int(serv)
@@ -114,19 +127,6 @@ if serv == 1:
 def main():
     get_alphabet()
     column_headers()
-    
-
-def get_IA_cms():
-    global app
-    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
-    app.connect(handle=p.handle)
-    dlg = app.window(title="Interaction Administrator - [HiltonACD]")
-
-def get_IA_manual():
-    global app
-    p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
-    app.connect(handle=p.handle)
-    dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
 
 def get_alphabet():
     for c in ascii_lowercase:
@@ -147,17 +147,21 @@ def column_headers():
     email = "Email Address"
     Name = "AgentName"
     cic_id = "CIC_ID"
-
+    
     add = sed(Add) or sed(Add2)
     agent_username = sed(windows)
     agent_name = sed(Name)
     agent_tsr = sed(cic_id)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     orgchart_data(add, agent_username, agent_name, agent_tsr)
 =======
     orgchart_data(add, agent_username,agent_name, agent_tsr)
 >>>>>>> master
+=======
+    orgchart_data(add, agent_username,agent_name, agent_tsr)
+>>>>>>> parent of 55d8f87... a
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
@@ -169,7 +173,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
 <<<<<<< HEAD
 
             print("Adding User - " + username, agentName, tsr)
-
+        
             try:
                 Config(tsr, username)
                 GetUserDetails(agentName)
@@ -199,6 +203,7 @@ def getWorkGroups(loc, dept):
                 AgentWorkGroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
             else:
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
+<<<<<<< HEAD
 
 =======
 
@@ -235,6 +240,9 @@ def getWorkGroups(loc, dept):
                 AgentWorkGroups(wrkqueues[loc + "_" + dept])
     
 >>>>>>> master
+=======
+    
+>>>>>>> parent of 55d8f87... a
 def getSFWorkGroups(): #helper function here
     if location == "orl":
         AgentSFWorkGroups(orl_outbnd_sf)
@@ -293,7 +301,7 @@ def AgentWorkGroups(wrkgrps):
             if department == "act" or department == "cc":
                 if num == 1:
                     ListBoxPos(-6)
-
+            
         if location == "spg":
             num += 1
             if department == "ct":
@@ -301,7 +309,7 @@ def AgentWorkGroups(wrkgrps):
                     ListBoxPos(-2)
                 if num == 2:
                     ListBoxPos(-8)
-
+            
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
 
@@ -309,7 +317,7 @@ def AgentWorkGroups(wrkgrps):
             num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
-
+            
             if department == "outbnd":
                 if num == 1:
                     ListBoxPos(-13)
@@ -329,7 +337,7 @@ def AgentSFWorkGroups(wrkgrps):
             num += 1
             app.dlg[x].click_input()
             app.dlg.Add.click_input()
-
+    
         if location == "spg":
             num += 1            
             app.dlg[x].click_input()
@@ -352,7 +360,7 @@ def ListBoxPos(scrollpos):
 def AutoACD():
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
-    app.dlg.CheckBox0.click_input()
+    app.dlg.CheckBox0.click_input() 
 
 def Roles(deptmnt):
     app.dlg.Roles.click_input()
@@ -378,6 +386,7 @@ def Licensing():
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 if serv == 1:
     get_IA_cms()
@@ -387,4 +396,53 @@ else:
 =======
    
 >>>>>>> master
+=======
+   
+>>>>>>> parent of 55d8f87... a
 main()
+
+"""
+Agent Queues
+---------------------------------------------------------------------
+No Licenses
+Roles - MKT-Agent
+- Orlando - OutBoundCMS
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, Orl_OUT_SUP
+- Las Vegas - OutBoundCMS
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2, LV_OUT_SUP
+- SpringField - OutBoundCMS
+Workgroups - MKT-Outbound-Callback, MKT-Outbound-Main2
+---------------------------------------------------------------------
+No Licenses
+Roles - MKT-SF-Agent
+- Orlando - OutBoundManual
+LOC-ORL-MKT-SalesForce, SF-Orlando-Manual, SF-RestrictDialing
+- Las Vegas - OutBoundManual
+LOC-LV-MKT-SalesForce, SF-LV-Manual, SF-RestrictDialing
+- SpringField - OutBoundManual
+LOC-SPG-MKT-SalesForce, SF-Springfield-Manual, SF-RestrictDialing
+---------------------------------------------------------------------
+Enable Licenses - Interaction Optimizer CLient Access,
+Interaction Optimizer Real Time Adherance Tracking,
+Interaction Optimizer Scheduable
+Roles - MKT-Agent
+- Orlando - Call Tranfer
+Workgroups - CT Priority 1, CT Priority 2, LOC-ORL-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+Las Vegas - Call Transfer
+CT Priority 1, CT Priority 2, LOC-LV-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+- SpringField - Call Transfer
+Workgroups - LOC-SPG-MKT-HRCC, MKT-InbCT-Callback, MKT-InbCT-HRCC
+Call Transfer - Client Optimizer
+---------------------------------------------------------------------
+- Orlando Activations
+No Licenses
+WorkGroups - LOC-ORL-MKT-ACT, MKT-Activations-CallBack, MKT-ACT-Main, MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
+Roles - MKT-CC-Agent
+---------------------------------------------------------------------
+- ORlando Customer Care
+Enable Licenses - Interaction Optimizer CLient Access, Interaction Optimizer Real Time Adherance Tracking, Interaction Optimizer Scheduable
+WorkGroups - LOC-ORL-MKT-CC,  MKT-CC-BookDates, MKT-CC-BookDates-Priority1,MKT-CC-CustomerService, MKT-CC-CustomerService-Priority2
+Roles - MKT-CC-Agent
+---------------------------------------------------------------------
+Auto-ACD
+"""
