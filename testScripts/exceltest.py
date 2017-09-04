@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 from string import ascii_lowercase
 
 
-wb = load_workbook('orgchart3.xlsx', read_only=True)
+wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb.worksheets[0]
 ws = wb.active
 column_header = {}
