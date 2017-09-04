@@ -11,8 +11,6 @@ from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
 
-
-
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
@@ -55,7 +53,7 @@ licenses = [
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb['HGV_OrgChart']
+sh = wb.worksheets[0]
 ws = wb.active
 
 serv = input("1:CMS\n2:Salesforce\nSelect Option:")
@@ -79,8 +77,6 @@ else:
 
 #app.dlg.print_control_identifiers() #Check Identifiers
 
-
-
 if serv == 1:
     if location == "spg":
         department = input("Select a department - ct:  ")
@@ -89,7 +85,6 @@ if serv == 1:
     else:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
-
 
 def main():
     """Main Function"""
@@ -112,11 +107,12 @@ def column_headers():
     """Assign ColumnHeader Names"""
     Add = "Add/Delete/Change/Transfer/Rehire"
     Add2 = "Add/Delete/Change"
+    Add3 = "Add/Delete/Change/Transfer"
     windows = "Windows for Adds"
     Name = "AgentName"
     cic_id = "CIC_ID"
 
-    add = get_header(Add) or get_header(Add2)
+    add = get_header(Add) or get_header(Add2) or get_header(Add3)
     agent_username = get_header(windows)
     agent_name = get_header(Name)
     agent_tsr = get_header(cic_id)

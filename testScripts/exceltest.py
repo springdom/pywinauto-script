@@ -2,13 +2,14 @@ from openpyxl import load_workbook
 from string import ascii_lowercase
 
 
-wb = load_workbook('orgchart4.xlsx', read_only=True)
-sh = wb['HGV_OrgChart']
+wb = load_workbook('orgchart3.xlsx', read_only=True)
+sh = wb.worksheets[0]
 ws = wb.active
 column_header = {}
 #Used Columns
 Add = "Add/Delete/Change/Transfer/Rehire"
 Add2 = "Add/Delete/Change"
+Add3 = "Add/Delete/Change/Transfer"
 windows = "Windows for Adds"
 email = "Email Address"
 Name = "AgentName"
@@ -38,7 +39,7 @@ def sed(a):
              return str(k)
 
 def cheese():
-    add = sed(Add) or sed(Add2)
+    add = sed(Add) or sed(Add2) or sed(Add3)
     agent_username = sed(windows)
     agentemail = sed(email) or "AZ"
                                    
