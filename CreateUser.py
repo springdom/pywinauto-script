@@ -150,8 +150,8 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 else:
                     get_sf_workgroups()
             except:
-                print("User Already Exists " + username, agentName, tsr)
                 if app.dlg["A User with that name already exists"].exists() == True:
+                    print("User Already Exists " + username, agentName, tsr)
                     app.dlg.OK.click_input()
                     app.dlg.Cancel.click_input()
             app.dlg.Cancel.click_input() #Change When Done
