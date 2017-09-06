@@ -36,7 +36,7 @@ orl_cc_cms = [
     ]
 
 wrkqueues = {
-    "orl_outbnd_cms_":orl_outbnd_cms, "orl_ct_cms":orl_ct_cms, "orl_act_cms":orl_act_cms,
+    "orl_outbnd_cms":orl_outbnd_cms, "orl_ct_cms":orl_ct_cms, "orl_act_cms":orl_act_cms,
     "orl_cc_cms":orl_cc_cms, "spg_ct_cms":spg_ct_cms, "lvn_outbnd_cms":lvn_outbnd_cms,
     "lvn_ct_cms":lvn_ct_cms,
     }
@@ -62,6 +62,19 @@ location = input("Location orl, spg, lvn:")
 location = location.lower()
 
 
+if serv == 1:
+    if location == "spg":
+        department = input("Select a department - ct:  ")
+    elif location == "lvn":
+        department = input("Select a department - outbnd, ct: ")
+    else:
+        department = input("Select a department - outbnd, ct, act, cc: ")
+    department = department.lower()
+
+wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
+sh = wb['HGV_OrgChart']
+ws = wb.active
+
 app = Application(backend='uia')
 if serv == 1:
     p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
@@ -74,22 +87,7 @@ else:
     dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
 typein = app.dlg.type_keys
 
-wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb['HGV_OrgChart']
-ws = wb.active
 #app.dlg.print_control_identifiers() #Check Identifiers
-
-
-
-if serv == 1:
-    if location == "spg":
-        department = input("Select a department - ct:  ")
-    elif location == "lvn":
-        department = input("Select a department - outbnd, ct: ")
-    else:
-        department = input("Select a department - outbnd, ct, act, cc: ")
-    department = department.lower()
-
 
 def main():
     """Main Function"""
@@ -141,13 +139,11 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 auto_acd()
                 if serv == 1:
                     cms_roles(department)
-                else:
-                    sf_roles()
-                if serv == 1:
-                    get_workgroups(location, department)
+                    get_cms_workgroups(location, department)
                     if department == "ct" or department == "cc":
                         licensing()
                 else:
+                    sf_roles()
                     get_sf_workgroups()
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
@@ -198,9 +194,9 @@ def cms_roles(deptmnt):
     app.dlg.Add.click_input()
 
     if deptmnt == "ct" or deptmnt == "outbnd":
-        app.dlg.ListItem4.select()
+        app.dlg["MKT-Agent"].select()
     elif deptmnt == "act" or deptmnt == "cc":
-        app.dlg.ListItem6.select()
+        app.dlg["MKT-CC-Agent"].select()
 
     app.dlg.OK.click_input()
 
@@ -211,12 +207,12 @@ def sf_roles():
     app.dlg.ListItem6.select()
     app.dlg.OK.click_input()
 
-
-def get_workgroups(loc, dept):
+def get_cms_workgroups(loc, dept):
     """Assign CMS WorkGroups based on department"""
     if location == loc:
         if department == dept:
             agent_cms_workgroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
+            
 
 def get_sf_workgroups(): #helper function here
     """Assign Salesforce WorkGroups based on Selection"""
@@ -317,3 +313,8 @@ def licensing():
         app.dlg[ls].type_keys("{SPACE}")
 
 main()
+"""
+app.dlg["User Name"].click_input()
+app.dlg.type_keys("{BS}")
+app.dlg.type_keys("123")
+"""
