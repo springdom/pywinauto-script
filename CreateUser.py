@@ -223,7 +223,7 @@ def get_sf_workgroups(): #helper function here
     if location == "lvn":
         agent_sf_workgroups(lv_outbnd_sf)
 
-def agent_cms_workgroups(wrkgrps):
+def agent_cms_workgroups(wrkgrps): #Do this better
     """Assign CMS WorkGroups"""
     num = 0
     app.dlg.Workgroups.click_input()
