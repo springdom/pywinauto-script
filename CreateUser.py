@@ -72,7 +72,7 @@ if serv == 1:
     department = department.lower()
 
 wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb['HGV_OrgChart']
+sh = wb.worksheets[0]
 ws = wb.active
 
 app = Application(backend='uia')
