@@ -11,33 +11,34 @@ from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
 
+
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
-spg_ct = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
+spg_ct_cms = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
 
-orl_ct = [
+orl_ct_cms = [
     "CT Priority 1", "CT Priority 2", "LOC-ORL-MKT-HRCC",
     "MKT-InbCT-Callback", "MKT-InbCT-HRCC",
     ]
-lvn_ct = [
+lvn_ct_cms = [
     "CT Priority 1", "CT Priority 2", "LOC-LV-MKT-HRCC",
     "MKT-InbCT-Callback", "MKT-InbCT-HRCC",
     ]
-orl_act = [
+orl_act_cms = [
     "LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main",
     "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService",
     "MKT-CC-CustomerService-Priority2",
     ]
-orl_cc = [
+orl_cc_cms = [
     "LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1",
     "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
     ]
 
 wrkqueues = {
-    "orl_outbnd_cms_":orl_outbnd_cms, "orl_ct":orl_ct, "orl_act":orl_act,
-    "orl_cc":orl_cc, "spg_ct":spg_ct, "lvn_outbnd_cms":lvn_outbnd_cms,
-    "lvn_ct":lvn_ct,
+    "orl_outbnd_cms_":orl_outbnd_cms, "orl_ct_cms":orl_ct_cms, "orl_act_cms":orl_act_cms,
+    "orl_cc_cms":orl_cc_cms, "spg_ct_cms":spg_ct_cms, "lvn_outbnd_cms":lvn_outbnd_cms,
+    "lvn_ct_cms":lvn_ct_cms,
     }
 
 #SalesForce
@@ -52,9 +53,7 @@ licenses = [
 
 roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
-wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb.worksheets[0]
-ws = wb.active
+column_header = {}
 
 serv = input("1:CMS\n2:Salesforce\nSelect Option:")
 serv = int(serv)
@@ -62,7 +61,6 @@ serv = int(serv)
 location = input("Location orl, spg, lvn:")
 location = location.lower()
 
-column_header = {}
 
 app = Application(backend='uia')
 if serv == 1:
@@ -74,8 +72,14 @@ if serv == 1:
     dlg = app.window(title="Interaction Administrator - [HiltonACD]")
 else:
     dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
+typein = app.dlg.type_keys
 
+wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
+sh = wb['HGV_OrgChart']
+ws = wb.active
 #app.dlg.print_control_identifiers() #Check Identifiers
+
+
 
 if serv == 1:
     if location == "spg":
@@ -86,6 +90,7 @@ if serv == 1:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
+
 def main():
     """Main Function"""
     get_alphabet()
@@ -94,6 +99,7 @@ def main():
 def get_alphabet():
     """Loop Through Alphabet and Column Headers in Excel"""
     for c in ascii_lowercase:
+        _x = sh[c.upper() + "1"].value
         column_header[c.upper()] = sh[c.upper() + "1"].value
 
 def get_header(getLetter):
@@ -120,7 +126,6 @@ def column_headers():
     orgchart_data(add, agent_username, agent_name, agent_tsr)
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
-    """Read From OrgChart and Send to IA"""
     n = 2
     while n < sh.max_row:
         if sh[add + str(n)].value == "Add":
@@ -144,15 +149,15 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                         licensing()
                 else:
                     get_sf_workgroups()
-            except:#Maybe else
+            except:
                 print("User Already Exists " + username, agentName, tsr)
-                if app.dlg["A User with that name already exists"].exists():
+                if app.dlg["A User with that name already exists"].exists() == True:
                     app.dlg.OK.click_input()
                     app.dlg.Cancel.click_input()
             app.dlg.Cancel.click_input() #Change When Done
         n += 1
 
-def config(tsr, win_username, passwd = "10102015", domain="hgvcnt\\"):
+def config(tsr, win_username, passwd="10102015", domain="hgvcnt\\"):
     """Assign Configuration"""
     app.dlg.type_keys('^n')
     app.dlg.Edit0.type_keys(str(tsr) + "{ENTER}")
@@ -160,9 +165,9 @@ def config(tsr, win_username, passwd = "10102015", domain="hgvcnt\\"):
     app.dlg.Edit4.type_keys(passwd) #Confirm Password
     app.dlg.Edit7.type_keys(domain + win_username) #Domain User
     get_location()
-    
+
 def get_location():
-    """Gets Location"""
+    """Gets Location from combobox"""
     app.dlg["ComboBox4"].click_input()
     if location == "orl":
         app.dlg["Orlando - Metro Center"].select()
@@ -186,8 +191,9 @@ def auto_acd():
     app.dlg.ListItem3.click_input()
     app.dlg.CheckBox0.click_input()
 
+
 def cms_roles(deptmnt):
-    """Assign Roles"""
+    """Assign Roles for cms"""
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
 
@@ -197,7 +203,7 @@ def cms_roles(deptmnt):
         app.dlg.ListItem6.select()
 
     app.dlg.OK.click_input()
-    
+
 def sf_roles():
     """Assign Roles in SalesForce"""
     app.dlg.Roles.click_input()
@@ -205,25 +211,23 @@ def sf_roles():
     app.dlg.ListItem6.select()
     app.dlg.OK.click_input()
 
+
 def get_workgroups(loc, dept):
-    """Assign CMS WorkGroups based on Selection"""
+    """Assign CMS WorkGroups based on department"""
     if location == loc:
         if department == dept:
-            if department == "outbnd":
-                agent_cms_workgroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
-            else:
-                agent_cms_workgroups(wrkqueues[loc + "_" + dept])
+            agent_cms_workgroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
 
-def get_sf_workgroups():
+def get_sf_workgroups(): #helper function here
     """Assign Salesforce WorkGroups based on Selection"""
     if location == "orl":
         agent_sf_workgroups(orl_outbnd_sf)
     if location == "spg":
         agent_sf_workgroups(spg_outbnd_sf)
     if location == "lvn":
-        agent_sf_workgroups(lvn_outbnd_sf)
+        agent_sf_workgroups(lv_outbnd_sf)
 
-def agent_cms_workgroups(wrkgrps): #Helper?
+def agent_cms_workgroups(wrkgrps):
     """Assign CMS WorkGroups"""
     num = 0
     app.dlg.Workgroups.click_input()
@@ -272,7 +276,6 @@ def agent_cms_workgroups(wrkgrps): #Helper?
                 if num == 3:
                     listbox_pos(-10)
 
-
 def agent_sf_workgroups(wrkgrps):
     """Assign SF WorkGroups"""
     num = 0
@@ -303,6 +306,7 @@ def listbox_pos(scrollpos):
     """Gets Scrollbox Position"""
     app.dlg['ListBox'].click_input()
     app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
+
 
 def licensing():
     """Assign Licensing"""
