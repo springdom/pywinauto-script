@@ -11,7 +11,6 @@ from pywinauto.application import Application
 #from pywinauto.findwindows import find_window
 from openpyxl import load_workbook
 
-
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
@@ -142,9 +141,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     get_cms_workgroups(location, department)
                     if department == "ct" or department == "cc":
                         licensing()
-                        app.dlg.Cancel.click_input() #Change When Done
-                    else:
-                        app.dlg.Cancel.click_input()
+                    app.dlg.Cancel.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
@@ -154,7 +151,6 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     print("User Already Exists " + username, agentName, tsr)
                     app.dlg.OK.click_input()
                     app.dlg.Cancel.click_input()
-            
         n += 1
 
 def config(tsr, win_username, passwd="10102015", domain="hgvcnt\\"):
