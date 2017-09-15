@@ -124,7 +124,7 @@ def column_headers():
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
-    while n < sh.max_row:
+    while n < sh.max_row + 1:
         if sh[add + str(n)].value == "Add":
             username = sh[windows + str(n)].value
             agentName = sh[agent_name + str(n)].value
