@@ -110,15 +110,18 @@ def column_headers():
     """Assign ColumnHeader Names"""
     Add = "Add/Delete/Change/Transfer/Rehire"
     Add2 = "Add/Delete/Change"
-    Add3 = "Add/Delete/Change/Transfer"
-    windows = "Windows for Adds"
+    Add3 = "Add/Deactivate/Reactivate/Change"
+    Add4 = "Add/Delete/Change/Transfer"
+    windows = "Windows Username"
+    windows2 = "Windows for Adds"
     Name = "AgentName"
     cic_id = "CIC_ID"
+    cic_id2 = "CIC ID"
 
-    add = get_header(Add) or get_header(Add2) or get_header(Add3)
-    agent_username = get_header(windows)
+    add = get_header(Add) or get_header(Add2) or get_header(Add3) or get_header(Add4)
+    agent_username = get_header(windows) or get_header(windows2) 
     agent_name = get_header(Name)
-    agent_tsr = get_header(cic_id)
+    agent_tsr = get_header(cic_id) or get_header(cic_id2)
 
     orgchart_data(add, agent_username, agent_name, agent_tsr)
 
@@ -141,11 +144,11 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     get_cms_workgroups(location, department)
                     if department == "ct" or department == "cc":
                         licensing()
-                    app.dlg.Cancel.click_input() #Change When Done
+                    app.dlg.OK.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.Cancel.click_input() #Change When Done
+                    app.dlg.OK.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
