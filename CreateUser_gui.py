@@ -56,11 +56,11 @@ sh = wb.worksheets[0]
 ws = wb.active
 
 #Replace with my_gui.server
-serv = input("1:CMS\n2:Salesforce\nSelect Option:")
-serv = int(serv)
+#serv = input("1:CMS\n2:Salesforce\nSelect Option:")
+#serv = int(serv)
 
-location = input("Location orl, spg, lvn:")
-location = location.lower()
+#location = input("Location orl, spg, lvn:")
+#location = location.lower()
 
 
 
@@ -183,23 +183,23 @@ class IAAutoGUI:
     def restart_button(self):
         pass
 
-    def setup():
-        app = Application(backend='uia')
-        #Replace with my_gui.server
-        if my_gui.server == 1:
-            p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
-            app.connect(handle=p.handle)
-            dlg = app.window(title="Interaction Administrator - [HiltonACD]")
-            if my_gui.location == "spg":
-                my_gui.department = input("Select a department - ct:  ")
-            elif my_gui.location == "lvn":
-                my_gui.department = input("Select a department - outbnd, ct: ")
-            else:
-                my_gui.department = input("Select a department - outbnd, ct, act, cc: ")
+def setup():
+    app = Application(backend='uia')
+    #Replace with my_gui.server
+    if my_gui.server == 1:
+        p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
+        app.connect(handle=p.handle)
+        dlg = app.window(title="Interaction Administrator - [HiltonACD]")
+        if my_gui.location == "spg":
+            my_gui.department = input("Select a department - ct:  ")
+        elif my_gui.location == "lvn":
+            my_gui.department = input("Select a department - outbnd, ct: ")
         else:
-            p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
-            app.connect(handle=p.handle)
-            dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
+            my_gui.department = input("Select a department - outbnd, ct, act, cc: ")
+    else:
+        p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
+        app.connect(handle=p.handle)
+        dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
 
 def main():
     """Main Function"""
