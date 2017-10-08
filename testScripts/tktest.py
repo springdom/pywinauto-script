@@ -1,7 +1,8 @@
 from openpyxl import load_workbook
 from string import ascii_lowercase
 from tkinter import Tk, Label, Radiobutton,Button, W, NORMAL,DISABLED, StringVar
-
+import sys
+import os
 
 wb = load_workbook('orgchart.xlsx', read_only=True)
 sh = wb.worksheets[0]
@@ -40,7 +41,7 @@ def sed(a):
              a = k
              return str(k)
 
-def cheese():
+def column_headers():
     add = sed(Add) or sed(Add2) or sed(Add3)
     agent_username = sed(windows)
     agentemail = sed(email) or "AZ"
@@ -50,11 +51,11 @@ def cheese():
   
     orgchart_data(add, agent_username, agentemail,agent_name, agent_tsr)
 
-
 class IAAutoGUI:
     def __init__(self, master, server = 0):
-        self.server = server
         self.master = master
+        self.server = server
+        
         master.title("IA Auto")
         self.master.minsize(width=300,height=200)
         
@@ -109,7 +110,7 @@ class IAAutoGUI:
         self.run_button.grid(row = 8, pady = 10)
         
         self.reset_button =  Button(master, width = 10, height = 2, padx = 10,
-                                    text = "Reset", command = lambda:self.restart_button())
+                                    text = "Reset", command = lambda:self.restart_program())
         self.reset_button.grid(row = 8, column =  2, pady = 10)
 
         col_count, row_count = root.grid_size()
@@ -156,23 +157,29 @@ class IAAutoGUI:
             self.cc.configure(state = DISABLED)
             
     def get_department(self):
-        print(self.department.get())
+        self.department = self.department.get()
+        print(self.department)
+        
         self.outbnd.configure(state = DISABLED)
         self.ct.configure(state = DISABLED)
         self.act.configure(state = DISABLED)
         self.cc.configure(state = DISABLED)
         self.act.configure(state = DISABLED)
         self.cc.configure(state = DISABLED)
-        cheese()
+        column_headers()
         
-    def restart_button(self):
-        pass
+    def restart_program(self):
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
+        
+            
+        
 
 if __name__ == '__main__':
     root = Tk()
     my_gui = IAAutoGUI(root)
     root.mainloop()
-            
-cheese()
- 
 
+print(my_gui.server)
+print(my_gui.location)
+print(my_gui.department)

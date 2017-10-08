@@ -224,7 +224,7 @@ def get_sf_workgroups(): #helper function here
     if location == "spg":
         agent_sf_workgroups(spg_outbnd_sf)
     if location == "lvn":
-        agent_sf_workgroups(lv_outbnd_sf)
+        agent_sf_workgroups(lvn_outbnd_sf)
 
 def agent_cms_workgroups(wrkgrps): #Do this better
     """Assign CMS WorkGroups"""
