@@ -51,7 +51,7 @@ roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 column_header = {}
 
-wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
+wb = load_workbook('excel_orgchart\orgchart3.xlsx', read_only=True)
 sh = wb.worksheets[0]
 ws = wb.active
 
@@ -131,10 +131,10 @@ class IAAutoGUI:
     def get_server(self, button_id):
         if button_id == 1:
             self.server = 1
-            print("CMS")
+            print("cms")
         elif button_id == 2:
             self.server = 2
-            print("Salesforce")
+            print("salesforce")
             
         self.cms_button.configure(state=DISABLED)
         self.sf_button.configure(state=DISABLED)
@@ -177,34 +177,49 @@ class IAAutoGUI:
         self.cc.configure(state = DISABLED)
         self.act.configure(state = DISABLED)
         self.cc.configure(state = DISABLED)
-        setup()
+        IAserver()
         main()
-        
+ 
     def restart_button(self):
         pass
 
+<<<<<<< HEAD
 def setup():
     app = Application(backend='uia')
     #Replace with my_gui.server
+=======
+app = Application(backend='uia')
+def IAserver():
+    
+    print(my_gui.server)
+>>>>>>> work_branch
     if my_gui.server == 1:
         p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
         app.connect(handle=p.handle)
         dlg = app.window(title="Interaction Administrator - [HiltonACD]")
+<<<<<<< HEAD
         if my_gui.location == "spg":
             my_gui.department = input("Select a department - ct:  ")
         elif my_gui.location == "lvn":
             my_gui.department = input("Select a department - outbnd, ct: ")
         else:
             my_gui.department = input("Select a department - outbnd, ct, act, cc: ")
+=======
+>>>>>>> work_branch
     else:
         p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
         app.connect(handle=p.handle)
         dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
+<<<<<<< HEAD
+=======
+        
+>>>>>>> work_branch
 
 def main():
     """Main Function"""
     get_alphabet()
     column_headers()
+
 
 def get_alphabet():
     """Loop Through Alphabet and Column Headers in Excel"""
@@ -218,22 +233,26 @@ def get_header(getLetter):
         if v == getLetter:
             getLetter = k
             return str(k)
-
+        
 def column_headers():
     """Assign ColumnHeader Names"""
     Add = "Add/Delete/Change/Transfer/Rehire"
     Add2 = "Add/Delete/Change"
-    Add3 = "Add/Delete/Change/Transfer"
-    windows = "Windows for Adds"
+    Add3 = "Add/Deactivate/Reactivate/Change"
+    Add4 = "Add/Delete/Change/Transfer"
+    windows = "Windows Username"
+    windows2 = "Windows for Adds"
     Name = "AgentName"
     cic_id = "CIC_ID"
+    cic_id2 = "CIC ID"
 
-    add = get_header(Add) or get_header(Add2) or get_header(Add3)
-    agent_username = get_header(windows)
+    add = get_header(Add) or get_header(Add2) or get_header(Add3) or get_header(Add4)
+    agent_username = get_header(windows) or get_header(windows2) 
     agent_name = get_header(Name)
-    agent_tsr = get_header(cic_id)
+    agent_tsr = get_header(cic_id) or get_header(cic_id2)
 
     orgchart_data(add, agent_username, agent_name, agent_tsr)
+
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
@@ -249,18 +268,16 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 config(tsr, username)
                 get_user_details(agentName)
                 auto_acd()
-                #Replace with my_gui.server
                 if my_gui.server == 1:
                     cms_roles(my_gui.department)
-                    get_cms_workgroups(location, department)
-                    #Replace with my_gui.department
+                    get_cms_workgroups(my_gui.location, my_gui.department)
                     if my_gui.department == "ct" or my_gui.department == "cc":
                         licensing()
                     app.dlg.Cancel.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.Cancel.click_input() #Change When Done
+                    app.dlg.OK.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
@@ -280,8 +297,6 @@ def config(tsr, win_username, passwd="10102015", domain="hgvcnt\\"):
 def get_location():
     """Gets Location from combobox"""
     app.dlg["ComboBox4"].click_input()
-
-    #Replace with my_gui.location
     if my_gui.location == "orl":
         app.dlg["Orlando - Metro Center"].select()
     if my_gui.location == "spg":
@@ -298,19 +313,18 @@ def get_user_details(agentName):
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
 
+
 def auto_acd():
     """Assign Auto-ACD"""
     app.dlg.ACD.click_input()
     app.dlg.ListItem3.click_input()
     app.dlg.CheckBox0.click_input()
 
-
 def cms_roles(deptmnt):
     """Assign Roles for cms"""
     app.dlg.Roles.click_input()
     app.dlg.Add.click_input()
 
-    #Replace with my_gui.department
     if deptmnt == "ct" or deptmnt == "outbnd":
         app.dlg["MKT-Agent"].select()
     elif deptmnt == "act" or deptmnt == "cc":
@@ -327,21 +341,18 @@ def sf_roles():
 
 def get_cms_workgroups(loc, dept):
     """Assign CMS WorkGroups based on department"""
-    #Replace with my_gui.location
     if my_gui.location == loc:
         if my_gui.department == dept:
             agent_cms_workgroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
-            
 
 def get_sf_workgroups(): #helper function here
     """Assign Salesforce WorkGroups based on Selection"""
-    #Replace with my_gui.location
     if my_gui.location == "orl":
         agent_sf_workgroups(orl_outbnd_sf)
     if my_gui.location == "spg":
         agent_sf_workgroups(spg_outbnd_sf)
     if my_gui.location == "lvn":
-        agent_sf_workgroups(lv_outbnd_sf)
+        agent_sf_workgroups(lvn_outbnd_sf)
 
 def agent_cms_workgroups(wrkgrps): #Do this better
     """Assign CMS WorkGroups"""
@@ -350,7 +361,6 @@ def agent_cms_workgroups(wrkgrps): #Do this better
     app.dlg.OK.click_input()
 
     for x in wrkgrps:
-        #Replace with my_gui.location
         if my_gui.location == "orl":
             if my_gui.department == "outbnd":
                 if num == 0:
@@ -424,7 +434,6 @@ def listbox_pos(scrollpos):
     app.dlg['ListBox'].click_input()
     app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
 
-
 def licensing():
     """Assign Licensing"""
     app.dlg.Licensing.click_input()
@@ -433,8 +442,8 @@ def licensing():
     for ls in licenses:
         app.dlg[ls].type_keys("{SPACE}")
 
+
 if __name__ == '__main__':
     root = Tk()
     my_gui = IAAutoGUI(root)
     root.mainloop()
-            
