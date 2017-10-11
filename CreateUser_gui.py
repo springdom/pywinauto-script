@@ -131,10 +131,10 @@ class IAAutoGUI:
     def get_server(self, button_id):
         if button_id == 1:
             self.server = 1
-            print("CMS")
+            print("cms")
         elif button_id == 2:
             self.server = 2
-            print("Salesforce")
+            print("salesforce")
             
         self.cms_button.configure(state=DISABLED)
         self.sf_button.configure(state=DISABLED)
@@ -199,7 +199,7 @@ def IAserver():
 
 def main():
     """Main Function"""
-    get_alphabet()s
+    get_alphabet()
     column_headers()
 
 
@@ -251,8 +251,8 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 get_user_details(agentName)
                 auto_acd()
                 if my_gui.server == 1:
-                    cms_roles(department)
-                    get_cms_workgroups(location, department)
+                    cms_roles(my_gui.department)
+                    get_cms_workgroups(my_gui.location, my_gui.department)
                     if my_gui.department == "ct" or my_gui.department == "cc":
                         licensing()
                     app.dlg.Cancel.click_input() #Change When Done
@@ -357,7 +357,7 @@ def agent_cms_workgroups(wrkgrps): #Do this better
             if my_gui.department == "ct":
                 if num == 3:
                     listbox_pos(-10)
-            if my_gui.department == "act" or department == "cc":
+            if my_gui.department == "act" or my_gui.department == "cc":
                 if num == 1:
                     listbox_pos(-6)
 
