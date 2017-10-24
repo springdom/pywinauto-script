@@ -7,6 +7,8 @@ import pywinauto
 from pywinauto.application import Application
 from openpyxl import load_workbook
 from tkinter import Tk, Label, Radiobutton,Button, W, NORMAL,DISABLED, StringVar
+from tkinter import filedialog as fd
+import sys
 
 #CMS
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
@@ -51,19 +53,6 @@ roles = ["MKT-Agent", "MKT-SF-Agent", "MKT-CC-Agent"]
 
 column_header = {}
 
-wb = load_workbook('excel_orgchart\orgchart3.xlsx', read_only=True)
-sh = wb.worksheets[0]
-ws = wb.active
-
-#Replace with my_gui.server
-#serv = input("1:CMS\n2:Salesforce\nSelect Option:")
-#serv = int(serv)
-
-#location = input("Location orl, spg, lvn:")
-#location = location.lower()
-
-
-
 #app.dlg.print_control_identifiers() #Check Identifiers
 
 class IAAutoGUI:
@@ -71,63 +60,74 @@ class IAAutoGUI:
         self.server = server
         self.master = master
         master.title("IA Auto")
-        self.master.minsize(width=300,height=200)
+        self.master.minsize(width=300,height=400)
+
+        #self.browse_button = ""
+        #self.browse_button.grid(row = 1)
+
+        self.filename = fd.askopenfilename()
+        self.filename_label = Label(master, text = self.filename)
+        self.filename_label.grid(row = 1, sticky = W)
+
+        self.wb = load_workbook(self.filename, read_only=True)
+        self.sh = self.wb.worksheets[0]
+        self.ws = self.wb.active
+
         
         self.serv_label = Label(master, text="Select Server")
         self.serv_label.grid(columnspan = 2, sticky = W)
         
         self.cms_button = Button(master, text="CMS", command=lambda:self.get_server(1))
-        self.cms_button.grid(row = 1)
+        self.cms_button.grid(row = 2)
 
         self.sf_button = Button(master, text="Salesforce", command=lambda:self.get_server(2))
-        self.sf_button.grid(row = 1, column = 1, sticky = W)
+        self.sf_button.grid(row = 2, column = 1, sticky = W)
 
         self.loc_label = Label(master, text="Select Location")
-        self.loc_label.grid(row = 2, columnspan = 2, sticky = W, pady = 10)
+        self.loc_label.grid(row = 3, columnspan = 2, sticky = W, pady = 10)
 
         self.orl_button = Button(master, text="orl", command=lambda:self.get_location("orl"),
                                  state=DISABLED)
-        self.orl_button.grid(row = 3)
+        self.orl_button.grid(row = 4)
         
         self.lvn_button = Button(master, text="lvn", command=lambda:self.get_location("lvn"),
                                  state=DISABLED)
-        self.lvn_button.grid(row = 3, column = 1, sticky = W )
+        self.lvn_button.grid(row = 4, column = 1, sticky = W )
         
         self.spg_button = Button(master,text="spg", command=lambda:self.get_location("spg"),
                                  state=DISABLED)
-        self.spg_button.grid(row = 3, column = 2, sticky = W)      
+        self.spg_button.grid(row = 4, column = 2, sticky = W)      
 
-        self.dept_label = Label(master, text="Choose Department")
-        self.dept_label.grid(row = 4, sticky = W, pady = 10)
+        self.dept_label = Label(master, text="Select Department")
+        self.dept_label.grid(row = 5, sticky = W, pady = 10)
 
         self.department = StringVar()
         self.outbnd = Radiobutton(master,indicatoron = 0, width = 20, padx = 20,
                                   text='Outbound', variable=self.department, value = "outbnd")
-        self.outbnd.grid(row = 5)
+        self.outbnd.grid(row = 6)
 
         self.ct = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                               text='Call Transfer', variable=self.department, value = "ct")
-        self.ct.grid(row = 5, column = 2)
+        self.ct.grid(row = 6, column = 2)
         
         self.act = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                                text='Activations', variable=self.department, value = "act")
-        self.act.grid(row = 6)
+        self.act.grid(row = 7)
         
         self.cc = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                               text='Customer Care', variable=self.department, value = "cc")
-        self.cc.grid(row = 6, column = 2)
+        self.cc.grid(row = 7, column = 2)
 
         self.run_button =  Button(master, width = 10, height = 2, padx = 10,
                                   text = "Run", command = lambda:self.get_department())
-        self.run_button.grid(row = 8, pady = 10)
+        self.run_button.grid(row = 9, pady = 10)
         
-        self.reset_button =  Button(master, width = 10, height = 2, padx = 10,
-                                    text = "Reset", command = lambda:self.restart_button())
-        self.reset_button.grid(row = 8, column =  2, pady = 10)
+        #self.reset_button =  Button(master, width = 10, height = 2, padx = 10, text = "Reset", command = lambda:self.restart_button())
+        #self.reset_button.grid(row = 9, column =  2, pady = 10)
 
         col_count, row_count = root.grid_size()
 
-    #maybe put pywinauto here
+    
     def get_server(self, button_id):
         if button_id == 1:
             self.server = 1
@@ -177,55 +177,35 @@ class IAAutoGUI:
         self.cc.configure(state = DISABLED)
         self.act.configure(state = DISABLED)
         self.cc.configure(state = DISABLED)
+        
         IAserver()
         main()
  
     def restart_button(self):
         pass
 
-<<<<<<< HEAD
-def setup():
-    app = Application(backend='uia')
-    #Replace with my_gui.server
-=======
 app = Application(backend='uia')
 def IAserver():
-    
     print(my_gui.server)
->>>>>>> work_branch
     if my_gui.server == 1:
         p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
         app.connect(handle=p.handle)
         dlg = app.window(title="Interaction Administrator - [HiltonACD]")
-<<<<<<< HEAD
-        if my_gui.location == "spg":
-            my_gui.department = input("Select a department - ct:  ")
-        elif my_gui.location == "lvn":
-            my_gui.department = input("Select a department - outbnd, ct: ")
-        else:
-            my_gui.department = input("Select a department - outbnd, ct, act, cc: ")
-=======
->>>>>>> work_branch
     else:
         p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonTCPA]")
         app.connect(handle=p.handle)
         dlg = app.window(title="Interaction Administrator - [HiltonTCPA]")
-<<<<<<< HEAD
-=======
         
->>>>>>> work_branch
-
 def main():
     """Main Function"""
     get_alphabet()
     column_headers()
 
-
 def get_alphabet():
     """Loop Through Alphabet and Column Headers in Excel"""
     for c in ascii_lowercase:
-        _x = sh[c.upper() + "1"].value
-        column_header[c.upper()] = sh[c.upper() + "1"].value
+        _x = my_gui.sh[c.upper() + "1"].value
+        column_header[c.upper()] = my_gui.sh[c.upper() + "1"].value
 
 def get_header(getLetter):
     """Match Header of File"""
@@ -256,11 +236,11 @@ def column_headers():
 
 def orgchart_data(add, windows, agent_name, agent_tsr):
     n = 2
-    while n < sh.max_row + 1:
-        if sh[add + str(n)].value == "Add":
-            username = sh[windows + str(n)].value
-            agentName = sh[agent_name + str(n)].value
-            tsr = sh[agent_tsr + str(n)].value
+    while n < my_gui.sh.max_row + 1:
+        if my_gui.sh[add + str(n)].value == "Add":
+            username = my_gui.sh[windows + str(n)].value
+            agentName = my_gui.sh[agent_name + str(n)].value
+            tsr = my_gui.sh[agent_tsr + str(n)].value
 
             print("Adding User - " + username, agentName, tsr)
 
@@ -277,7 +257,7 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.OK.click_input() #Change When Done
+                    app.dlg.Cancel.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
@@ -447,3 +427,5 @@ if __name__ == '__main__':
     root = Tk()
     my_gui = IAAutoGUI(root)
     root.mainloop()
+    
+sys.exit()
