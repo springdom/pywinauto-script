@@ -1,0 +1,62 @@
+from openpyxl import load_workbook
+from string import ascii_lowercase
+
+wb= load_workbook('OrlandoOutbound.xlsx', read_only=True)
+sh = wb.worksheets[1]
+ws = wb.active
+column_header = {}
+
+def main():
+    """Main Function"""
+    get_alphabet()
+    column_headers()
+
+def get_alphabet():
+    """Loop Through Alphabet and Column Headers in Excel"""
+    for c in ascii_lowercase:
+        _x = sh[c.upper() + "1"].value
+        column_header[c.upper()] = sh[c.upper() + "1"].value
+
+def get_header(getLetter):
+    """Match Header of File"""
+    for k, v in column_header.items():
+        if v == getLetter:
+            getLetter = k
+            return str(k)
+
+def column_headers():
+    """Assign ColumnHeader Names"""
+    Add = "Add/Delete/Change/Transfer/Rehire"
+    Add2 = "Add/Delete/Change"
+    Add3 = "Add/Deactivate/Reactivate/Change"
+    Add4 = "Add/Delete/Change/Transfer"
+    windows = "Windows Username"
+    windows2 = "Windows for Adds"
+    Name = "AgentName"
+    cic_id = "CIC_ID"
+    cic_id2 = "CIC ID"
+    queue = "Campaign"
+    Shift = "Shift"
+
+    add = get_header(Add) or get_header(Add2) or get_header(Add3) or get_header(Add4)
+    agent_username = get_header(windows) or get_header(windows2) 
+    agent_name = get_header(Name)
+    agent_tsr = get_header(cic_id) or get_header(cic_id2)
+    campaign = get_header(queue)
+    shift = get_header(Shift)
+    
+    orgchart_data(add, agent_username, agent_name, agent_tsr, campaign, shift)
+
+def orgchart_data(add, windows, agent_name, agent_tsr, campaign, shift):
+    n = 2
+    while n < sh.max_row + 1:
+        #if sh[add + str(n)].value != None:
+        username = sh[windows + str(n)].value
+        agentName = sh[agent_name + str(n)].value
+        tsr = sh[agent_tsr + str(n)].value
+        user_campaign = sh[campaign + str(n)].value
+        agent_shift = sh[shift + str(n)].value
+        if sh[agent_name + str(n)].value != None and sh[add + str(n)].value != "Deactivate":
+            print(agentName, tsr, user_campaign, agent_shift)
+        n += 1
+
