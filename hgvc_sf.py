@@ -26,7 +26,7 @@ by_id("01r38000000Hv1x_Tab").click()
 time.sleep(2)
 
 select = Select(driver.find_element_by_id("fcf"))
-select.select_by_visible_text("Available & Callable - Cell - Pacific")
+select.select_by_visible_text("Available & Callable - Cell - Eastern")
 by_name("go")
 
 #by_id("fcf").click()
