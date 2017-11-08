@@ -45,21 +45,6 @@ def column_headers():
     queue = "Campaign"
     Shift = "Shift"
 
-<<<<<<< HEAD
-select = Select(driver.find_element_by_id("fcf"))
-select.select_by_visible_text("Available & Callable - Cell - Eastern")
-by_name("go")
-=======
-    add = get_header(Add) or get_header(Add2) or get_header(Add3) or get_header(Add4)
-    agent_username = get_header(windows) or get_header(windows2) 
-    agent_name = get_header(Name)
-    agent_tsr = get_header(cic_id) or get_header(cic_id2)
-    campaign = get_header(queue)
-    shift = get_header(Shift)
-    
-    orgchart_data(add, agent_username, agent_name, agent_tsr, campaign, shift)
->>>>>>> 105d73d21c4cd1c55cce0995e89cac4ecf1533da
-
 def BrowserSetup():
     driver.get("https://identitynow.hgv.com/")
     #driver.get("https://hgv.my.salesforce.com/home/home.jsp?tsid=02u38000000NcOF")
