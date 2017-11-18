@@ -45,6 +45,15 @@ def column_headers():
     queue = "Campaign"
     Shift = "Shift"
 
+    add = get_header(Add) or get_header(Add2) or get_header(Add3) or get_header(Add4)
+    agent_username = get_header(windows) or get_header(windows2) 
+    agent_name = get_header(Name)
+    agent_tsr = get_header(cic_id) or get_header(cic_id2)
+    campaign = get_header(queue)
+    shift = get_header(Shift)
+    
+    orgchart_data(add, agent_username, agent_name, agent_tsr, campaign, shift)
+
 def BrowserSetup():
     driver.get("https://identitynow.hgv.com/")
     #driver.get("https://hgv.my.salesforce.com/home/home.jsp?tsid=02u38000000NcOF")
@@ -82,17 +91,36 @@ def orgchart_data(add, windows, agent_name, agent_tsr, campaign, shift):
         user_campaign = sh[campaign + str(n)].value
         agent_shift = sh[shift + str(n)].value
         if sh[agent_name + str(n)].value != None and sh[add + str(n)].value != "Deactivate":
-            print(agentName, tsr, user_campaign, agent_shift)
-            AssignUser(agentName)
+            #print(agentName, tsr, user_campaign, agent_shift)
+            if sh[campaign + str(n)].value != "New Hire-SF Cell Phone2":
+                AssignUser(agentName)
+                time.sleep(3)
+                SelectQueue()
+                time.sleep(2)
+                SelectLeads()          
         n += 1
 
 def GetUser():
     pass
+
+def SelectQueue():
+    select.select_by_visible_text("Available & Callable - Cell - Pacific")
+    by_name("go").click()
+    time.sleep(4)
+
 def AssignUser(AgentName):
     time.sleep(3)
     user = by_id('newOwn')
     user.send_keys(AgentName) #Get User Name
+    time.sleep(0.3)
     by_name('cancel').click()
+
+def SelectLeads():
+    by_id("00B38000007Xnvh_paginator_rpp_target").click()
+    driver.find_element_by_xpath("//*[text()='200']").click()
+    time.sleep(1)
+    by_id("allBox").click()
+    driver.find_element_by_xpath("//input[@type='submit' and @value='Change Owner']").click()
 
 def main():
     BrowserSetup()
