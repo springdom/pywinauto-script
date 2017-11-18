@@ -6,8 +6,8 @@ from openpyxl import load_workbook
 from string import ascii_lowercase
 import time
 
-user_name = "mtaylor"
-passwd = "J@maica1994"
+user_name = ""
+passwd = ""
 
 driver = webdriver.Firefox()
 by_name = driver.find_element_by_name
