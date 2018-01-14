@@ -8,6 +8,14 @@ driver = webdriver.Firefox()
 by_name = driver.find_element_by_name
 by_id = driver.find_element_by_id
 
+#Select Region - est/cnt/pcf
+print("est - Eastern, cnt - Central, pcf - Pacific")
+region = input("Enter Region Name: ")
+
+#Select cell 1 or cell 2
+print("Enter 1 for Cell 1 or 2 for Cell 2")
+cellopt = input("Enter Whether Leads are for Cell 1 or Cell 2 agents: ")
+
 def BrowserSetup():
     driver.get("https://identitynow.hgv.com/")
     #driver.get("https://hgv.my.salesforce.com/home/home.jsp?tsid=02u38000000NcOF")
@@ -32,26 +40,46 @@ def startUp():
     
     time.sleep(4)
 
-selector =    "00B38000007Xnw2_paginator_rpp_target"
 
-selPacific =  "00B38000007XnwQ_paginator_rpp_target"
-selPacific2 = "00B38000007XnwV_paginator_rpp_target"
-selPacificAC = "00B38000007Xnvh_paginator_rpp_target"
-#selPacificAC2 = "00B38000007Xnvh_paginator_rpp_target"
+selector = "00B38000007Xnw2_paginator_rpp_target"
 
-selEastern =  "00B38000007Xnw2_paginator_rpp_target"
-selEastern2 = "00B38000007Xnw1_paginator_rpp_target"
-selEasternAC = "00B38000007XnvD_paginator_rpp_target"
-#selEasternAC2 = "00B38000007XnvD_paginator_rpp_target"
+def leadOpt():
+    selEastern =  "00B38000007Xnw2_paginator_rpp_target"
+    selCentral =  "00B38000007Xnvr_paginator_rpp_target"
+    selPacific =  "00B38000007XnwQ_paginator_rpp_target"
 
-selCentral =  "00B38000007Xnvr_paginator_rpp_target"
-selCentral2 = "00B38000007Xnvw_paginator_rpp_target"
-selCentralAC = "00B38000007Xnv8_paginator_rpp_target"
-#selCentralAC2 = "00B38000007Xnv8_paginator_rpp_target"
+    #Cell2
+    selEastern2 = "00B38000007Xnw1_paginator_rpp_target"
+    selCentral2 = "00B38000007Xnvw_paginator_rpp_target"
+    selPacific2 = "00B38000007XnwV_paginator_rpp_target"
 
+    #Available & Callable
+    selEasternAC = "00B38000007XnvD_paginator_rpp_target"
+    selCentralAC = "00B38000007Xnv8_paginator_rpp_target"
+    selPacificAC = "00B38000007Xnvh_paginator_rpp_target"
 
+    #Cell2 Available & Callable
+    selEasternAC2 = "00B38000007XnvD_paginator_rpp_target"
+    selCentralAC2 = "00B38000007Xnv8_paginator_rpp_target"
+    selPacificAC2 = "00B38000007Xnvh_paginator_rpp_target"
 
-def add_leads():
+    if cellopt == 1:
+        if region == "est":
+            add_leads(selEasternAC)
+        elif region == "cnt":
+            add_leads(selCentralAC)
+        elif region == "pcf":
+            add_leads(selPacificAC)
+    elif cellopt == 2:
+        if region == "est":
+            add_leads(selEasternAC2)
+        elif region == "cnt":
+            add_leads(selCentralAC2)
+        elif region == "pcf":
+            add_leads(selPacificAC2)
+    
+def add_leads(selopt):
+    selector = selopt
     x = True
     while x:
         #print(agentName, tsr, user_campaign, agent_shift)
@@ -62,10 +90,10 @@ def add_leads():
 
 def SelectQueue():
     eastern = "Cell - Eastern"
-    eastern2 = "Cell 2 - Eastern"
     pacific = "Cell - Pacific"
-    pacific2 = "Cell 2 - Pacific"
     central = "Cell - Central"
+    eastern2 = "Cell 2 - Eastern"
+    pacific2 = "Cell 2 - Pacific"
     central2 = "Cell 2 - Central"
     
     select = Select(driver.find_element_by_name("fcf"))
