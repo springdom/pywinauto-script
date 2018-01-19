@@ -4,17 +4,23 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 import time
 
-driver = webdriver.Firefox()
-by_name = driver.find_element_by_name
-by_id = driver.find_element_by_id
-
 #Select Region - est/cnt/pcf
 print("est - Eastern, cnt - Central, pcf - Pacific")
 region = input("Enter Region Name: ")
 
 #Select cell 1 or cell 2
 print("Enter 1 for Cell 1 or 2 for Cell 2")
-cellopt = input("Enter Whether Leads are for Cell 1 or Cell 2 agents: ")
+cellopt = int(input("Enter Whether Leads are for Cell 1 or Cell 2 agents: "))
+#amount = input("Amount of leads to add(10, 25, 50, 100, 200): ")
+
+driver = webdriver.Firefox()
+by_name = driver.find_element_by_name
+by_id = driver.find_element_by_id
+
+user_name = "username"
+passwd = "password"
+
+selector = "00B38000007XnvD_paginator_rpp_target"
 
 def BrowserSetup():
     driver.get("https://identitynow.hgv.com/")
@@ -32,16 +38,14 @@ def startUp():
     time.sleep(7)
     by_id("01r38000000Hv1x_Tab").click()
     time.sleep(2)
-    SelectQueue()
+    SelectQueue(selector)
+    
     try:
         by_name("go").click()
     except:
         pass
     
-    time.sleep(4)
-
-
-selector = "00B38000007Xnw2_paginator_rpp_target"
+    time.sleep(3)
 
 def leadOpt():
     selEastern =  "00B38000007Xnw2_paginator_rpp_target"
@@ -62,7 +66,7 @@ def leadOpt():
     selEasternAC2 = "00B38000007XnvD_paginator_rpp_target"
     selCentralAC2 = "00B38000007Xnv8_paginator_rpp_target"
     selPacificAC2 = "00B38000007Xnvh_paginator_rpp_target"
-
+    
     if cellopt == 1:
         if region == "est":
             add_leads(selEasternAC)
@@ -77,34 +81,60 @@ def leadOpt():
             add_leads(selCentralAC2)
         elif region == "pcf":
             add_leads(selPacificAC2)
-    
+
 def add_leads(selopt):
     selector = selopt
     x = True
     while x:
         #print(agentName, tsr, user_campaign, agent_shift)
-            AssignUser(input("Enter Agent Name: "))
-            input("Enter To Continue")
-            SelectQueue()
-            SelectLeads(selector)
+        AssignUser(input("Enter Agent Name: "))
+        input("Enter To Continue")
+        SelectQueue(selector)
+        SelectLeads(selector)
 
-def SelectQueue():
+def SelectQueue(region):
     eastern = "Cell - Eastern"
-    pacific = "Cell - Pacific"
     central = "Cell - Central"
+    pacific = "Cell - Pacific"
     eastern2 = "Cell 2 - Eastern"
-    pacific2 = "Cell 2 - Pacific"
     central2 = "Cell 2 - Central"
-    
+    pacific2 = "Cell 2 - Pacific"
+
+    #00B38000007XnvD_paginator_rpp_target
+    if region == "00B38000007Xnw2_paginator_rpp_target":
+        LocOption = eastern
+    elif region == "00B38000007Xnvr_paginator_rpp_target":
+        LocOption = central
+    elif region == "00B38000007XnwQ_paginator_rpp_target":
+        LocOption = pacific
+    elif region == "00B38000007Xnw1_paginator_rpp_target":
+        LocOption = eastern2
+    elif region == "00B38000007Xnvw_paginator_rpp_target":
+        LocOption = central2
+    elif region == "00B38000007XnwV_paginator_rpp_target":
+        LocOption = pacific2
+    elif region == "00B38000007XnvD_paginator_rpp_target":
+        LocOption = eastern
+    elif region == "00B38000007Xnv8_paginator_rpp_target":
+        LocOption = central
+    elif region ==  "00B38000007Xnvh_paginator_rpp_target":
+        LocOption = pacific
+    elif region ==  "00B38000007XnvD_paginator_rpp_target":
+        LocOption = eastern2
+    elif region == "00B38000007Xnv8_paginator_rpp_target":
+        LocOption = central2
+    elif region == "00B38000007Xnvh_paginator_rpp_target":
+        LocOption = pacific2
+
     select = Select(driver.find_element_by_name("fcf"))
-    
-    select.select_by_visible_text("Available - " + eastern)
-    #select.select_by_visible_text("Available & Callable - " + pacific)
+    #select.select_by_visible_text("Available - " + LocOption)
+    select.select_by_visible_text("Available & Callable - " + LocOption)
     
     time.sleep(4)
 
-def SelectLeads(Selector):
-    by_id(Selector).click()
+def SelectLeads(OptSel):
+    print(OptSel)
+    by_id(OptSel).click()
     driver.find_element_by_xpath("//*[text()='200']").click()
     time.sleep(1)
     by_id("allBox").click()
@@ -120,6 +150,6 @@ def main():
     BrowserSetup()
     startUp()
     SelectLeads(selector)
-    add_leads()
+    leadOpt()
 
 main()
