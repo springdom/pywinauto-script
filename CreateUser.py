@@ -26,12 +26,15 @@ lvn_ct_cms = [
     ]
 orl_act_cms = [
     "LOC-ORL-MKT-ACT", "MKT-Activations-CallBack", "MKT-ACT-Main",
-    "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1", "MKT-CC-CustomerService",
-    "MKT-CC-CustomerService-Priority2",
     ]
 orl_cc_cms = [
     "LOC-ORL-MKT-CC", "MKT-CC-BookDates", "MKT-CC-BookDates-Priority1",
     "MKT-CC-CustomerService", "MKT-CC-CustomerService-Priority2",
+    ]
+orl_own_cms = [
+    "LOC-ORL-MKT-OWN", "MKT-Owner-Extension1", "MKT-Owner-Extension2", "MKT-Owners-Callback",
+    "MKT-Owners-LeadGen1", "MKT-Owners-LeadGen2", "MKT-Owners-Main", "MKT-Owners-Main2",
+    "MKT-Owners-NonResponder"
     ]
 
 wrkqueues = {
@@ -40,8 +43,8 @@ wrkqueues = {
     "lvn_ct_cms":lvn_ct_cms,
     }
 
-#SalesForce
-orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"] #Manual
+#Manual
+orl_outbnd_sf = ["LOC-ORL-MKT-SalesForce", "SF-Orlando-Manual", "SF-RestrictDialing"]
 spg_outbnd_sf = ["LOC-SPG-MKT-SalesForce", "SF-Springfield-Manual", "SF-RestrictDialing"]
 lvn_outbnd_sf = ["LOC-LAS-MKT-SalesForce", "SF-Vegas-Manual", "SF-RestrictDialing"]
 
@@ -60,7 +63,6 @@ serv = int(serv)
 location = input("Location orl, spg, lvn:")
 location = location.lower()
 
-
 if serv == 1:
     if location == "spg":
         department = input("Select a department - ct:  ")
@@ -70,11 +72,15 @@ if serv == 1:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
+shvalue = input("Select Excel Sheet: ")
+shvalue = int(shvalue - 1)
+
 wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb.worksheets[0]
+sh = wb.worksheets[shvalue]
 ws = wb.active
 
 app = Application(backend='uia')
+
 if serv == 1:
     p = pywinauto.findwindows.find_element(title="Interaction Administrator - [HiltonACD]")
 else:
@@ -144,11 +150,11 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     get_cms_workgroups(location, department)
                     if department == "ct" or department == "cc":
                         licensing()
-                    app.dlg.OK.click_input() #Change When Done
+                    app.dlg.Ok.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.OK.click_input() #Change When Done
+                    app.dlg.Ok.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
@@ -190,7 +196,6 @@ def auto_acd():
     app.dlg.ListItem3.click_input()
     app.dlg.CheckBox0.click_input()
 
-
 def cms_roles(deptmnt):
     """Assign Roles for cms"""
     app.dlg.Roles.click_input()
@@ -216,7 +221,6 @@ def get_cms_workgroups(loc, dept):
         if department == dept:
             agent_cms_workgroups(wrkqueues[loc + "_" + dept + "_" + "cms"])
             
-
 def get_sf_workgroups(): #helper function here
     """Assign Salesforce WorkGroups based on Selection"""
     if location == "orl":
@@ -226,7 +230,7 @@ def get_sf_workgroups(): #helper function here
     if location == "lvn":
         agent_sf_workgroups(lvn_outbnd_sf)
 
-def agent_cms_workgroups(wrkgrps): #Do this better
+def agent_cms_workgroups(wrkgrps):
     """Assign CMS WorkGroups"""
     num = 0
     app.dlg.Workgroups.click_input()
@@ -234,47 +238,23 @@ def agent_cms_workgroups(wrkgrps): #Do this better
 
     for x in wrkgrps:
         if location == "orl":
-            if department == "outbnd":
-                if num == 0:
-                    listbox_pos(-13)
-                if num == 2:
-                    listbox_pos(-5)
-
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
             if department == "ct":
-                if num == 3:
-                    listbox_pos(-10)
-            if department == "act" or department == "cc":
-                if num == 1:
-                    listbox_pos(-6)
+                LstBoxAdd(x)
+
+            if department == "act":
+                LstBoxAdd(x)
+            if department == "cc":
+                LstBoxAdd(x)
 
         if location == "spg":
-            num += 1
-            if department == "ct":
-                if num == 1:
-                    listbox_pos(-2)
-                if num == 2:
-                    listbox_pos(-8)
-
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
+            LstBoxAdd(x)
+            
         if location == "lvn":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
             if department == "outbnd":
-                if num == 1:
-                    listbox_pos(-13)
-
+                LstBoxAdd(x)
             if department == "ct":
-                if num == 3:
-                    listbox_pos(-10)
-
+                LstBoxAdd(x)
+    
 def agent_sf_workgroups(wrkgrps):
     """Assign SF WorkGroups"""
     num = 0
@@ -283,29 +263,16 @@ def agent_sf_workgroups(wrkgrps):
 
     for x in wrkgrps:
         if location == "orl":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
+            LstBoxAdd(x)
         if location == "spg":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-            if num == 2:
-                listbox_pos(-2)
-
+            LstBoxAdd(x)
         if location == "lvn":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-            if num == 2:
-                listbox_pos(-2)
+            LstBoxAdd(x)
 
-def listbox_pos(scrollpos):
-    """Gets Scrollbox Position"""
+def LstBoxAdd(x):
     app.dlg['ListBox'].click_input()
-    app.dlg['ListBox'].wheel_mouse_input(wheel_dist=scrollpos)
-
+    app.dlg['Listbox'].type_keys(x)
+    app.dlg.Add.click_input()
 
 def licensing():
     """Assign Licensing"""
@@ -316,8 +283,3 @@ def licensing():
         app.dlg[ls].type_keys("{SPACE}")
 
 main()
-"""
-app.dlg["User Name"].click_input()
-app.dlg.type_keys("{BS}")
-app.dlg.type_keys("123")
-"""
