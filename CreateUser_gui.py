@@ -70,7 +70,7 @@ class IAAutoGUI:
         self.filename_label.grid(row = 1, sticky = W)
 
         self.wb = load_workbook(self.filename, read_only=True)
-        self.sh = self.wb.worksheets[0]
+        self.sh = self.wb.worksheets[0] # Change Sheets
         self.ws = self.wb.active
 
         
@@ -253,11 +253,11 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     get_cms_workgroups(my_gui.location, my_gui.department)
                     if my_gui.department == "ct" or my_gui.department == "cc":
                         licensing()
-                    app.dlg.Cancel.click_input() #Change When Done
+                    app.dlg.OK.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.Cancel.click_input() #Change When Done
+                    app.dlg.OK.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
@@ -292,7 +292,6 @@ def get_user_details(agentName):
     app.dlg.Edit0.type_keys(name[0]) #FirstName
     app.dlg.Edit2.type_keys(name[1]) #LastName
     app.dlg.Edit4.type_keys(name[0] + "{SPACE}" + name[1]) #Display Name
-
 
 def auto_acd():
     """Assign Auto-ACD"""
@@ -334,54 +333,30 @@ def get_sf_workgroups(): #helper function here
     if my_gui.location == "lvn":
         agent_sf_workgroups(lvn_outbnd_sf)
 
-def agent_cms_workgroups(wrkgrps): #Do this better
+def agent_cms_workgroups(wrkgrps):
     """Assign CMS WorkGroups"""
     num = 0
     app.dlg.Workgroups.click_input()
     app.dlg.OK.click_input()
 
     for x in wrkgrps:
-        if my_gui.location == "orl":
-            if my_gui.department == "outbnd":
-                if num == 0:
-                    listbox_pos(-13)
-                if num == 2:
-                    listbox_pos(-5)
+        if location == "orl":
+            if department == "ct":
+                LstBoxAdd(x)
 
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
+            if department == "act":
+                LstBoxAdd(x)
+            if department == "cc":
+                LstBoxAdd(x)
 
-            if my_gui.department == "ct":
-                if num == 3:
-                    listbox_pos(-10)
-            if my_gui.department == "act" or my_gui.department == "cc":
-                if num == 1:
-                    listbox_pos(-6)
-
-        if my_gui.location == "spg":
-            num += 1
-            if my_gui.department == "ct":
-                if num == 1:
-                    listbox_pos(-2)
-                if num == 2:
-                    listbox_pos(-8)
-
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
-        if my_gui.location == "lvn":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-
-            if my_gui.department == "outbnd":
-                if num == 1:
-                    listbox_pos(-13)
-
-            if my_gui.department == "ct":
-                if num == 3:
-                    listbox_pos(-10)
+        if location == "spg":
+            LstBoxAdd(x)
+            
+        if location == "lvn":
+            if department == "outbnd":
+                LstBoxAdd(x)
+            if department == "ct":
+                LstBoxAdd(x)
 
 def agent_sf_workgroups(wrkgrps):
     """Assign SF WorkGroups"""
@@ -390,24 +365,17 @@ def agent_sf_workgroups(wrkgrps):
     app.dlg.OK.click_input()
 
     for x in wrkgrps:
-        if my_gui.location == "orl":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
+        if location == "orl":
+            LstBoxAdd(x)
+        if location == "spg":
+            LstBoxAdd(x)
+        if location == "lvn":
+            LstBoxAdd(x)
+def LstBoxAdd(x):
+    app.dlg['ListBox'].click_input()
+    app.dlg['Listbox'].type_keys(x)
+    app.dlg.Add.click_input()
 
-        if my_gui.location == "spg":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-            if num == 2:
-                listbox_pos(-2)
-
-        if my_gui.location == "lvn":
-            num += 1
-            app.dlg[x].click_input()
-            app.dlg.Add.click_input()
-            if num == 2:
-                listbox_pos(-2)
 
 def listbox_pos(scrollpos):
     """Gets Scrollbox Position"""
