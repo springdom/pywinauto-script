@@ -6,7 +6,7 @@ from string import ascii_lowercase
 import pywinauto
 from pywinauto.application import Application
 from openpyxl import load_workbook
-from tkinter import Tk, Label, Radiobutton,Button, W, NORMAL,DISABLED, StringVar
+from tkinter import Tk, Label, Radiobutton,Button, W, NORMAL,DISABLED, StringVar, ttk
 from tkinter import filedialog as fd
 import sys
 
@@ -87,47 +87,47 @@ class IAAutoGUI:
         self.loc_label.grid(row = 3, columnspan = 2, sticky = W, pady = 10)
 
         self.orl_button = Button(master, text="orl", command=lambda:self.get_location("orl"),
-                                 state=DISABLED)
+                                 state=DISABLED, width = 20, padx = 20)
         self.orl_button.grid(row = 4)
-        
-        self.lvn_button = Button(master, text="lvn", command=lambda:self.get_location("lvn"),
-                                 state=DISABLED)
-        self.lvn_button.grid(row = 4, column = 1, sticky = W )
-        
+
         self.spg_button = Button(master,text="spg", command=lambda:self.get_location("spg"),
-                                 state=DISABLED)
-        self.spg_button.grid(row = 4, column = 2, sticky = W)      
+                                 state=DISABLED, width = 20, padx = 20)
+        self.spg_button.grid(row = 5)  
+        self.lvn_button = Button(master, text="lvn", command=lambda:self.get_location("lvn"),
+                                 state=DISABLED, width = 20, padx = 20)
+        self.lvn_button.grid(row = 4, column = 2, sticky = W )
+        
+    
 
         self.dept_label = Label(master, text="Select Department")
-        self.dept_label.grid(row = 5, sticky = W, pady = 10)
+        self.dept_label.grid(row = 6, sticky = W, pady = 10)
 
         self.department = StringVar()
         self.outbnd = Radiobutton(master,indicatoron = 0, width = 20, padx = 20,
                                   text='Outbound', variable=self.department, value = "outbnd")
-        self.outbnd.grid(row = 6)
+        self.outbnd.grid(row = 7)
 
         self.ct = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                               text='Call Transfer', variable=self.department, value = "ct")
-        self.ct.grid(row = 6, column = 2)
+        self.ct.grid(row = 7, column = 2)
         
         self.act = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                                text='Activations', variable=self.department, value = "act")
-        self.act.grid(row = 7)
+        self.act.grid(row = 8)
         
         self.cc = Radiobutton(master, indicatoron = 0, width = 20, padx = 20,
                               text='Customer Care', variable=self.department, value = "cc")
-        self.cc.grid(row = 7, column = 2)
+        self.cc.grid(row = 8, column = 2)
 
         self.run_button =  Button(master, width = 10, height = 2, padx = 10,
                                   text = "Run", command = lambda:self.get_department())
-        self.run_button.grid(row = 9, pady = 10)
+        self.run_button.grid(row = 10, pady = 10)
         
         #self.reset_button =  Button(master, width = 10, height = 2, padx = 10, text = "Reset", command = lambda:self.restart_button())
         #self.reset_button.grid(row = 9, column =  2, pady = 10)
 
         col_count, row_count = root.grid_size()
-
-    
+        
     def get_server(self, button_id):
         if button_id == 1:
             self.server = 1
@@ -253,11 +253,11 @@ def orgchart_data(add, windows, agent_name, agent_tsr):
                     get_cms_workgroups(my_gui.location, my_gui.department)
                     if my_gui.department == "ct" or my_gui.department == "cc":
                         licensing()
-                    app.dlg.OK.click_input() #Change When Done
+                    app.dlg.Cancel.click_input() #Change When Done
                 else:
                     sf_roles()
                     get_sf_workgroups()
-                    app.dlg.OK.click_input() #Change When Done
+                    app.dlg.Cancel.click_input() #Change When Done
             except:
                 if app.dlg["A User with that name already exists"].exists() == True:
                     print("User Already Exists " + username, agentName, tsr)
@@ -335,28 +335,33 @@ def get_sf_workgroups(): #helper function here
 
 def agent_cms_workgroups(wrkgrps):
     """Assign CMS WorkGroups"""
-    num = 0
     app.dlg.Workgroups.click_input()
     app.dlg.OK.click_input()
-
+    
     for x in wrkgrps:
-        if location == "orl":
-            if department == "ct":
+        if my_gui.location == "orl":
+            if my_gui.department == "ct":
+                print(wrkgrps)
                 LstBoxAdd(x)
 
-            if department == "act":
+            if my_gui.department == "act":
                 LstBoxAdd(x)
-            if department == "cc":
+            if my_gui.department == "cc":
                 LstBoxAdd(x)
 
-        if location == "spg":
+        if my_gui.location == "spg":
             LstBoxAdd(x)
             
-        if location == "lvn":
-            if department == "outbnd":
+        if my_gui.location == "lvn":
+            if my_gui.department == "outbnd":
                 LstBoxAdd(x)
-            if department == "ct":
+            if my_gui.department == "ct":
                 LstBoxAdd(x)
+
+def LstBoxAdd(x):
+    app.dlg['ListBox'].click_input()
+    app.dlg['Listbox'].type_keys(x)
+    app.dlg.Add.click_input()
 
 def agent_sf_workgroups(wrkgrps):
     """Assign SF WorkGroups"""
@@ -365,17 +370,12 @@ def agent_sf_workgroups(wrkgrps):
     app.dlg.OK.click_input()
 
     for x in wrkgrps:
-        if location == "orl":
+        if my_gui.location == "orl":
             LstBoxAdd(x)
-        if location == "spg":
+        if my_gui.location == "spg":
             LstBoxAdd(x)
-        if location == "lvn":
+        if my_gui.location == "lvn":
             LstBoxAdd(x)
-def LstBoxAdd(x):
-    app.dlg['ListBox'].click_input()
-    app.dlg['Listbox'].type_keys(x)
-    app.dlg.Add.click_input()
-
 
 def listbox_pos(scrollpos):
     """Gets Scrollbox Position"""
