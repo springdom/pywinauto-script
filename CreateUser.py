@@ -12,6 +12,10 @@ from pywinauto.application import Application
 from openpyxl import load_workbook
 
 #CMS
+flname = 'excel_orgchart\HGV_OrgChart_Template_Orlando_Outbound_Salesforce_03262018.xlsx'
+shName = input("Enter Sheet: ")
+sheetName = int(shName) - 1
+
 orl_outbnd_cms = ["MKT-Outbound-Callback", "MKT-Outbound-Main2", "Orl_OUT_SUP"]
 lvn_outbnd_cms = ["LAS_OUT_SUP", "MKT-Outbound-Callback", "MKT-Outbound-Main2"]
 spg_ct_cms = ["LOC-SPG-MKT-HRCC", "MKT-InbCT-Callback", "MKT-InbCT-HRCC"]
@@ -72,11 +76,8 @@ if serv == 1:
         department = input("Select a department - outbnd, ct, act, cc: ")
     department = department.lower()
 
-shvalue = input("Select Excel Sheet: ")
-shvalue = int(shvalue - 1)
-
-wb = load_workbook('excel_orgchart\orgchart.xlsx', read_only=True)
-sh = wb.worksheets[shvalue]
+wb = load_workbook(flname, read_only=True)
+sh = wb.worksheets[sheetName]
 ws = wb.active
 
 app = Application(backend='uia')
